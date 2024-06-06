@@ -47,4 +47,8 @@ class SubjectService{
         $subjectDetails = Subject::select("subject","subject_uuid")->where("id",$subjectId)->first();
         return $subjectDetails;
     }
+
+    public function selectSubject(){
+        
+    }
 }

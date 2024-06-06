@@ -35,7 +35,13 @@ class SelectedSubjectController extends Controller
         }
     }
 
-    public function removeSelectedSubject(){
-        
+
+    public function removeSelectedSubject($uuid){
+        try{
+            $this->service->removeSubject($uuid);
+            return response()->json(["message"=>"Selection Removed"]);
+        }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
     }
 }

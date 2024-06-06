@@ -28,20 +28,7 @@ Route::prefix("v1")->group(function(){
     Route::get("/healthcheck",function(){
         return response()->json(["message"=>"hello from kaizenklass"]);
     });
-    // Route::post("register-admin",[UserController::class,"registerAdmin"]);
-    // * dev routes
-    Route::get("get-assignments",[AssignmentController::class,"getAssignments"]);
-    Route::post("test",function(){
-        return response()->json([
-            "services" => [
-                "link_detection" => true,
-                "image_detection" => true,
-                "profanity_detection" => true
-                ]
-              ],200);
-    });
-    
-    
+    Route::get("get-assignments",[AssignmentController::class,"getAssignments"]);   
     Route::post("register-contributor",[UserController::class,"registerContributor"]);
     Route::post("login",[UserController::class,"login"]);
     Route::get("user-data",[UserController::class,"userData"]); // No regular users
