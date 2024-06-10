@@ -76,9 +76,14 @@ Route::prefix("v1")->group(function(){
 // todo: add search for subjects
 Route::prefix("v2")->group(function(){
     Route::middleware(["auth:sanctum"])->group(function(){
+        Route::post("onboard",[SelectedSubjectController::class,"onboard"]);
+    });
+
+    Route::middleware(["auth:sanctum","checkIsOnboard"])->group(function(){
+        Route::post("get/selected-subjects",[SelectedSubjectController::class,"getSelectedSubjects"]);
         Route::post("add/selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
         Route::post("add/selected-subject",[SelectedSubjectController::class,"selectSubject"]);
         Route::post("delete/selected-subject",[SelectedSubjectController::class,"removeSelectedSubject"]);
-
+        Route::post("delete/selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
     });
 });

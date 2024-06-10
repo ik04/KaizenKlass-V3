@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\SubjectAlreadySelectedException;
+use App\Exceptions\UserAlreadyOnboardedException;
 use App\Http\Requests\AddSelectedSubjectRequest;
 use App\Http\Requests\AddSelectedSubjectsRequest;
 use App\Services\SelectedSubjectService;
@@ -15,12 +17,35 @@ class SelectedSubjectController extends Controller
         
     }
 
+    public function onboard(AddSelectedSubjectsRequest $request){
+        try{
+            if($request->user()->is_onboard){
+                throw new UserAlreadyOnboardedException("User Already Onboarded.",code:409);
+            }
+            $validated = $request->validated();
+            $this->service->onboard($validated["subject_uuid"],$request->user());
+            $request->user()->save();
+            return response()->json(["message"=>"You have been Onboarded!"]);
+        }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
+        }catch(UserAlreadyOnboardedException $e){
+            return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
+    }
+
+    public function getSelectedSubjects(Request $request){
+        $selectedSubjects = $this->service->getSelectedSubjects($request->user()->id);
+        return response()->json(["selected_subjects" => $selectedSubjects]);
+    }
+
     public function selectSubjects(AddSelectedSubjectsRequest $request){
         try{
             $validated = $request->validated();
-            $this->service->selectSubjects($validated["subject_uuid"],$request->user());
+            $this->service->selectSubjects($validated["subject_uuid"],$request->user()->id);
             return response()->json(["message"=>"Subjects added"]);
         }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
+        }catch(SubjectAlreadySelectedException $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
     }
@@ -34,12 +59,18 @@ class SelectedSubjectController extends Controller
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
     }
-
-
     public function removeSelectedSubject($uuid){
         try{
             $this->service->removeSubject($uuid);
             return response()->json(["message"=>"Selection Removed"]);
+        }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
+    }
+    public function removeAllSelectedSubject(Request $request){
+        try{
+            $this->service->removeAllSubjects($request->user()->id);
+            return response()->json(["message"=>"All Selections Removed"]);
         }catch(Exception $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
