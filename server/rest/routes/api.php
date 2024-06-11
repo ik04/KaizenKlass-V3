@@ -78,12 +78,18 @@ Route::prefix("v2")->group(function(){
     Route::middleware(["auth:sanctum"])->group(function(){
         Route::post("onboard",[SelectedSubjectController::class,"onboard"]);
     });
-
     Route::middleware(["auth:sanctum","checkIsOnboard"])->group(function(){
-        Route::post("get/selected-subjects",[SelectedSubjectController::class,"getSelectedSubjects"]);
-        Route::post("add/selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
-        Route::post("add/selected-subject",[SelectedSubjectController::class,"selectSubject"]);
-        Route::post("delete/selected-subject",[SelectedSubjectController::class,"removeSelectedSubject"]);
-        Route::post("delete/selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
+        Route::prefix("get")->group(function(){
+            Route::get("selected-subjects",[SelectedSubjectController::class,"getSelectedSubjects"]);
+            Route::get("selected-subjects/assignments",[AssignmentController::class,"getAssignmentsWithSelectedSubjects"]);
+        });
+        Route::prefix("add")->group(function(){
+            Route::post("selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
+            Route::post("selected-subject",[SelectedSubjectController::class,"selectSubject"]);
+        });
+        Route::prefix("delete")->group(function(){
+            Route::post("selected-subject",[SelectedSubjectController::class,"removeSelectedSubject"]);
+            Route::post("selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
+        });
     });
 });

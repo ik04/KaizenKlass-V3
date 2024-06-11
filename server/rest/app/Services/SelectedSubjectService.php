@@ -26,7 +26,7 @@ class SelectedSubjectService{
         $user->is_onboard = true;
     }
     public function getSelectedSubjects($userId){
-        $selectedSubjects = SelectedSubject::join("subjects","selected_subjects.subject_id","=","subjects.id")->select("subjects.slug","subjects.subject")->where("selected_subjects.user_id",$userId)->get();
+        $selectedSubjects = SelectedSubject::join("subjects","selected_subjects.subject_id","=","subjects.id")->select("subjects.subject_uuid","subjects.subject")->where("selected_subjects.user_id",$userId)->get();
         return $selectedSubjects;
     }
     

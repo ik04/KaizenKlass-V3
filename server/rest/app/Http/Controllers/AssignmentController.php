@@ -123,4 +123,8 @@ public function deleteAssignment($assignmentUuid)
         $assignmentsWithDeadline = $this->service->getAssignmentsWithDeadline();
         return response()->json(["assignments"=>$assignmentsWithDeadline],200);
     }
+    public function getAssignmentsWithSelectedSubjects(Request $request){
+        $assignments = $this->service->getAssignmentsWithSelectedSubjects($request->user()->id);
+    return response()->json(["assignments"=>$assignments],200);
+    }
 }
