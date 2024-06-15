@@ -15,6 +15,12 @@ class TestService{
         
 
     }
+
+    public function getTests(){
+        $tests = Test::select("title","exam_date","test_uuid")->get();
+        return $tests;
+    }
+
     public function getTestId($uuid){
         $testId = Test::select("id")->where("test_uuid",$uuid)->first();
         if(!$testId){

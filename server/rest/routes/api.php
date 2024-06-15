@@ -77,6 +77,12 @@ Route::prefix("v1")->group(function(){
 
 // todo: add search for subjects
 Route::prefix("v2")->group(function(){
+
+    Route::prefix("get")->group(function(){
+        Route::get("tests",[TestController::class,"getTests"]);
+
+    });
+
     Route::middleware(["auth:sanctum"])->group(function(){
         Route::post("onboard",[SelectedSubjectController::class,"onboard"]);
     });

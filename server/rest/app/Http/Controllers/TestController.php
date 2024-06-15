@@ -14,6 +14,10 @@ class TestController extends Controller
     {
         
     }
+    public function getTests(){
+        $tests = $this->service->getTests();
+        return response()->json(["tests" => $tests],200);
+    }
     public function createTest(AddTestRequest $request){
         try{
 

@@ -11,7 +11,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->dateTime("deadline")->nullable()->change();
+            $table->dateTime("deadline")->nullable();
         });
     }
 
@@ -21,7 +21,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->dateTime("deadline")->nullable(false)->change(); // Revert the column to not nullable
         });
     }
 };
