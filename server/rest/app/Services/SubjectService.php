@@ -32,6 +32,14 @@ class SubjectService{
         $subjects = Subject::select("subject", "subject_uuid")
                     ->withCount('assignments') 
                     ->orderByDesc('assignments_count') 
+                    ->get();
+
+                    return $subjects;
+    }
+    public function getSubjectsV2(){
+        $subjects = Subject::select("subject", "subject_uuid")
+                    ->withCount('assignments') 
+                    ->orderByDesc('assignments_count') 
                     ->paginate(12);
 
                     return $subjects;

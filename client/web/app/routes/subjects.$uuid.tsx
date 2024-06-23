@@ -53,8 +53,6 @@ export default function subject() {
       try {
         const url = `${baseUrl}/api/v1/get-subject-assignments/${uuid}`;
         const resp = await axios.get(url);
-        console.log(resp);
-        console.log("himom");
         const data = {
           subject: resp.data.subject,
           assignments: resp.data.assignments,

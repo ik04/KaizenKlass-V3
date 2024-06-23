@@ -1,42 +1,26 @@
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Dashboard } from "~/components/dashboard";
-import { SplashScreen } from "~/components/splashScreen";
-import { SubjectCard } from "~/components/subjectCard";
-import { Input } from "~/components/ui/input";
-import { Skeleton } from "~/components/ui/skeleton";
+import React, { useEffect, useState } from "react";
 import Fuse from "fuse.js";
-import { MetaFunction } from "@remix-run/node";
+import { Skeleton } from "~/components/ui/skeleton";
+import { SubjectSelectionCard } from "~/components/subjectSelectionCard";
+import { Input } from "~/components/ui/input";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Subjects | KaizenKlass" },
-    { property: "og:title", content: "Subjects | KaizenKlass" },
-    {
-      property: "og:site_name",
-      content: "Kaizen Klass",
-    },
-    // <meta property="og:site_name" content="Site Name" />
-  ];
-};
-
-export default function Subjects() {
+export default function onboard() {
   const { baseUrl }: { baseUrl: string } = useLoaderData();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [nextPage, setNextPage] = useState<string>("");
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
 
   useEffect(() => {
     const callSubjectsEndpoint = async () => {
-      const url = `${baseUrl}/api/v2/get-subjects`;
+      const url = `${baseUrl}/api/v1/get-subjects`;
       try {
         const resp = await axios.get(url);
-        setSubjects(resp.data.subjects.data);
-        setNextPage(resp.data.subjects.next_page_url);
+        setSubjects(resp.data.subjects);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -45,16 +29,6 @@ export default function Subjects() {
     callSubjectsEndpoint();
   }, [baseUrl]);
 
-  const callNextPage = async () => {
-    if (nextPage != null) {
-      const resp = await axios.get(nextPage);
-      const newSubs = resp.data.subjects.data;
-      setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
-      setNextPage(resp.data.subjects.next_page_url);
-    }
-  };
-
-  // * implement the search better, using the backend
   useEffect(() => {
     const filterSubjects = () => {
       if (!searchQuery) {
@@ -86,12 +60,34 @@ export default function Subjects() {
     setSearchQuery("");
   };
 
+  const handleToggle = (uuid: string) => {
+    setSelectedSubjects((prevSelectedSubjects) => {
+      if (prevSelectedSubjects.includes(uuid)) {
+        return prevSelectedSubjects.filter((id) => id !== uuid);
+      } else {
+        return [...prevSelectedSubjects, uuid];
+      }
+    });
+  };
   return (
     <div className="bg-main min-h-screen">
-      <Dashboard baseUrl={baseUrl}>
-        <div className="flex flex-col">
+      <h1 className="text-highlight font-display text-6xl py-4 capitalize text-center">
+        Welcome to the onboarding page
+      </h1>
+      <p className="font-base text-highlightSecondary text-center text-2xl">
+        Please select your subjects to get started with using the site and track
+        your subjects
+      </p>
+      <div className="flex flex-row-reverse">
+        <div className="fixed h-[80%] text-highlightSecondary uppercase font-base justify-center flex flex-col mr-5 text-3xl space-y-5">
+          <button onClick={() => setSelectedSubjects([])}>Clear All</button>
+          <button className="bg-highlight text-main p-2 rounded-2xl">
+            Finish
+          </button>
+        </div>
+        <div className="flex flex-col items-center">
           {!isLoading && (
-            <div className="flex items-center space-x-3 text-xl md:w-full">
+            <div className="flex items-center space-x-3 text-xl md:w-[50%] mt-5">
               <Input
                 type="text"
                 placeholder="Search subjects..."
@@ -102,7 +98,7 @@ export default function Subjects() {
               {isSearching && (
                 <p
                   onClick={clearSearch}
-                  className="font-base font-extrabold text-highlightSecondary"
+                  className="font-base font-extrabold text-highlightSecondary cursor-pointer"
                 >
                   X
                 </p>
@@ -113,23 +109,20 @@ export default function Subjects() {
             {!isLoading ? (
               <>
                 {(searchQuery ? filteredSubjects : subjects).map((subject) => (
-                  <div key={subject.subject} className="md:m-8 my-8">
-                    <SubjectCard
+                  <div
+                    key={subject.subject}
+                    onClick={() => handleToggle(subject.subject_uuid)}
+                    className={`md:m-8 my-8 ${
+                      selectedSubjects.includes(subject.subject_uuid) &&
+                      "border-2 border-highlight rounded-3xl"
+                    }`}
+                  >
+                    <SubjectSelectionCard
                       subject={subject.subject}
                       uuid={subject.subject_uuid}
                     />
                   </div>
                 ))}
-                {nextPage != null && (
-                  <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
-                    <div
-                      className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
-                      onClick={callNextPage}
-                    >
-                      load more
-                    </div>
-                  </div>
-                )}
               </>
             ) : (
               <>
@@ -143,13 +136,10 @@ export default function Subjects() {
             )}
           </div>
         </div>
-      </Dashboard>
+      </div>
     </div>
   );
 }
-
-// todo: make an actual dashboard with useful info to replace subjects page and make subjects page its own thing
-// todo: handle server errors (get help)
 
 export async function loader() {
   const data = {

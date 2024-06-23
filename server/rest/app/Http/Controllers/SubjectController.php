@@ -34,6 +34,10 @@ class SubjectController extends Controller
         $subjects = $this->service->getSubjects();
         return response()->json(["subjects"=>$subjects],200);
     }
+    public function getSubjectsV2(Request $request){
+        $subjects = $this->service->getSubjectsV2();
+        return response()->json(["subjects"=>$subjects],200);
+    }
 
     public function deleteSubject($subjectUuid)
     {

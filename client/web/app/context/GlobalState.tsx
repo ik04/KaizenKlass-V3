@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { GlobalContext } from "./GlobalContext";
 import axios from "axios";
-import { useLoaderData } from "@remix-run/react";
+import { redirect } from "@remix-run/react";
 
 export const GlobalState = ({
   children,
@@ -18,6 +18,7 @@ export const GlobalState = ({
   const [isSidebarExpanded, setSidebarExpanded] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [hasEditPrivileges, setHasEditPrivileges] = useState(false);
+  const [isOnboard, setIsOnboard] = useState<number>(0);
   // ? should i rename this to name or keep as username
   const AdminRole = 0;
   const CrossCheckerRole = 1;
@@ -28,7 +29,8 @@ export const GlobalState = ({
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${resp.data.access_token}`;
-      // console.log(resp.data);
+      console.log(resp.data);
+      setIsOnboard(resp.data.is_onboard);
       setIsAuthenticated(true);
       setUsername(resp.data.name);
       setEmail(resp.data.email);
@@ -46,7 +48,19 @@ export const GlobalState = ({
   useEffect(() => {
     callUserData();
   }, []);
-  //! fix the context for root
+
+  const checkIsOnboard = () => {
+    if (isAuthenticated && !(location.pathname === "/onboard")) {
+      if (isOnboard == 0) {
+        location.href = "/onboard";
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkIsOnboard();
+  }, [isAuthenticated]);
+
   return (
     <GlobalContext.Provider
       value={{
