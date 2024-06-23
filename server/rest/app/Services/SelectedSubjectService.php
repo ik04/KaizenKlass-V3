@@ -56,8 +56,9 @@ class SelectedSubjectService{
                 "selection_uuid" => Uuid::uuid4()
             ]);
     }
-    public function removeSubject($uuid){
-        if(!$selectedSubject = SelectedSubject::where("selection_uuid",$uuid)->first()){
+    public function removeSubject($uuid, $userId){
+        $subjectId = $this->service->getSubjectId($uuid);
+        if(!$selectedSubject = SelectedSubject::where("subject_id",$subjectId)->where("user_id",$userId)->first()){
             throw new SelectionNotFoundException(message:"selection not found", code:404);
         }
         $selectedSubject->delete();

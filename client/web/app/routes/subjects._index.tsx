@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Dashboard } from "~/components/dashboard";
@@ -135,6 +135,16 @@ export default function Subjects() {
                     />
                   </div>
                 ))}
+                <div className="md:m-8 my-8">
+                  <Link
+                    to={`/subjects/select`}
+                    className="hover:border-highlight p-5 flex justify-between items-center md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl md:flex md:flex-col md:justify-center md:items-center md:space-y-5 bg-mainLighter transition-all"
+                  >
+                    <div className="font-base w-full text-highlightSecondary md:p-0 p-4 font-semibold text-center md:text-7xl">
+                      +
+                    </div>
+                  </Link>
+                </div>
                 {nextPage != null && (
                   <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
                     <div

@@ -107,7 +107,7 @@ Route::prefix("v2")->group(function(){
             Route::put("test-resource/{uuid}",[TestResourceController::class,"updateOwnTestResource"]); 
         });
         Route::prefix("delete")->group(function(){
-            Route::post("selected-subject",[SelectedSubjectController::class,"removeSelectedSubject"]);
+            Route::post("selected-subject/{uuid}",[SelectedSubjectController::class,"removeSelectedSubject"]);
             Route::post("selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
         });
     });
