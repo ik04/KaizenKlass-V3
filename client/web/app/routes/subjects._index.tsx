@@ -28,13 +28,15 @@ export default function Subjects() {
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [nextPage, setNextPage] = useState<string>("");
 
   useEffect(() => {
     const callSubjectsEndpoint = async () => {
       const url = `${baseUrl}/api/v1/get-subjects`;
       try {
         const resp = await axios.get(url);
-        setSubjects(resp.data.subjects);
+        setSubjects(resp.data.subjects.data);
+        setNextPage(resp.data.subjects.next_page_url);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -43,6 +45,16 @@ export default function Subjects() {
     callSubjectsEndpoint();
   }, [baseUrl]);
 
+  const callNextPage = async () => {
+    if (nextPage != null) {
+      const resp = await axios.get(nextPage);
+      const newSubs = resp.data.subjects.data;
+      setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
+      setNextPage(resp.data.subjects.next_page_url);
+    }
+  };
+
+  // * implement the search better, using the backend
   useEffect(() => {
     const filterSubjects = () => {
       if (!searchQuery) {
@@ -108,6 +120,16 @@ export default function Subjects() {
                     />
                   </div>
                 ))}
+                {nextPage != null && (
+                  <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
+                    <div
+                      className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
+                      onClick={callNextPage}
+                    >
+                      load more
+                    </div>
+                  </div>
+                )}
               </>
             ) : (
               <>

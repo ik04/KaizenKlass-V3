@@ -32,7 +32,7 @@ class SubjectService{
         $subjects = Subject::select("subject", "subject_uuid")
                     ->withCount('assignments') 
                     ->orderByDesc('assignments_count') 
-                    ->get();
+                    ->paginate(12);
 
                     return $subjects;
     }
