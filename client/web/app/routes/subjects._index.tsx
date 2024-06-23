@@ -62,10 +62,17 @@ export default function Subjects() {
 
   const callNextPage = async () => {
     if (nextPage != null) {
-      const resp = await axios.get(nextPage);
-      const newSubs = resp.data.subjects.data;
-      setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
-      setNextPage(resp.data.subjects.next_page_url);
+      if (isAuthenticated) {
+        const resp = await axios.get(nextPage);
+        const newSubs = resp.data.selected_subjects.data;
+        setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
+        setNextPage(resp.data.selected_subjects.next_page_url);
+      } else {
+        const resp = await axios.get(nextPage);
+        const newSubs = resp.data.subjects.data;
+        setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
+        setNextPage(resp.data.subjects.next_page_url);
+      }
     }
   };
 
@@ -145,16 +152,6 @@ export default function Subjects() {
                     </div>
                   </Link>
                 </div>
-                {nextPage != null && (
-                  <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
-                    <div
-                      className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
-                      onClick={callNextPage}
-                    >
-                      load more
-                    </div>
-                  </div>
-                )}
               </>
             ) : (
               <>
@@ -167,6 +164,16 @@ export default function Subjects() {
               </>
             )}
           </div>
+          {nextPage != null && !isLoading && (
+            <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
+              <div
+                className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
+                onClick={callNextPage}
+              >
+                load more
+              </div>
+            </div>
+          )}
         </div>
       </Dashboard>
     </div>

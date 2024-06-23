@@ -28,7 +28,7 @@ export default function onboard() {
         });
         return;
       }
-      const resp = axios.post(`${baseUrl}/api/v2/onboard`, {
+      const resp = await axios.post(`${baseUrl}/api/v2/onboard`, {
         subject_uuid: selectedSubjects,
       });
       toast({

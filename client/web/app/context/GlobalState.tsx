@@ -59,7 +59,7 @@ export const GlobalState = ({
 
   useEffect(() => {
     checkIsOnboard();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, checkIsOnboard]);
 
   return (
     <GlobalContext.Provider
