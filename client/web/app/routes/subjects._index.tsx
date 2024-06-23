@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dashboard } from "~/components/dashboard";
 import { SplashScreen } from "~/components/splashScreen";
 import { SubjectCard } from "~/components/subjectCard";
@@ -8,6 +8,7 @@ import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
 import Fuse from "fuse.js";
 import { MetaFunction } from "@remix-run/node";
+import { GlobalContext } from "~/context/GlobalContext";
 
 export const meta: MetaFunction = () => {
   return [
@@ -23,6 +24,7 @@ export const meta: MetaFunction = () => {
 
 export default function Subjects() {
   const { baseUrl }: { baseUrl: string } = useLoaderData();
+  const { isAuthenticated } = useContext(GlobalContext);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
@@ -32,18 +34,31 @@ export default function Subjects() {
 
   useEffect(() => {
     const callSubjectsEndpoint = async () => {
-      const url = `${baseUrl}/api/v2/get-subjects`;
-      try {
-        const resp = await axios.get(url);
-        setSubjects(resp.data.subjects.data);
-        setNextPage(resp.data.subjects.next_page_url);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
+      let url;
+      if (isAuthenticated) {
+        url = `${baseUrl}/api/v2/get/selected-subjects`;
+        try {
+          const resp = await axios.get(url);
+          setSubjects(resp.data.selected_subjects.data);
+          setNextPage(resp.data.selected_subjects.next_page_url);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching subjects:", error);
+        }
+      } else {
+        url = `${baseUrl}/api/v2/get-subjects`;
+        try {
+          const resp = await axios.get(url);
+          setSubjects(resp.data.subjects.data);
+          setNextPage(resp.data.subjects.next_page_url);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching subjects:", error);
+        }
       }
     };
     callSubjectsEndpoint();
-  }, [baseUrl]);
+  }, [baseUrl, isAuthenticated]);
 
   const callNextPage = async () => {
     if (nextPage != null) {
