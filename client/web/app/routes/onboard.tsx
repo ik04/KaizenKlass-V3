@@ -1,19 +1,44 @@
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Fuse from "fuse.js";
 import { Skeleton } from "~/components/ui/skeleton";
 import { SubjectSelectionCard } from "~/components/subjectSelectionCard";
 import { Input } from "~/components/ui/input";
+import { toast } from "~/components/ui/use-toast";
+import { GlobalContext } from "~/context/GlobalContext";
 
 export default function onboard() {
   const { baseUrl }: { baseUrl: string } = useLoaderData();
+  const { isOnBoard } = useContext(GlobalContext);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+
+  const onboard = async () => {
+    try {
+      if (selectedSubjects.length == 0) {
+        toast({
+          title: "Please Select Subjects",
+          description: "there are no subjects selected",
+          variant: "destructive",
+        });
+        return;
+      }
+      const resp = axios.post(`${baseUrl}/api/v2/onboard`, {
+        subject_uuid: selectedSubjects,
+      });
+      toast({
+        title: "Subjects Selected!",
+        description: "You have been Onboarded!",
+        variant: "default",
+      });
+      location.href = "/subjects";
+    } catch (err) {}
+  };
 
   useEffect(() => {
     const callSubjectsEndpoint = async () => {
@@ -28,6 +53,14 @@ export default function onboard() {
     };
     callSubjectsEndpoint();
   }, [baseUrl]);
+
+  useEffect(() => {
+    console.log(isOnBoard);
+
+    if (isOnBoard == 1) {
+      location.href = "/subjects";
+    }
+  }, [isOnBoard]);
 
   useEffect(() => {
     const filterSubjects = () => {
@@ -81,7 +114,10 @@ export default function onboard() {
       <div className="flex flex-row-reverse">
         <div className="fixed h-[80%] text-highlightSecondary uppercase font-base justify-center flex flex-col mr-5 text-3xl space-y-5">
           <button onClick={() => setSelectedSubjects([])}>Clear All</button>
-          <button className="bg-highlight text-main p-2 rounded-2xl">
+          <button
+            onClick={onboard}
+            className="bg-highlight text-main p-2 rounded-2xl"
+          >
             Finish
           </button>
         </div>

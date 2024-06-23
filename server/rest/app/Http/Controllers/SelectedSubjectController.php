@@ -16,23 +16,26 @@ class SelectedSubjectController extends Controller
     {
         
     }
-
-    public function onboard(AddSelectedSubjectsRequest $request){
-        try{
-            if($request->user()->is_onboard){
-                throw new UserAlreadyOnboardedException("User Already Onboarded.",code:409);
+    public function onboard(AddSelectedSubjectsRequest $request) {
+        try {
+            if ($request->user()->is_onboard) {
+                throw new UserAlreadyOnboardedException("User Already Onboarded.", 409);
             }
+            
             $validated = $request->validated();
-            $this->service->onboard($validated["subject_uuid"],$request->user());
+            $this->service->onboard($validated["subject_uuid"], $request->user());
+            
+            $request->user()->is_onboard = true;
             $request->user()->save();
-            return response()->json(["message"=>"You have been Onboarded!"]);
-        }catch(Exception $e){
-            return response()->json(["error"=>$e->getMessage()]);
-        }catch(UserAlreadyOnboardedException $e){
-            return response()->json(["error"=>$e->getMessage()],$e->getCode());
+            
+            return response()->json(["message" => "You have been Onboarded!"]);
+        } catch (UserAlreadyOnboardedException $e) {
+            return response()->json(["error" => $e->getMessage()], $e->getCode());
+        } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()]);
         }
     }
-
+    
     public function getSelectedSubjects(Request $request){
         $selectedSubjects = $this->service->getSelectedSubjects($request->user()->id);
         return response()->json(["selected_subjects" => $selectedSubjects]);

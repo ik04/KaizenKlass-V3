@@ -161,7 +161,6 @@ export const AddAssignmentButton = ({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               name=""
-              placeholder="select subject"
               className="py-2 my-2 bg-white text-sm rounded-sm"
               id=""
             >

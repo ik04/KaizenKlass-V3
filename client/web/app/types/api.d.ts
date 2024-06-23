@@ -42,7 +42,7 @@ interface GlobalContextValue {
   setSidebarExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   isAdmin: boolean;
   hasEditPrivileges: boolean;
-  is_onboard: boolean;
+  isOnBoard: number;
 }
 
 interface Resource {

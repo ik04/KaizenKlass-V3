@@ -73,6 +73,7 @@ export const GlobalState = ({
         setSidebarExpanded,
         isAdmin,
         hasEditPrivileges,
+        isOnBoard: isOnboard,
       }}
     >
       {children}
