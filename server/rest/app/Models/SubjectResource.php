@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class SubjectResource extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "content",
+        "user_id",
+        "subject_id",
+        "subject_resource_uuid"
+    ];
 }

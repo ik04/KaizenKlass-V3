@@ -6,6 +6,7 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SelectedSubjectController;
 use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\SubjectResourceController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestResourceController;
 use App\Http\Controllers\UserController;
@@ -98,10 +99,13 @@ Route::prefix("v2")->group(function(){
             Route::get("subjects/{uuid}/tests",[TestController::class,"getTestsBySubject"]);
 
             Route::get("test/{uuid}",[TestController::class,"getTest"]);
+            Route::get("tests",[TestController::class,"getTests"]);
         });
         Route::prefix("add")->group(function(){
             Route::post("selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
             Route::post("selected-subject",[SelectedSubjectController::class,"selectSubject"]);
+
+            Route::post("subject-resource",[SubjectResourceController::class,"addSubjectResource"]);
         });
         Route::prefix("update")->group(function(){
             Route::put("test-resource/{uuid}",[TestResourceController::class,"updateOwnTestResource"]); 

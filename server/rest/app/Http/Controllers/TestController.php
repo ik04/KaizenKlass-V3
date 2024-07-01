@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\TestAlreadyExistsException;
 use App\Http\Requests\AddTestRequest;
 use App\Http\Requests\UpdateTestRequest;
 use App\Services\TestService;
@@ -24,8 +25,12 @@ class TestController extends Controller
             $validated = $request->validated();
             $test = $this->service->createTest($validated["title"],$validated["exam_date"] ?? null,$validated["subject_uuid"]);
             return response()->json(["test"=>$test,"message"=>"Test added successfully!"],201);
-        }catch(Exception $e){
+        }
+        catch(TestAlreadyExistsException $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
+        catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
         }
     }
     public function getTestsWithSelectedSubjects(Request $request){

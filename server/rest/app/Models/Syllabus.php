@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Syllabus extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "link",
+        "subject_id"
+    ];
 }
