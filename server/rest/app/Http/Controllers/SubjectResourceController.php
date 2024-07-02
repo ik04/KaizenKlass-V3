@@ -9,6 +9,7 @@ use App\Models\SubjectResource;
 use App\Services\SubjectResourceService;
 use App\Services\SubjectService;
 use Exception;
+use Illuminate\Http\Request;
 
 class SubjectResourceController extends Controller
 {
@@ -40,7 +41,7 @@ class SubjectResourceController extends Controller
     public function updateSubjectResource(UpdateSubjectResourceRequest $request, $subjectResourceUuid){
         try{
             $validated = $request->validated();
-            $subjectResource = $this->service->updateSubjectResource($validated["content"],$subjectResourceUuid);
+            $subjectResource = $this->service->updateSubjectResource($validated["content"],$subjectResourceUuid,$request->user()->id);
             return response()->json(["message" => "Updated Subject Resource!","subject_resource" => $subjectResource]);
         }catch(InvalidSubjectResourceUuidException $e){
             return response()->json(["message" => $e->getMessage()],$e->getCode());
@@ -48,10 +49,10 @@ class SubjectResourceController extends Controller
             return response()->json(["message" => $e->getMessage()]);
         }
     }
-    public function removeSubjectResources($subjectResourceUuid){
+    public function removeSubjectResources(Request $request,$subjectResourceUuid){
         try{
 
-            $deleteSubjectResource = $this->service->deleteSubjectResource($subjectResourceUuid);
+            $deleteSubjectResource = $this->service->deleteSubjectResource($subjectResourceUuid,$request->user()->id);
             return response()->json(["message" => "Deleted Subject Resource!"]);
         }catch(InvalidSubjectResourceUuidException $e){
             return response()->json(["message" => $e->getMessage()],$e->getCode());

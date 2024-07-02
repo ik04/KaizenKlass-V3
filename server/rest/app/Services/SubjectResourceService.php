@@ -34,8 +34,8 @@ class SubjectResourceService{
         ]);
         return $subjectResource;
     }
-    public function updateSubjectResource($content,$subjectResourceUuid){
-        $subjectResource = SubjectResource::where("subject_resource_uuid",$subjectResourceUuid)->first();
+    public function updateSubjectResource($content,$subjectResourceUuid,$userId){
+        $subjectResource = SubjectResource::where("subject_resource_uuid",$subjectResourceUuid)->where("user_id",$userId)->first();
         if (!$subjectResource) {
             throw new InvalidSubjectResourceUuidException(message:"Subject Resource not found",code:404);
         }
@@ -49,8 +49,8 @@ class SubjectResourceService{
         $subjectResource = $this->removeIds($subjectResource);
         return $subjectResource;
     }
-    public function deleteSubjectResource($subjectResourceUuid){
-        $subjectResource = SubjectResource::where("subject_resource_uuid",$subjectResourceUuid)->first();
+    public function deleteSubjectResource($subjectResourceUuid,$userId){
+        $subjectResource = SubjectResource::where("subject_resource_uuid",$subjectResourceUuid)->where("user_id",$userId)->first();
         if (!$subjectResource) {
             throw new InvalidSubjectResourceUuidException(message:"Subject Resource not found",code:404);
         }
