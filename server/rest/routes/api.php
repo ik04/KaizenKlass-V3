@@ -111,10 +111,15 @@ Route::prefix("v2")->group(function(){
         });
         Route::prefix("update")->group(function(){
             Route::put("test-resource/{uuid}",[TestResourceController::class,"updateOwnTestResource"]); 
+
+            Route::put("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"updateSubjectResource"]); 
         });
         Route::prefix("delete")->group(function(){
             Route::post("selected-subject/{uuid}",[SelectedSubjectController::class,"removeSelectedSubject"]);
             Route::post("selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
+
+            Route::delete("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"updateSubjectResource"]); 
+
         });
     });
     Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){

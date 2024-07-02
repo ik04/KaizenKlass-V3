@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InvalidSubjectResourceUuidException;
 use App\Http\Requests\AddSubjectResourceRequest;
+use App\Http\Requests\UpdateSubjectResourceRequest;
 use App\Models\SubjectResource;
 use App\Services\SubjectResourceService;
 use App\Services\SubjectService;
+use Exception;
 
 class SubjectResourceController extends Controller
 {
@@ -33,5 +36,16 @@ class SubjectResourceController extends Controller
         ->where("subject_id",$subjectId)
         ->get();
         return response()->json(["subject_resources" => $subjectResources]);
+    }
+    public function updateSubjectResource(UpdateSubjectResourceRequest $request, $subjectResourceUuid){
+        try{
+            $validated = $request->validated();
+            $subjectResource = $this->service->updateSubjectResource($validated["content"],$subjectResourceUuid);
+            return response()->json(["message" => "Updated Subject Resource!","subject_resource" => $subjectResource]);
+        }catch(InvalidSubjectResourceUuidException $e){
+            return response()->json(["message" => $e->getMessage()],$e->getCode());
+        }catch(Exception $e){
+            return response()->json(["message" => $e->getMessage()]);
+        }
     }
 }
