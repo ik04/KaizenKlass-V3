@@ -118,7 +118,7 @@ Route::prefix("v2")->group(function(){
             Route::post("selected-subject/{uuid}",[SelectedSubjectController::class,"removeSelectedSubject"]);
             Route::post("selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
 
-            Route::delete("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"updateSubjectResource"]); 
+            Route::delete("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"removeSubjectResources"]); 
 
         });
     });

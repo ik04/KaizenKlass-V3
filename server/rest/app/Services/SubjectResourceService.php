@@ -49,4 +49,11 @@ class SubjectResourceService{
         $subjectResource = $this->removeIds($subjectResource);
         return $subjectResource;
     }
+    public function deleteSubjectResource($subjectResourceUuid){
+        $subjectResource = SubjectResource::where("subject_resource_uuid",$subjectResourceUuid)->first();
+        if (!$subjectResource) {
+            throw new InvalidSubjectResourceUuidException(message:"Subject Resource not found",code:404);
+        }
+        $subjectResource->delete();
+    }
 }

@@ -48,4 +48,15 @@ class SubjectResourceController extends Controller
             return response()->json(["message" => $e->getMessage()]);
         }
     }
+    public function removeSubjectResources($subjectResourceUuid){
+        try{
+
+            $deleteSubjectResource = $this->service->deleteSubjectResource($subjectResourceUuid);
+            return response()->json(["message" => "Deleted Subject Resource!"]);
+        }catch(InvalidSubjectResourceUuidException $e){
+            return response()->json(["message" => $e->getMessage()],$e->getCode());
+        }catch(Exception $e){
+            return response()->json(["message" => $e->getMessage()]);
+        }
+    }
 }
