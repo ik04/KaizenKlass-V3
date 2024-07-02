@@ -100,6 +100,8 @@ Route::prefix("v2")->group(function(){
 
             Route::get("test/{uuid}",[TestController::class,"getTest"]);
             Route::get("tests",[TestController::class,"getTests"]);
+
+            Route::get("subject-resources/{uuid}",[SubjectResourceController::class,"getSubjectResources"]);
         });
         Route::prefix("add")->group(function(){
             Route::post("selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
