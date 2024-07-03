@@ -33,7 +33,7 @@ class TestController extends Controller
             return response()->json(["error"=>$e->getMessage()]);
         }
     }
-    public function getTestsWithSelectedSubjects(Request $request){
+    public function getTestsWithSelectedSubjects(Request $request){ // for logged in 
         try{
             $tests = $this->service->getTestsWithSelectedSubjects($request->user()->id);
             return response()->json(["tests"=>$tests],200);
@@ -41,7 +41,7 @@ class TestController extends Controller
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
     }
-    public function getTestsBySubject($uuid){
+    public function getTestsBySubject($uuid){ // for not logged in 
         try{
             $tests = $this->service->getTestsBySubjects($uuid);
             return response()->json(["tests"=>$tests],200);
@@ -49,7 +49,7 @@ class TestController extends Controller
             return response()->json(["error"=>$e->getMessage(),"code"=>$e->getCode()]);
         }
     }
-    public function getTest($uuid){
+    public function getTest($uuid){ // for all tests
         try{
             $test = $this->service->getTestWithResources($uuid);
             return response()->json(["test"=>$test],200);

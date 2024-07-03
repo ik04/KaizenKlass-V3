@@ -24,6 +24,11 @@ export const Dashboard = ({
       img: "/assets/assignments.svg",
       name: "assignments",
     },
+    {
+      href: "/tests",
+      img: "/assets/exam.png",
+      name: "tests",
+    },
     { href: "/deadlines", img: "/assets/skull.svg", name: "deadlines" },
   ];
   const extraSidebarIcons = [

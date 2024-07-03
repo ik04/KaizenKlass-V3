@@ -51,7 +51,6 @@ class SubjectResourceController extends Controller
     }
     public function removeSubjectResources(Request $request,$subjectResourceUuid){
         try{
-
             $deleteSubjectResource = $this->service->deleteSubjectResource($subjectResourceUuid,$request->user()->id);
             return response()->json(["message" => "Deleted Subject Resource!"]);
         }catch(InvalidSubjectResourceUuidException $e){
