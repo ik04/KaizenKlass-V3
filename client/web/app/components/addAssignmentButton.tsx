@@ -154,7 +154,7 @@ export const AddAssignmentButton = ({
         </div>
       </DialogTrigger>
       <DialogContent>
-        <div className="font-base flex flex-col space-y-1 md:block">
+        <div className="font-base flex flex-col space-y-1 md:block overflow-hidden">
           <div className="flex flex-col">
             <Label>Subject</Label>
             <select
