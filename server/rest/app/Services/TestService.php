@@ -17,7 +17,7 @@ class TestService{
     }
 
     public function getTests(){
-        $tests = Test::select("title","exam_date","test_uuid")->get();
+        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->join("subjects","subjects.id","=","tests.subject_id")->get();
         return $tests;
     }
 

@@ -42,18 +42,34 @@ export default function assignments() {
   };
   const callAssignmentsWithSubjects = async () => {
     try {
-      const url = `${baseUrl}/api/v1/get-assignment-subjects?page=1`;
-      const resp = await axios.get(url);
-      // console.log(resp);
-      setIsLoading(false);
-      setLastPage(resp.data.assignments.last_page);
-      if (resp.data.assignments.data.length === 0) {
-        setIsEmpty(true);
+      if (isAuthenticated) {
+        const url = `${baseUrl}/api/v2/get/selected-subjects/assignments?page=1`;
+        const resp = await axios.get(url);
+        setLastPage(resp.data.assignments.last_page);
+        if (resp.data.assignments.data.length === 0) {
+          setIsEmpty(true);
+          setIsLoading(false);
+        } else {
+          setAssignments(resp.data.assignments.data);
+          setIsLoading(false);
+        }
+        if (resp.data.assignments.next_page_url !== null) {
+          setIsLastPage(false);
+        }
       } else {
-        setAssignments(resp.data.assignments.data);
-      }
-      if (resp.data.assignments.next_page_url !== null) {
-        setIsLastPage(false);
+        const url = `${baseUrl}/api/v1/get-assignment-subjects?page=1`;
+        const resp = await axios.get(url);
+        // console.log(resp);
+        setIsLoading(false);
+        setLastPage(resp.data.assignments.last_page);
+        if (resp.data.assignments.data.length === 0) {
+          setIsEmpty(true);
+        } else {
+          setAssignments(resp.data.assignments.data);
+        }
+        if (resp.data.assignments.next_page_url !== null) {
+          setIsLastPage(false);
+        }
       }
     } catch (error) {
       toast({
@@ -63,6 +79,7 @@ export default function assignments() {
       });
     }
   };
+  //! improved approach in subjects page, refactor later
   const callNextPage = async () => {
     try {
       const nextPage = page + 1;
@@ -85,10 +102,32 @@ export default function assignments() {
       });
     }
   };
+  const callNextAuthPage = async () => {
+    try {
+      const nextPage = page + 1;
+      const url = `${baseUrl}/api/v2/get/selected-subjects/assignments?page=${nextPage}`;
+      const resp = await axios.get(url);
+      const newAssignments = resp.data.assignments.data;
+      setAssignments((prevAssignments) => [
+        ...prevAssignments,
+        ...newAssignments,
+      ]);
+      setPage(nextPage);
+      if (resp.data.assignments.next_page_url === null) {
+        setIsLastPage(true);
+      }
+    } catch (error) {
+      toast({
+        title: "Error Loading Assignments",
+        description: `An error occurred while loading the assignments`,
+        variant: "destructive",
+      });
+    }
+  };
 
   useEffect(() => {
     callAssignmentsWithSubjects();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="bg-main h-screen">
