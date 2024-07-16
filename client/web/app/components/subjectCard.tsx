@@ -7,7 +7,7 @@ export const SubjectCard = ({
   subject: string;
   uuid: string;
 }) => {
-  // todo: make uniquee with varying icons, eeg: initials or something else
+  // todo: make unique with varying icons, eg: initials or something else
   return (
     <Link
       to={`/subjects/${uuid}`}

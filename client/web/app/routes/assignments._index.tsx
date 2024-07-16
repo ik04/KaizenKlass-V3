@@ -32,7 +32,6 @@ export default function assignments() {
     useContext(GlobalContext);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [page, setPage] = useState(1);
-  const [lastPage, setLastPage] = useState();
   const [isLastPage, setIsLastPage] = useState(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +44,9 @@ export default function assignments() {
       if (isAuthenticated) {
         const url = `${baseUrl}/api/v2/get/selected-subjects/assignments?page=1`;
         const resp = await axios.get(url);
-        setLastPage(resp.data.assignments.last_page);
+        console.log(resp);
+        console.log(resp.data.assignments.next_page_url);
+
         if (resp.data.assignments.data.length === 0) {
           setIsEmpty(true);
           setIsLoading(false);
@@ -53,21 +54,24 @@ export default function assignments() {
           setAssignments(resp.data.assignments.data);
           setIsLoading(false);
         }
-        if (resp.data.assignments.next_page_url !== null) {
+
+        if (resp.data.assignments.next_page_url === null) {
+          setIsLastPage(true);
+        } else {
           setIsLastPage(false);
         }
       } else {
         const url = `${baseUrl}/api/v1/get-assignment-subjects?page=1`;
         const resp = await axios.get(url);
-        // console.log(resp);
         setIsLoading(false);
-        setLastPage(resp.data.assignments.last_page);
         if (resp.data.assignments.data.length === 0) {
           setIsEmpty(true);
         } else {
           setAssignments(resp.data.assignments.data);
         }
-        if (resp.data.assignments.next_page_url !== null) {
+        if (resp.data.assignments.next_page_url === null) {
+          setIsLastPage(true);
+        } else {
           setIsLastPage(false);
         }
       }
@@ -168,7 +172,9 @@ export default function assignments() {
                     <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
                       <div
                         className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 w-[40%] flex justify-center items-center text-2xl p-2"
-                        onClick={callNextPage}
+                        onClick={
+                          isAuthenticated ? callNextAuthPage : callNextPage
+                        }
                       >
                         load more
                       </div>
