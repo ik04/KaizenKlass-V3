@@ -52,10 +52,10 @@ export default function subjectPage() {
           {sections.map((section) => (
             <Link
               to={section.href}
-              className="text-highlightSecondary bg-mainLighter flex-1 rounded-3xl flex flex-col justify-center items-center space-y-5"
+              className="text-highlightSecondary bg-mainLighter flex-1 rounded-3xl flex flex-col justify-center items-center space-y-5 hover:border hover:border-highlight duration-75"
             >
-              <img src={section.img} className="w-20" alt="" />
-              <h1 className="font-display capitalize font-bold text-3xl">
+              <img src={section.img} className="w-16" alt="" />
+              <h1 className="font-base capitalize font-bold text-3xl">
                 {section.name}
               </h1>
             </Link>
