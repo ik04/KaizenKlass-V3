@@ -17,7 +17,7 @@ class TestService{
     }
 
     public function getTests(){
-        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->join("subjects","subjects.id","=","tests.subject_id")->get();
+        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->join("subjects","subjects.id","=","tests.subject_id")->paginate(5);
         return $tests;
     }
 
@@ -52,12 +52,12 @@ class TestService{
         $tests = Test::join("subjects", "subjects.id", "=", "tests.subject_id")
         ->leftJoin("selected_subjects", "selected_subjects.subject_id", "=", "tests.subject_id")
         ->select("tests.title", "tests.test_uuid", "subjects.subject", "subjects.subject_uuid")->where("selected_subjects.user_id",$userId)
-        ->orderBy("tests.id", "DESC")->get();
+        ->orderBy("tests.id", "DESC")->paginate(5);
         return $tests;
     }
     public function getTestsBySubjects(string $subjectUuid){
         $subjectId = $this->subjectService->getSubjectId($subjectUuid);
-        $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->get();
+        $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->paginate(5);
         return $tests;
     }
    public function getTestWithResources(string $uuid)

@@ -51,3 +51,10 @@ interface Resource {
   link: string;
   type: number;
 }
+interface Test {
+  title: string;
+  exam_date?: string;
+  test_uuid: string;
+  subject_uuid: string;
+  subject: string;
+}

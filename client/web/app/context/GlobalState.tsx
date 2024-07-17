@@ -29,7 +29,6 @@ export const GlobalState = ({
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${resp.data.access_token}`;
-      console.log(resp.data);
       setIsOnboard(resp.data.is_onboard);
       setIsAuthenticated(true);
       setUsername(resp.data.name);

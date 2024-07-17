@@ -44,7 +44,6 @@ export default function assignments() {
       if (isAuthenticated) {
         const url = `${baseUrl}/api/v2/get/selected-subjects/assignments?page=1`;
         const resp = await axios.get(url);
-        console.log(resp);
         console.log(resp.data.assignments.next_page_url);
 
         if (resp.data.assignments.data.length === 0) {
