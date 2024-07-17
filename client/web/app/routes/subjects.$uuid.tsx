@@ -28,11 +28,11 @@ export default function subjectPage() {
       img: "/assets/assignments.svg",
     },
     { name: "tests", href: `/subjects/tests/${uuid}`, img: "/assets/exam.png" },
-    {
-      name: "syllabus",
-      href: `/subjects/syllabus/${uuid}`,
-      img: "/assets/syllabus.svg",
-    },
+    // {
+    //   name: "syllabus",
+    //   href: `/subjects/syllabus/${uuid}`,
+    //   img: "/assets/syllabus.svg",
+    // },
     {
       name: "resources",
       href: `/subjects/resources/${uuid}`,
