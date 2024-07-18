@@ -90,7 +90,7 @@ export default function tests() {
           {!isLoading ? (
             <>
               {!isEmpty ? (
-                <>
+                <div className="flex flex-col space-y-7">
                   {tests.map((test) => (
                     <TestCard
                       test_uuid={test.test_uuid}
@@ -101,7 +101,7 @@ export default function tests() {
                       key={test.test_uuid}
                     />
                   ))}
-                </>
+                </div>
               ) : (
                 <>
                   <EmptyState />
