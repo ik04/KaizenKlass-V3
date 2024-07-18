@@ -8,10 +8,10 @@ use Ramsey\Uuid\Uuid;
 
 class SubjectService{
     public function getSubjectId($subjectUuid){
-        if(!$actualSubjectId = Subject::select("id")->where("subject_uuid",$subjectUuid)->first()->id){
+        if(!$actualSubjectId = Subject::select("id")->where("subject_uuid",$subjectUuid)->first()){
             throw new InvalidSlugException(message:"Invalid Subject Slug", code:400);
         }
-        return $actualSubjectId;
+        return $actualSubjectId->id;
     }
     public function getSubjectName($subjectUuid){
         if(!$subject = Subject::select("subject")->where("subject_uuid",$subjectUuid)->first()->subject){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InvalidSlugException;
 use App\Exceptions\TestAlreadyExistsException;
 use App\Http\Requests\AddTestRequest;
 use App\Http\Requests\UpdateTestRequest;
@@ -27,6 +28,9 @@ class TestController extends Controller
             return response()->json(["test"=>$test,"message"=>"Test added successfully!"],201);
         }
         catch(TestAlreadyExistsException $e){
+            return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
+        catch(InvalidSlugException $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
         catch(Exception $e){
