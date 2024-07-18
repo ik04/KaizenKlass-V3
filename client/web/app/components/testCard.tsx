@@ -53,11 +53,16 @@ export const TestCard = (test: Test) => {
       to={`/tests/${test_uuid}`}
       className="bg-mainLighter h-32 flex rounded-2xl flex-col items-start justify-center hover:border-highlight border border-mainLighter duration-150 transition-all space-y-1 p-5"
     >
-      <Link to={`/tests/${test_uuid}`} className="">
+      <Link
+        to={`/tests/${test_uuid}`}
+        className="flex items-center justify-between w-full"
+      >
         <h2 className="text-4xl font-base text-highlight">
           {!isMobileViewport ? title : truncatedTitle}
         </h2>
+        <img src="/assets/examIcon.png" className="w-12" alt="" />
       </Link>
+
       {subject && subject_uuid && (
         <Link
           to={`/subjects/${subject_uuid}`}
@@ -65,7 +70,7 @@ export const TestCard = (test: Test) => {
         >
           <div className="flex space-x-1">
             <p>{subject}</p>
-            <img src="/assets/testIcon.png" alt="" />
+            <img src="/assets/book.svg" alt="" />
           </div>
         </Link>
       )}
