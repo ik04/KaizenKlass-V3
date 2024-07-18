@@ -31,7 +31,7 @@ export default function tests() {
   const { isAuthenticated, role, hasEditPrivileges } =
     useContext(GlobalContext);
   const [tests, setTests] = useState<Test[]>([]);
-  const [page, setPage] = useState(1);
+  const [nextPage, setNextPage] = useState("");
   const [isLastPage, setIsLastPage] = useState(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +42,7 @@ export default function tests() {
         // const url = `${baseUrl}/api/v2/get/tests?page=1`;
         const url = isAuthenticated
           ? `${baseUrl}/api/v2/get/selected-subjects/tests?page=1`
-          : `${baseUrl}/api/v2/get/selected-subjects/tests?page=1`;
+          : `${baseUrl}/api/v2/get/tests?page=1`;
         const resp = await axios.get(url);
         console.log(resp.data.tests);
         if (resp.data.tests.data.length === 0) {
@@ -56,10 +56,17 @@ export default function tests() {
         if (resp.data.tests.next_page_url === null) {
           setIsLastPage(true);
         } else {
+          setNextPage(resp.data.tests.next_page_url);
           setIsLastPage(false);
         }
       }
     } catch (err: any) {}
+  };
+  const callNextPage = async () => {
+    const resp = await axios.get(nextPage);
+    const newTests = resp.data.tests.data;
+    setTests((prevTests) => [...prevTests, ...newTests]);
+    setNextPage(resp.data.tests.next_page_url);
   };
 
   useEffect(() => {
