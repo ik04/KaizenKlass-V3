@@ -38,27 +38,19 @@ export default function tests() {
 
   const callTestsWithSubjects = async () => {
     try {
-      if (isAuthenticated) {
-        // const url = `${baseUrl}/api/v2/get/tests?page=1`;
-        const url = isAuthenticated
-          ? `${baseUrl}/api/v2/get/selected-subjects/tests?page=1`
-          : `${baseUrl}/api/v2/get/tests?page=1`;
-        const resp = await axios.get(url);
-        console.log(resp.data.tests);
-        if (resp.data.tests.data.length === 0) {
-          setIsEmpty(true);
-          setIsLoading(false);
-        } else {
-          setTests(resp.data.tests.data);
-          setIsLoading(false);
-        }
-
-        if (resp.data.tests.next_page_url === null) {
-          setIsLastPage(true);
-        } else {
-          setNextPage(resp.data.tests.next_page_url);
-          setIsLastPage(false);
-        }
+      // const url = `${baseUrl}/api/v2/get/tests?page=1`;
+      const url = isAuthenticated
+        ? `${baseUrl}/api/v2/get/selected-subjects/tests?page=1`
+        : `${baseUrl}/api/v2/get/tests?page=1`;
+      const resp = await axios.get(url);
+      console.log(resp.data.tests);
+      if (resp.data.tests.data.length === 0) {
+        setIsEmpty(true);
+        setIsLoading(false);
+      } else {
+        setTests(resp.data.tests.data);
+        setNextPage(resp.data.tests.next_page_url);
+        setIsLoading(false);
       }
     } catch (err: any) {}
   };
@@ -81,6 +73,7 @@ export default function tests() {
             Tests
           </div>
         </div>
+        <></>
       </Dashboard>
     </div>
   );

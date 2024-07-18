@@ -81,6 +81,9 @@ Route::prefix("v2")->group(function(){
     Route::get("get-subjects",[SubjectController::class,"getSubjectsV2"]);
     Route::prefix("get")->group(function(){
         Route::get("tests",[TestController::class,"getTests"]);
+        Route::get("subject-resources/{uuid}",[SubjectResourceController::class,"getSubjectResources"]);
+        Route::get("subjects/{uuid}/tests",[TestController::class,"getTestsBySubject"]);
+        Route::get("test/{uuid}",[TestController::class,"getTest"]);
         
     });
 
@@ -96,12 +99,6 @@ Route::prefix("v2")->group(function(){
             Route::get("selected-subjects/search/{query}",[SelectedSubjectController::class,"searchSelectedSubjects"]);
 
             Route::get("selected-subjects/tests",[TestController::class,"getTestsWithSelectedSubjects"]);
-            Route::get("subjects/{uuid}/tests",[TestController::class,"getTestsBySubject"]);
-
-            Route::get("test/{uuid}",[TestController::class,"getTest"]);
-            Route::get("tests",[TestController::class,"getTests"]);
-
-            Route::get("subject-resources/{uuid}",[SubjectResourceController::class,"getSubjectResources"]);
         });
         Route::prefix("add")->group(function(){
             Route::post("selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
