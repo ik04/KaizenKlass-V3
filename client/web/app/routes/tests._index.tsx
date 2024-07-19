@@ -12,6 +12,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 import { MetaFunction } from "@remix-run/node";
 import { TestCard } from "~/components/testCard";
+import { AddTestButton } from "~/components/addTestButton";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,13 +30,16 @@ export default function tests() {
   // const { assignments }: { assignments: Assignment[] } = useLoaderData();
   // ? directly set nextpage url?
   const { baseUrl }: { baseUrl: string } = useLoaderData();
-  const { isAuthenticated, role, hasEditPrivileges } =
-    useContext(GlobalContext);
+  const { isAuthenticated, hasEditPrivileges } = useContext(GlobalContext);
   const [tests, setTests] = useState<Test[]>([]);
   const [nextPage, setNextPage] = useState("");
   const [isLastPage, setIsLastPage] = useState(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleTestAddition = (test: Test) => {
+    setTests([test, ...tests]);
+  };
 
   const callTestsWithSubjects = async () => {
     try {
@@ -86,11 +90,17 @@ export default function tests() {
             Tests
           </div>
         </div>
-        <div className="md:h-[80%]">
+        <div className="md:h-[80%] h-full">
           {!isLoading ? (
             <>
               {!isEmpty ? (
                 <div className="flex flex-col space-y-7">
+                  {hasEditPrivileges && (
+                    <AddTestButton
+                      handleAddTest={handleTestAddition}
+                      baseUrl={baseUrl}
+                    />
+                  )}
                   {tests.map((test) => (
                     <TestCard
                       test_uuid={test.test_uuid}

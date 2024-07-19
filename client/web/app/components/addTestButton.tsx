@@ -21,12 +21,12 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export const AddAssignmentButton = ({
+export const AddTestButton = ({
   baseUrl,
-  handleAddAssignment,
+  handleAddTest,
 }: {
   baseUrl: string;
-  handleAddAssignment: (assignment: Assignment) => void;
+  handleAddTest: (test: Test) => void;
 }) => {
   const { toast } = useToast();
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -41,9 +41,9 @@ export const AddAssignmentButton = ({
   const [open, setOpen] = useState<boolean>(false);
 
   const getSubjects = async () => {
-    const url = `${baseUrl}/api/v2/get/selected-subjects/all`;
+    const url = `${baseUrl}/api/v1/get-subjects`;
     const resp = await axios.get(url);
-    setSubjects(resp.data.selected_subjects);
+    setSubjects(resp.data.subjects);
   };
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const AddAssignmentButton = ({
           title: "Assignment Added!",
           description: `${title} has been added to the assignments`,
         });
-        handleAddAssignment(resp.data.assignment);
+        handleAddTest(resp.data.assignment);
         resetFields();
       } else {
         toast({

@@ -28,6 +28,10 @@ class SelectedSubjectService{
         $selectedSubjects = SelectedSubject::join("subjects","selected_subjects.subject_id","=","subjects.id")->select("subjects.subject_uuid","subjects.subject")->where("selected_subjects.user_id",$userId)->paginate(8);
         return $selectedSubjects;
     }
+    public function getAllSelectedSubjects($userId){
+        $selectedSubjects = SelectedSubject::join("subjects","selected_subjects.subject_id","=","subjects.id")->select("subjects.subject_uuid","subjects.subject")->where("selected_subjects.user_id",$userId)->get();
+        return $selectedSubjects;
+    }
     
     public function selectSubjects($subjectSlugs, $userId)
     {

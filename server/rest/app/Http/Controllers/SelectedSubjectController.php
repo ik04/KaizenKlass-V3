@@ -40,6 +40,10 @@ class SelectedSubjectController extends Controller
         $selectedSubjects = $this->service->getSelectedSubjects($request->user()->id);
         return response()->json(["selected_subjects" => $selectedSubjects]);
     }
+    public function getAllSelectedSubjects(Request $request){
+        $selectedSubjects = $this->service->getAllSelectedSubjects($request->user()->id);
+        return response()->json(["selected_subjects" => $selectedSubjects]);
+    }
 
     public function selectSubjects(AddSelectedSubjectsRequest $request){
         try{

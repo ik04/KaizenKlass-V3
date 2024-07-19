@@ -93,6 +93,7 @@ Route::prefix("v2")->group(function(){
     Route::middleware(["auth:sanctum","checkIsOnboard"])->group(function(){
         Route::prefix("get")->group(function(){
             Route::get("selected-subjects",[SelectedSubjectController::class,"getSelectedSubjects"]);
+            Route::get("selected-subjects/all",[SelectedSubjectController::class,"getAllSelectedSubjects"]);
             Route::get("selected-subjects/assignments",[AssignmentController::class,"getAssignmentsWithSelectedSubjects"]);
 
             Route::get("subjects/search/{query}",[SubjectController::class,"searchSubjects"]);
