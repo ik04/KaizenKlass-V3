@@ -86,7 +86,7 @@ export default function tests() {
             Tests
           </div>
         </div>
-        <div className="">
+        <div className="md:h-[80%]">
           {!isLoading ? (
             <>
               {!isEmpty ? (
@@ -103,9 +103,7 @@ export default function tests() {
                   ))}
                 </div>
               ) : (
-                <>
-                  <EmptyState />
-                </>
+                <EmptyState />
               )}
             </>
           ) : (
