@@ -51,7 +51,7 @@ class TestService{
     public function getTestsWithSelectedSubjects($userId){
         $tests = Test::join("subjects", "subjects.id", "=", "tests.subject_id")
         ->leftJoin("selected_subjects", "selected_subjects.subject_id", "=", "tests.subject_id")
-        ->select("tests.title", "tests.test_uuid", "subjects.subject", "subjects.subject_uuid")->where("selected_subjects.user_id",$userId)
+        ->select("tests.title", "tests.test_uuid", "subjects.subject", "subjects.subject_uuid","tests.exam_date")->where("selected_subjects.user_id",$userId)
         ->orderBy("tests.id", "DESC")->paginate(5);
         return $tests;
     }

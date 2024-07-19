@@ -51,38 +51,40 @@ export const TestCard = (test: Test) => {
   return (
     <Link
       to={`/tests/${test_uuid}`}
-      className="bg-mainLighter h-32 flex rounded-2xl flex-col items-start justify-center hover:border-highlight border border-mainLighter duration-150 transition-all space-y-1 p-5"
+      className="bg-mainLighter h-32 flex rounded-2xl items-center justify-between hover:border-highlight border border-mainLighter duration-150 transition-all space-y-1 p-5"
     >
-      <Link
-        to={`/tests/${test_uuid}`}
-        className="flex items-center justify-between w-full"
-      >
-        <h2 className="text-4xl font-base text-highlight">
-          {!isMobileViewport ? title : truncatedTitle}
-        </h2>
-        <img src="/assets/examIcon.png" className="w-12" alt="" />
-      </Link>
-
-      {subject && subject_uuid && (
+      <div className="">
         <Link
-          to={`/subjects/${subject_uuid}`}
-          className="text-highlightSecondary font-base"
+          to={`/tests/${test_uuid}`}
+          className="flex items-center justify-between w-full"
         >
-          <div className="flex space-x-1">
-            <p>{subject}</p>
-            <img src="/assets/book.svg" alt="" />
-          </div>
+          <h2 className="text-4xl font-base text-highlight">
+            {!isMobileViewport ? title : truncatedTitle}
+          </h2>
         </Link>
-      )}
-      {exam_date != null && (
-        <div
-          className={`${
-            !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
-          } font-base md:text-xl`}
-        >
-          {readableDeadline}
-        </div>
-      )}
+
+        {subject && subject_uuid && (
+          <Link
+            to={`/subjects/${subject_uuid}`}
+            className="text-highlightSecondary font-base"
+          >
+            <div className="flex space-x-1">
+              <p>{subject}</p>
+              <img src="/assets/book.svg" alt="" />
+            </div>
+          </Link>
+        )}
+        {exam_date != null && (
+          <div
+            className={`${
+              !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
+            } font-base md:text-xl`}
+          >
+            {readableDeadline}
+          </div>
+        )}
+      </div>
+      <img src="/assets/examIcon.png" className="w-12" alt="" />
     </Link>
   );
 };
