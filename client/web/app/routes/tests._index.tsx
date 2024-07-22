@@ -90,11 +90,11 @@ export default function tests() {
             Tests
           </div>
         </div>
-        <div className="md:h-[80%] h-full">
+        <div className="">
           {!isLoading ? (
             <>
               {!isEmpty ? (
-                <div className="flex flex-col space-y-7">
+                <div className="flex flex-col space-y-7 mb-10">
                   {hasEditPrivileges && (
                     <AddTestButton
                       handleAddTest={handleTestAddition}
@@ -111,6 +111,16 @@ export default function tests() {
                       key={test.test_uuid}
                     />
                   ))}
+                  {nextPage != null && (
+                    <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
+                      <div
+                        className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 w-[40%] flex justify-center items-center text-2xl p-2"
+                        onClick={callNextPage}
+                      >
+                        load more
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <EmptyState />

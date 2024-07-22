@@ -32,18 +32,14 @@ export const AddTestButton = ({
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [subject, setSubject] = useState<string>();
   const [title, setTitle] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [link, setLink] = useState<string>();
-  const [content, setContent] = useState<string>();
   const [date, setDate] = useState<Date | null>(null);
   const [isDatePicked, setIsDatePicked] = useState<boolean>(false);
-  const [time, setTime] = useState("");
   const [open, setOpen] = useState<boolean>(false);
 
   const getSubjects = async () => {
-    const url = `${baseUrl}/api/v1/get-subjects`;
+    const url = `${baseUrl}/api/v2/get/selected-subjects/all`;
     const resp = await axios.get(url);
-    setSubjects(resp.data.subjects);
+    setSubjects(resp.data.selected_subjects);
   };
 
   useEffect(() => {
@@ -53,38 +49,25 @@ export const AddTestButton = ({
   const addAssignment = async () => {
     try {
       if (subject && title) {
-        if (date && !time) {
-          toast({
-            title: "Required fields",
-            variant: "destructive",
-            description: `Add both date and time are required for deadline`,
-          });
-          return;
-        }
         let combinedDeadline = null;
-        if (time && date) {
-          // Combine date and time
+        if (date) {
           const deadlineDateTime = new Date(date);
-          const [hours, minutes] = time.split(":");
-          deadlineDateTime.setHours(parseInt(hours, 10));
-          deadlineDateTime.setMinutes(parseInt(minutes, 10));
-          deadlineDateTime.setSeconds(0); // Ensure seconds are set to 0
-          combinedDeadline = format(deadlineDateTime, "yyyy-MM-dd HH:mm:ss");
+          // deadlineDateTime.setHours(23);
+          // deadlineDateTime.setMinutes(0);
+          // deadlineDateTime.setSeconds(0); // Ensure seconds are set to 0
+          combinedDeadline = format(deadlineDateTime, "yyyy-MM-dd");
           console.log(combinedDeadline);
         }
-        const resp = await axios.post(`${baseUrl}/api/v1/add-assignment`, {
+        const resp = await axios.post(`${baseUrl}/api/v2/add/test`, {
           title,
-          content,
-          link,
-          description,
           subject_uuid: subject,
-          deadline: combinedDeadline,
+          exam_date: combinedDeadline,
         });
         toast({
           title: "Assignment Added!",
           description: `${title} has been added to the assignments`,
         });
-        handleAddTest(resp.data.assignment);
+        handleAddTest(resp.data.test);
         resetFields();
       } else {
         toast({
@@ -136,12 +119,7 @@ export const AddTestButton = ({
   const resetFields = () => {
     setSubject("");
     setTitle("");
-    setDescription("");
-    setLink("");
-    setContent("");
     setDate(null);
-    setIsDatePicked(false);
-    setTime("");
   };
 
   return (
@@ -181,15 +159,10 @@ export const AddTestButton = ({
             onChange={(e) => setTitle(e.target.value)}
             required
           />
-          <Label>Description</Label>
-          <Textarea
-            value={description}
-            placeholder="description (optional)"
-            onChange={(e) => setDescription(e.target.value)}
-          />
+
           <div className="flex flex-col space-y-1">
             <div className="">
-              <Label>Deadline</Label>
+              <Label>Exam Date</Label>
               <div className="bg-highlightSecondary rounded-md p-5 flex space-y-7 flex-col">
                 <Calendar onChange={handleDateChange} value={date} />
                 {date && (
@@ -199,37 +172,7 @@ export const AddTestButton = ({
                 )}
               </div>
             </div>
-            <div className="">
-              <Label>Time</Label>
-              {isDatePicked ? (
-                <>
-                  <Input
-                    type="time"
-                    onChange={(e) => {
-                      setTime(e.target.value);
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  {" "}
-                  <Input
-                    disabled
-                    type="time"
-                    onChange={(e) => {
-                      setTime(e.target.value);
-                    }}
-                  />
-                </>
-              )}
-            </div>
           </div>
-          <Label>Content</Label>
-          <Input
-            value={content}
-            placeholder="Drive link of assignment (a share link of the pdf)"
-            onChange={(e) => setContent(e.target.value)}
-          />
         </div>
         <div className="flex space-x-4 items-center">
           <div

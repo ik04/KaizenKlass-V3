@@ -18,16 +18,17 @@ export const AssignmentCard = ({
   return (
     <Link
       to={`/assignments/${assignment_uuid}`}
-      className="bg-mainLighter h-max-36 md:h-32 flex rounded-2xl items-center justify-between hover:border-highlight border border-mainLighter duration-200 transition-all space-y-3 p-5"
+      className="bg-mainLighter h-max-36 md:h-32 w-full flex rounded-2xl items-center justify-between hover:border-highlight border border-mainLighter duration-200 transition-all space-y-3 p-5"
     >
       <div className="">
         <Link
           to={`/assignments/${assignment_uuid}`}
-          className="flex justify-between w-full items-center"
+          className="flex justify-between space-x-5 w-full items-center"
         >
           <h2 className="text-4xl font-base text-highlight">
             {!isMobileViewport ? title : truncatedTitle}
           </h2>
+          <img src="/assets/assignment.svg" className="w-12" alt="" />
         </Link>
         {subject && subject_uuid && (
           <Link
@@ -41,7 +42,6 @@ export const AssignmentCard = ({
           </Link>
         )}
       </div>
-      <img src="/assets/assignment.png" className="w-12" alt="" />
     </Link>
   );
 };

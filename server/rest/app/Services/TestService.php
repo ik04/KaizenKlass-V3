@@ -49,10 +49,18 @@ class TestService{
         return $test;
     }
     public function getTestsWithSelectedSubjects($userId){
+        $currentDate = now();
         $tests = Test::join("subjects", "subjects.id", "=", "tests.subject_id")
         ->leftJoin("selected_subjects", "selected_subjects.subject_id", "=", "tests.subject_id")
-        ->select("tests.title", "tests.test_uuid", "subjects.subject", "subjects.subject_uuid","tests.exam_date")->where("selected_subjects.user_id",$userId)
-        ->orderBy("tests.id", "DESC")->paginate(5);
+        ->select("tests.title", "tests.test_uuid", "subjects.subject", "subjects.subject_uuid", "tests.exam_date")
+        ->where("selected_subjects.user_id", $userId)
+        ->orderByRaw("CASE 
+            WHEN tests.exam_date >= ? THEN 0 
+            WHEN tests.exam_date < ? THEN 1 
+            WHEN tests.exam_date IS NULL THEN 2 
+            END", [$currentDate, $currentDate])
+        ->orderBy("tests.exam_date", "ASC")
+        ->paginate(5);
         return $tests;
     }
     public function getTestsBySubjects(string $subjectUuid){
