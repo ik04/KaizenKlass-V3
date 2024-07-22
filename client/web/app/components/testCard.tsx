@@ -40,6 +40,7 @@ export const TestCard = (test: Test) => {
       setReadableDeadline(`Passed On ${formatDate(deadlineDate)}`);
     }
   };
+
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",

@@ -90,17 +90,19 @@ export default function tests() {
             Tests
           </div>
         </div>
-        <div className="">
+        <div className="h-full">
           {!isLoading ? (
             <>
+              {hasEditPrivileges && (
+                <div className="mb-7">
+                  <AddTestButton
+                    handleAddTest={handleTestAddition}
+                    baseUrl={baseUrl}
+                  />
+                </div>
+              )}
               {!isEmpty ? (
-                <div className="flex flex-col space-y-7 mb-10">
-                  {hasEditPrivileges && (
-                    <AddTestButton
-                      handleAddTest={handleTestAddition}
-                      baseUrl={baseUrl}
-                    />
-                  )}
+                <div className="flex flex-col space-y-7 mb-20">
                   {tests.map((test) => (
                     <TestCard
                       test_uuid={test.test_uuid}

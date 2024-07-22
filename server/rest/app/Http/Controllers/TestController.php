@@ -6,13 +6,14 @@ use App\Exceptions\InvalidSlugException;
 use App\Exceptions\TestAlreadyExistsException;
 use App\Http\Requests\AddTestRequest;
 use App\Http\Requests\UpdateTestRequest;
+use App\Services\SubjectService;
 use App\Services\TestService;
 use Exception;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    public function __construct(protected TestService $service)
+    public function __construct(protected TestService $service,protected SubjectService $subjectService)
     {
         
     }
@@ -22,9 +23,11 @@ class TestController extends Controller
     }
     public function createTest(AddTestRequest $request){
         try{
-
             $validated = $request->validated();
             $test = $this->service->createTest($validated["title"],$validated["exam_date"] ?? null,$validated["subject_uuid"]);
+            unset($test["id"],$test["subject_id"]);
+            $test["subject_uuid"] = $validated["subject_uuid"];
+            $test["subject"] = $this->subjectService->getSubjectName($validated["subject_uuid"]);
             return response()->json(["test"=>$test,"message"=>"Test added successfully!"],201);
         }
         catch(TestAlreadyExistsException $e){

@@ -22,7 +22,7 @@ class AddTestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => "required|string",
+            "title" => ["required","string","in:End-Sem,CT-1,CT-2,CT-3,CT-4"],
             "exam_date" =>"nullable|date_format:Y-m-d",
             "subject_uuid" => "string|required"
         ];
