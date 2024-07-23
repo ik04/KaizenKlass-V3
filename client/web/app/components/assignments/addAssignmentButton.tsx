@@ -5,13 +5,18 @@ import {
   DialogContent,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import axios from "axios";
 import { SelectItem } from "@radix-ui/react-select";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import { useNavigate } from "@remix-run/react";
 import Calendar from "react-calendar";
 import { formatDate } from "node_modules/react-calendar/dist/esm/shared/dateFormatter";

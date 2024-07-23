@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import axios from "axios";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
-export const EditOwnSolutionButton = ({
+export const EditSolutionButton = ({
   baseUrl,
   originalDescription,
   solutionUuid,
-  handleEditSolution,
 }: {
   baseUrl: string;
   originalDescription: string;
   solutionUuid: string;
-  handleEditSolution: (updatedSolution: Solution) => void;
 }) => {
   const { toast } = useToast();
   const [description, setDescription] = useState<string>(originalDescription);
@@ -25,7 +23,7 @@ export const EditOwnSolutionButton = ({
   const editSolution = async () => {
     try {
       const resp = await axios.put(
-        `${baseUrl}/api/v1/edit-own-solution/${solutionUuid}`,
+        `${baseUrl}/api/v1/edit-solution/${solutionUuid}`,
         {
           content,
           description,
@@ -36,8 +34,7 @@ export const EditOwnSolutionButton = ({
         title: "solution Updated!",
         description: "solution has been updated",
       });
-      // location.reload();
-      handleEditSolution(resp.data.solution);
+      location.reload();
       setOpen(false);
     } catch (error: any) {
       console.log(error.response);
@@ -54,6 +51,7 @@ export const EditOwnSolutionButton = ({
               errorMessages += `${key}: ${value.join(", ")}\n`;
             }
           }
+
           toast({
             title: "Invalid Fields Inputs",
             description: errorMessages.trim(),
@@ -70,7 +68,7 @@ export const EditOwnSolutionButton = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="">
-        <img src="/assets/pencil.png" className="md:w-7 w-5 mb-2" alt="" />
+        <img src="/assets/pencil.png" className="w-7 mb-2" alt="" />
       </DialogTrigger>
       <DialogContent>
         <div className="">

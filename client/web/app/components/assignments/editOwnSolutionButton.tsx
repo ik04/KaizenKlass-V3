@@ -1,45 +1,44 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import axios from "axios";
-import { useToast } from "./ui/use-toast";
-import { DialogClose } from "@radix-ui/react-dialog";
+import { useToast } from "../ui/use-toast";
 
-export const AddSolutionButton = ({
+export const EditOwnSolutionButton = ({
   baseUrl,
-  assignmentUuid,
-  handleSolutionAddition,
+  originalDescription,
+  solutionUuid,
+  handleEditSolution,
 }: {
   baseUrl: string;
-  assignmentUuid: string;
-  handleSolutionAddition: (solution: Solution) => void;
+  originalDescription: string;
+  solutionUuid: string;
+  handleEditSolution: (updatedSolution: Solution) => void;
 }) => {
   const { toast } = useToast();
-  const [description, setDescription] = useState<string>();
+  const [description, setDescription] = useState<string>(originalDescription);
   const [content, setContent] = useState<string>();
   const [open, setOpen] = useState<boolean>(false);
 
-  const addSolution = async () => {
+  const editSolution = async () => {
     try {
-      if (description) {
-        const resp = await axios.post(`${baseUrl}/api/v1/add-solution`, {
+      const resp = await axios.put(
+        `${baseUrl}/api/v1/edit-own-solution/${solutionUuid}`,
+        {
           content,
           description,
-          assignment_uuid: assignmentUuid,
-        });
-        toast({
-          title: "Solution Added!",
-        });
-        handleSolutionAddition(resp.data.solution);
-      } else {
-        toast({
-          title: "Invalid Fields Inputs",
-          description: "description is required",
-          variant: "destructive",
-        });
-      }
+        }
+      );
+      // console.log(resp);
+      toast({
+        title: "solution Updated!",
+        description: "solution has been updated",
+      });
+      // location.reload();
+      handleEditSolution(resp.data.solution);
+      setOpen(false);
     } catch (error: any) {
       console.log(error.response);
 
@@ -55,7 +54,6 @@ export const AddSolutionButton = ({
               errorMessages += `${key}: ${value.join(", ")}\n`;
             }
           }
-
           toast({
             title: "Invalid Fields Inputs",
             description: errorMessages.trim(),
@@ -69,15 +67,10 @@ export const AddSolutionButton = ({
       }
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="w-full">
-        <div className="h-32 flex rounded-2xl flex-col items-start justify-center border-dashed border-2 hover:border-highlight border-mainLighter duration-200 transition-all space-y-3 px-5">
-          <p className="font-base text-highlightSecondary text-3xl">
-            Add Solution
-          </p>
-        </div>
+      <DialogTrigger className="">
+        <img src="/assets/pencil.png" className="md:w-7 w-5 mb-2" alt="" />
       </DialogTrigger>
       <DialogContent>
         <div className="">
@@ -85,6 +78,7 @@ export const AddSolutionButton = ({
           <Textarea
             placeholder="description/answer"
             required
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
           <Label>Content</Label>
@@ -94,14 +88,12 @@ export const AddSolutionButton = ({
             required
           />
         </div>
-        <DialogClose>
-          <div
-            onClick={addSolution}
-            className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
-          >
-            Submit
-          </div>
-        </DialogClose>
+        <div
+          onClick={editSolution}
+          className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
+        >
+          Submit
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -2,7 +2,7 @@ import { Link, useLocation } from "@remix-run/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "~/context/GlobalContext";
-import { Tooltip, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 
 // ! shift dashboard to global ( this is bad practice lmao)

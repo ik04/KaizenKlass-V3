@@ -5,11 +5,11 @@ import {
   DialogContent,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import axios from "axios";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import { useNavigate } from "@remix-run/react";
 import Calendar from "react-calendar";
 import { format } from "date-fns";

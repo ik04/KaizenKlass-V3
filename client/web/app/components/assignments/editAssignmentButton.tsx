@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import axios from "axios";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import Calendar from "react-calendar";
 import { format, set } from "date-fns";
 
@@ -173,7 +173,6 @@ export const EditAssignmentButton = ({
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             name=""
-            placeholder="select subject"
             className="py-2 my-2 bg-white text-sm rounded-sm"
             id=""
           >
