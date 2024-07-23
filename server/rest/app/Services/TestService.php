@@ -39,9 +39,14 @@ class TestService{
         if($examDate){
             $data["exam_date"] = $examDate;
         }
+        $currentDate = now();
         $existingTest = Test::where('subject_id', $subjectId)
-                        ->whereRaw('LOWER(title) = ?', [strtolower($title)])
-                        ->first();
+        ->whereRaw('LOWER(title) = ?', [strtolower($title)])
+        ->where(function ($query) use ($currentDate) {
+            $query->where("exam_date", ">=", $currentDate)
+                  ->orWhereNull("exam_date");
+        })
+        ->first();
         if($existingTest){
             throw new TestAlreadyExistsException(message:"Test with same title already exists for this subject",code:400);
         }

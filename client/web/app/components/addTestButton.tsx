@@ -16,6 +16,7 @@ import { useNavigate } from "@remix-run/react";
 import Calendar from "react-calendar";
 import { formatDate } from "node_modules/react-calendar/dist/esm/shared/dateFormatter";
 import { format } from "date-fns";
+import { testTitles } from "~/data/constants";
 
 type ValuePiece = Date | null;
 
@@ -79,6 +80,13 @@ export const AddTestButton = ({
     } catch (error: any) {
       console.log(error.response);
 
+      if (error.response && error.response.status === 400) {
+        toast({
+          title: "Error",
+          description: error.response.data.error,
+          variant: "destructive",
+        });
+      }
       if (error.response && error.response.status === 422) {
         const errors = error.response.data.errors;
 
@@ -91,7 +99,6 @@ export const AddTestButton = ({
               errorMessages += `${key}: ${value.join(", ")}\n`;
             }
           }
-
           toast({
             title: "Invalid Fields Inputs",
             description: errorMessages.trim(),
@@ -152,13 +159,21 @@ export const AddTestButton = ({
               ))}
             </select>
           </div>
-          <Label>Title</Label>
-          <Input
-            value={title}
-            placeholder="Title"
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <div className="flex flex-col">
+            <Label>Title</Label>
+            <select
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="py-2 my-2 bg-white text-sm rounded-sm"
+            >
+              <option value="" className="text-[#737373]" disabled selected>
+                Select Title
+              </option>
+              {testTitles.map((test) => (
+                <option value={test}>{test}</option>
+              ))}
+            </select>
+          </div>
 
           <div className="flex flex-col space-y-1">
             <div className="">
