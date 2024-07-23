@@ -1,14 +1,14 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { BackButton } from "~/components/backButton";
-import { Dashboard } from "~/components/dashboard";
-import { AddSolutionButton } from "~/components/addSolutionButton";
+import { BackButton } from "~/components/utils/backButton";
+import { Dashboard } from "~/components/layout/dashboard";
+import { AddSolutionButton } from "~/components/assignments/addSolutionButton";
 import { GlobalContext } from "~/context/GlobalContext";
-import { EditAssignmentButton } from "~/components/editAssignmentButton";
+import { EditAssignmentButton } from "~/components/assignments/editAssignmentButton";
 import { toast } from "~/components/ui/use-toast";
-import { EditSolutionButton } from "~/components/editSolutionButton";
-import { EditOwnSolutionButton } from "~/components/editOwnSolutionButton";
+import { EditSolutionButton } from "~/components/assignments/editSolutionButton";
+import { EditOwnSolutionButton } from "~/components/assignments/editOwnSolutionButton";
 import { MetaFunction, redirect } from "@remix-run/node";
 
 export default function assignments() {

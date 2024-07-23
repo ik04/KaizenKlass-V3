@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import Fuse from "fuse.js";
 import { Skeleton } from "~/components/ui/skeleton";
-import { SubjectSelectionCard } from "~/components/subjectSelectionCard";
+import { SubjectSelectionCard } from "~/components/subjects/subjectSelectionCard";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import { GlobalContext } from "~/context/GlobalContext";

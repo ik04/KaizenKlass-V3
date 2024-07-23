@@ -2,8 +2,8 @@ import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import React from "react";
-import { Dashboard } from "~/components/dashboard";
-import { ResourceCard } from "~/components/resourceCard";
+import { Dashboard } from "~/components/layout/dashboard";
+import { ResourceCard } from "~/components/resources/resourceCard";
 
 export const meta: MetaFunction = () => {
   return [

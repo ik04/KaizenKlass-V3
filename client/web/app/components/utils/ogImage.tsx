@@ -1,5 +1,5 @@
 import React from "react";
-const ogs = require("open-graph-scraper");
+import ogs from "open-graph-scraper";
 
 export const OgImage = (url: string) => {
   const options = { url: url };

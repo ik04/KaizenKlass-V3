@@ -1,8 +1,8 @@
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import React from "react";
-import { BackButton } from "~/components/backButton";
-import { Dashboard } from "~/components/dashboard";
+import { BackButton } from "~/components/utils/backButton";
+import { Dashboard } from "~/components/layout/dashboard";
 
 export const meta: MetaFunction = () => {
   return [

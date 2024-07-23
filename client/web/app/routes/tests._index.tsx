@@ -1,18 +1,18 @@
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { AddAssignmentButton } from "~/components/addAssignmentButton";
-import { AssignmentCard } from "~/components/assignmentCard";
-import { BackButton } from "~/components/backButton";
-import { Dashboard } from "~/components/dashboard";
-import { EmptyState } from "~/components/emptyState";
+import { AddAssignmentButton } from "~/components/assignments/addAssignmentButton";
+import { AssignmentCard } from "~/components/assignments/assignmentCard";
+import { BackButton } from "~/components/utils/backButton";
+import { Dashboard } from "~/components/layout/dashboard";
+import { EmptyState } from "~/components/utils/emptyState";
 import { GlobalContext } from "~/context/GlobalContext";
 import Calendar from "react-calendar";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 import { MetaFunction } from "@remix-run/node";
-import { TestCard } from "~/components/testCard";
-import { AddTestButton } from "~/components/addTestButton";
+import { TestCard } from "~/components/tests/testCard";
+import { AddTestButton } from "~/components/tests/addTestButton";
 
 export const meta: MetaFunction = () => {
   return [

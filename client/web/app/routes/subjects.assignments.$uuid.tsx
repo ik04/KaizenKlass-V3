@@ -2,12 +2,11 @@ import { MetaFunction, redirect } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { AddSubjectAssignmentButton } from "~/components/addSubjectAssignmentButton";
-import { AssignmentCard } from "~/components/assignmentCard";
-import { BackButton } from "~/components/backButton";
-import { Dashboard } from "~/components/dashboard";
-import { EmptyState } from "~/components/emptyState";
-import { SubjectAssignmentCard } from "~/components/subjectAssignmentCard";
+import { AddSubjectAssignmentButton } from "~/components/subjects/addSubjectAssignmentButton";
+import { BackButton } from "~/components/utils/backButton";
+import { Dashboard } from "~/components/layout/dashboard";
+import { EmptyState } from "~/components/utils/emptyState";
+import { SubjectAssignmentCard } from "~/components/subjects/subjectAssignmentCard";
 import { Skeleton } from "~/components/ui/skeleton";
 import { GlobalContext } from "~/context/GlobalContext";
 

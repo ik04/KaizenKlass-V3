@@ -2,10 +2,10 @@ import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { BackButton } from "~/components/backButton";
-import { Dashboard } from "~/components/dashboard";
-import { DeadlineCard } from "~/components/deadlineCard";
-import { EmptyState } from "~/components/emptyState";
+import { BackButton } from "~/components/utils/backButton";
+import { Dashboard } from "~/components/layout/dashboard";
+import { DeadlineCard } from "~/components/deadlines/deadlineCard";
+import { EmptyState } from "~/components/utils/emptyState";
 import { toast } from "~/components/ui/use-toast";
 
 export const meta: MetaFunction = () => {

@@ -2,7 +2,7 @@ import { MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import React, { FormEvent } from "react";
-import { BackButton } from "~/components/backButton";
+import { BackButton } from "~/components/utils/backButton";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { toast } from "~/components/ui/use-toast";

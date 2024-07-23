@@ -1,6 +1,6 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import { BackButton } from "~/components/backButton";
-import { Dashboard } from "~/components/dashboard";
+import { BackButton } from "~/components/utils/backButton";
+import { Dashboard } from "~/components/layout/dashboard";
 
 function sanitizeAndCapitalizeSlug(slug: string) {
   let sanitizedSlug = slug.toLowerCase();

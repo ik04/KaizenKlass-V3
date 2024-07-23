@@ -1,9 +1,9 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Dashboard } from "~/components/dashboard";
-import { SplashScreen } from "~/components/splashScreen";
-import { SubjectCard } from "~/components/subjectCard";
+import { Dashboard } from "~/components/layout/dashboard";
+import { SplashScreen } from "~/components/utils/splashScreen";
+import { SubjectCard } from "~/components/subjects/subjectCard";
 import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
 import Fuse from "fuse.js";

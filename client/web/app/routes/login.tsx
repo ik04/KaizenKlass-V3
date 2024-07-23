@@ -4,7 +4,7 @@ import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import axios from "axios";
 import React, { useState } from "react";
 import { Form } from "react-hook-form";
-import { BackButton } from "~/components/backButton";
+import { BackButton } from "~/components/utils/backButton";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 
