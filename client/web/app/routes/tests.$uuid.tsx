@@ -61,6 +61,7 @@ export default function tests() {
     };
     return date.toLocaleDateString("en-US", options);
   };
+  console.log(resources);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

@@ -15,8 +15,11 @@ class Test extends Model
         "subject_id",
         "test_uuid"
     ];
+     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany;
+     */
     public function testResources(): HasMany
     {
-        return $this->hasMany(TestResource::class);
+        return $this->hasMany(TestResource::class,"test_id");
     }
 }

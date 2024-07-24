@@ -73,43 +73,42 @@ class TestService{
         $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->paginate(5);
         return $tests;
     }
-   public function getTestWithResources(string $uuid)
-{
-    $test = Test::with("testResources") // Eager load the 'testResources' relationship
-        ->join("subjects", "subjects.id", "=", "tests.subject_id")
-        ->select("tests.title", "tests.exam_date", "tests.test_uuid", "subjects.subject_uuid", "subjects.subject")
-        ->where("tests.test_uuid", $uuid)
-        ->first();
-
-    if (!$test) {
-        throw new TestNotFoundException(message: "Test not found", code: 404);
-    }
-    $resourceData = [];
-
-    foreach ($test->testResources as $resource) {
-        $user = User::select("name", "user_uuid")->where("id", $resource->user_id)->first();
-        $username = $user->name;
-        $userUuid = $user->user_uuid; 
-        $resourceData[] = [
-            "user_uuid" => $userUuid,
-            "username" => $username,
-            "test_resource_uuid" => $resource->test_resource_uuid,
-            "description" => $resource->description,
-            "content" => $resource->content
+    public function getTestWithResources(string $uuid)
+    {
+        $test = Test::with(['testResources' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }])
+            ->select("tests.*", "subjects.subject_uuid", "subjects.subject")
+            ->join("subjects", "subjects.id", "=", "tests.subject_id")
+            ->where("tests.test_uuid", $uuid)
+            ->first();
+    
+        if (!$test) {
+            throw new TestNotFoundException(message: "Test not found", code: 404);
+        }
+    
+        $resourceData = $test->testResources->map(function ($resource) {
+            $user = User::select("name", "user_uuid")->where("id", $resource->user_id)->first();
+            return [
+                "user_uuid" => $user->user_uuid,
+                "username" => $user->name,
+                "test_resource_uuid" => $resource->test_resource_uuid,
+                "description" => $resource->description,
+                "content" => $resource->content
+            ];
+        })->toArray();
+    
+        return [
+            "test" => [
+                "title" => $test->title,
+                "exam_date" => $test->exam_date,
+                "test_uuid" => $test->test_uuid,
+                "subject_uuid" => $test->subject_uuid,
+                "subject" => $test->subject,
+            ],
+            "resources" => $resourceData,
         ];
     }
-
-    return [
-        "test" => [
-            "title" => $test->title,
-            "exam_date" => $test->exam_date,
-            "test_uuid" => $test->test_uuid,
-            "subject_uuid" => $test->subject_uuid,
-            "subject" => $test->subject,
-        ],
-        "resources" => $resourceData,
-    ];
-}
 
     public function deleteTest(string $uuid){
         $test = Test::where("test_uuid",$uuid)->first();
