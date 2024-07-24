@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidSlugException;
 use App\Exceptions\TestAlreadyExistsException;
+use App\Exceptions\TestNotFoundException;
 use App\Http\Requests\AddTestRequest;
 use App\Http\Requests\UpdateTestRequest;
 use App\Services\SubjectService;
@@ -58,10 +59,13 @@ class TestController extends Controller
     }
     public function getTest($uuid){ // for all tests
         try{
-            $test = $this->service->getTestWithResources($uuid);
-            return response()->json(["test"=>$test],200);
-        }catch(Exception $e){
+            $result = $this->service->getTestWithResources($uuid);
+            return response()->json($result,200);
+        }catch(TestNotFoundException $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
+        catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
         }
     }
 

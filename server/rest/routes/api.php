@@ -86,7 +86,7 @@ Route::prefix("v2")->group(function(){
         Route::get("test/{uuid}",[TestController::class,"getTest"]);
         
     });
-
+    
     Route::middleware(["auth:sanctum"])->group(function(){
         Route::post("onboard",[SelectedSubjectController::class,"onboard"]);
     });
@@ -95,29 +95,32 @@ Route::prefix("v2")->group(function(){
             Route::get("selected-subjects",[SelectedSubjectController::class,"getSelectedSubjects"]);
             Route::get("selected-subjects/all",[SelectedSubjectController::class,"getAllSelectedSubjects"]);
             Route::get("selected-subjects/assignments",[AssignmentController::class,"getAssignmentsWithSelectedSubjects"]);
-
+            
             Route::get("subjects/search/{query}",[SubjectController::class,"searchSubjects"]);
             Route::get("selected-subjects/search/{query}",[SelectedSubjectController::class,"searchSelectedSubjects"]);
-
+            
             Route::get("selected-subjects/tests",[TestController::class,"getTestsWithSelectedSubjects"]);
         });
         Route::prefix("add")->group(function(){
             Route::post("selected-subjects",[SelectedSubjectController::class,"selectSubjects"]);
             Route::post("selected-subject",[SelectedSubjectController::class,"selectSubject"]);
-
+            
             Route::post("subject-resource",[SubjectResourceController::class,"addSubjectResource"]);
+            Route::post("test-resource",[TestResourceController::class,"createTestResource"]);
         });
         Route::prefix("update")->group(function(){
             Route::put("test-resource/{uuid}",[TestResourceController::class,"updateOwnTestResource"]); 
-
+            
             Route::put("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"updateSubjectResource"]); 
         });
         Route::prefix("delete")->group(function(){
             Route::post("selected-subject/{uuid}",[SelectedSubjectController::class,"removeSelectedSubject"]);
             Route::post("selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
-
+            
             Route::delete("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"removeSubjectResources"]); 
 
+            Route::delete("test-resource/{uuid}", [TestResourceController::class, "deleteOwnTestResource"]);
+            
         });
     });
     Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){
@@ -126,7 +129,7 @@ Route::prefix("v2")->group(function(){
         });
         Route::prefix("get")->group(function(){
         });
-        Route::prefix("remove")->group(function(){
+        Route::prefix("delete")->group(function(){
             Route::delete("test/{uuid}",[TestController::class,"deleteTest"]); 
         });
         Route::prefix("update")->group(function(){

@@ -10,17 +10,18 @@ import { toast } from "~/components/ui/use-toast";
 import { EditSolutionButton } from "~/components/assignments/editSolutionButton";
 import { EditOwnSolutionButton } from "~/components/assignments/editOwnSolutionButton";
 import { MetaFunction, redirect } from "@remix-run/node";
+import { AddTestResourceButton } from "~/components/tests/addTestResourceButton";
 
-export default function assignments() {
+export default function tests() {
   const {
-    storedAssignment,
-    solutions,
+    storedTest,
+    resources,
     baseUrl,
     uuid,
     currentDomain,
   }: {
-    storedAssignment: Assignment;
-    solutions: Solution[];
+    storedTest: Test;
+    resources: TestResource[];
     baseUrl: string;
     uuid: string;
     currentDomain: string;
@@ -28,28 +29,38 @@ export default function assignments() {
   const { userUuid, hasEditPrivileges, isAuthenticated, role } =
     useContext(GlobalContext);
 
-  const handleAddSolution = (solution: Solution) => {
-    setAssignmentSolutions((prevSolutions) => [solution, ...prevSolutions]);
+  const handleAddResource = (resources: TestResource) => {
+    setTestResources((prevResources) => [resources, ...prevResources]);
   };
-  const handleEditAssignment = (assignment: Assignment) => {
-    setAssignment(assignment);
+  const handleEditAssignment = (assignment: Test) => {
+    setTest(assignment);
   };
 
-  const handleEditSolution = (updatedSolution: Solution) => {
-    setAssignmentSolutions((prevSolutions: Solution[]) =>
-      prevSolutions.map((solution) =>
-        solution.solution_uuid === updatedSolution.solution_uuid
-          ? updatedSolution
-          : solution
+  const handleEditResource = (updatedResource: TestResource) => {
+    setTestResources((prevResources: TestResource[]) =>
+      prevResources.map((resource) =>
+        resource.test_resource_uuid === updatedResource.test_resource_uuid
+          ? updatedResource
+          : resource
       )
     );
   };
 
   const [readableDeadline, setReadableDeadline] = useState<string>();
   const [isDanger, setIsDanger] = useState<boolean>(false);
-  const [assignment, setAssignment] = useState<Assignment>(storedAssignment);
-  const [assignmentSolutions, setAssignmentSolutions] =
-    useState<Solution[]>(solutions);
+  const [test, setTest] = useState<Test>(storedTest);
+  const [testResources, setTestResources] = useState<TestResource[]>(resources);
+
+  const formatDate = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -59,7 +70,7 @@ export default function assignments() {
       const timeDifference = deadlineDate.getTime() - now.getTime();
       if (timeDifference <= 0) {
         setIsDanger(true);
-        setReadableDeadline("Passed");
+        setReadableDeadline(`${formatDate(deadlineDate)}`);
         clearInterval(interval); // Stop the interval if deadline has passed
       } else {
         const daysUntilDeadline = Math.floor(
@@ -101,8 +112,8 @@ export default function assignments() {
       }
     };
 
-    if (assignment.deadline) {
-      const deadlineString = assignment.deadline;
+    if (test.exam_date) {
+      const deadlineString = test.exam_date;
       calculateTimeUntilDeadline(deadlineString);
       if (new Date(deadlineString) > new Date()) {
         interval = setInterval(() => {
@@ -111,15 +122,13 @@ export default function assignments() {
         return () => clearInterval(interval);
       }
     }
-  }, [assignment.deadline]);
+  }, [test.exam_date]);
 
-  const deleteAssignment = async () => {
+  const deleteTest = async () => {
     try {
-      const resp = await axios.delete(
-        `${baseUrl}/api/v1/delete-assignment/${uuid}`
-      );
+      const resp = await axios.delete(`${baseUrl}/api/v2/delete/test/${uuid}`);
 
-      // console.log("deleted assignment!");
+      //   console.log("deleted assignment!");
       history.back();
     } catch (error) {
       toast({
@@ -169,14 +178,14 @@ export default function assignments() {
     });
   }
 
-  const deleteOwnSolution = async (solutionUuid: string) => {
+  const deleteOwnResource = async (resourceUuid: string) => {
     try {
       const resp = await axios.delete(
-        `${baseUrl}/api/v1/delete-own-solution/${solutionUuid}`
+        `${baseUrl}/api/v2/delete/test-resource/${resourceUuid}`
       );
-      setAssignmentSolutions((prevSolutions: Solution[]) =>
+      setTestResources((prevSolutions: TestResource[]) =>
         prevSolutions.filter(
-          (solution) => solution.solution_uuid !== solutionUuid
+          (solution) => solution.test_resource_uuid !== resourceUuid
         )
       );
       toast({
@@ -197,9 +206,9 @@ export default function assignments() {
       const resp = await axios.delete(
         `${baseUrl}/api/v1/delete-solution/${solutionUuid}`
       );
-      setAssignmentSolutions((prevSolutions: Solution[]) =>
-        prevSolutions.filter(
-          (solution) => solution.solution_uuid !== solutionUuid
+      setTestResources((prevResources: TestResource[]) =>
+        prevResources.filter(
+          (resource) => resource.test_resource_uuid !== solutionUuid
         )
       );
       toast({
@@ -246,10 +255,10 @@ export default function assignments() {
                 <div className="assignment flex flex-col md:w-full space-y-1 md:space-y-0">
                   <div className="flex items-center justify-between">
                     <h1 className="text-highlight font-base text-2xl md:text-4xl">
-                      {assignment.title}
+                      {test.title}
                     </h1>
                     <div className="flex space-x-2">
-                      {hasEditPrivileges && (
+                      {/* {hasEditPrivileges && (
                         <EditAssignmentButton
                           handleEditAssignment={handleEditAssignment}
                           assignmentUuid={uuid}
@@ -260,12 +269,12 @@ export default function assignments() {
                           originalDescription={assignment.description}
                           originalDeadline={assignment.deadline}
                         />
-                      )}
+                      )} */}
 
                       {hasEditPrivileges && (
                         <img
                           src="/assets/trash.png"
-                          onClick={deleteAssignment}
+                          onClick={deleteTest}
                           className="w-7"
                           alt=""
                         />
@@ -273,27 +282,16 @@ export default function assignments() {
                     </div>
                   </div>
                   <a
-                    href={`/subjects/${assignment.subject_uuid}`}
+                    href={`/subjects/${test.subject_uuid}`}
                     className="text-highlightSecondary text-start text-sm md:text-2xl font-base"
                   >
-                    {assignment.subject}
+                    {test.subject}
                   </a>
-                  {assignment.description && (
-                    <div
-                      className="text-highlight text-sm md:text-xl font-base whitespace-pre-line"
-                      dangerouslySetInnerHTML={{
-                        __html: convertLinksToAnchors(
-                          assignment.description,
-                          currentDomain
-                        ),
-                      }}
-                    />
-                  )}
-                  {assignment.deadline !== null && (
+                  {test.exam_date !== null && (
                     <div className="flex items-center justify-between">
                       <p className="text-highlightSecondary text-xs cursor-default font-base md:text-base transition-all duration-150 hover:text-red-500">
-                        {assignment.deadline &&
-                          parseDateTimeForIndia(assignment.deadline)}
+                        {test.exam_date &&
+                          parseDateTimeForIndia(test.exam_date)}
                       </p>
                       <p
                         className={`${
@@ -306,48 +304,13 @@ export default function assignments() {
                       </p>
                     </div>
                   )}{" "}
-                  <div className="flex space-x-2 md:space-x-5 items-center md:-ml-2 md:mt-6">
-                    {assignment.content && (
-                      <>
-                        <a
-                          href={`${assignment.content}`}
-                          className="flex items-center space-x-2"
-                        >
-                          <img
-                            src="/assets/download.svg"
-                            className="md:w-10"
-                            alt=""
-                          />
-                          <p className="text-highlight font-base font-bold text-xs md:text-lg">
-                            Download Content
-                          </p>
-                        </a>
-                      </>
-                    )}
-                    {assignment.content && (
-                      <a
-                        target="_blank"
-                        href={`${convertToViewLink(assignment.content)}`}
-                        className="flex items-center space-x-2"
-                      >
-                        <img
-                          src="/assets/link.svg"
-                          className="md:w-10"
-                          alt=""
-                        />
-                        <p className="text-highlight font-base font-bold text-xs md:text-lg">
-                          View content
-                        </p>
-                      </a>
-                    )}
-                  </div>
                 </div>
               </div>
               <p className="md:hidden text-highlightSecondary font-base my-5">
-                Solutions:
+                Solutions:assignment
               </p>
               <div className="solutions flex flex-col space-y-5 md:space-y-7">
-                {assignmentSolutions.map((solution) => (
+                {testResources.map((resource) => (
                   <div className="md:flex md:space-x-4 md:items-start">
                     <div className="icon md:flex w-16 hidden justify-center p-3 items-center bg-mainLighter rounded-full">
                       <img
@@ -359,24 +322,24 @@ export default function assignments() {
                     <div className="solution flex flex-col space-y-1 md:space-x-0 md:w-full w-[300px] break-words overflow-hidden whitespace-wrap overflow-ellipsis md:whitespace-normal md:overflow-visible md:text-overflow-clip">
                       <div className="flex justify-between">
                         <h1 className="text-highlightSecondary font-base text-xl md:text-2xl">
-                          Posted by: {solution.username}
+                          Posted by: {resource.username}
                         </h1>
                         <div className="flex space-x-3 items-start">
-                          {isAuthenticated &&
+                          {/* {isAuthenticated &&
                             userUuid == solution.user_uuid && (
                               <EditOwnSolutionButton
-                                handleEditSolution={handleEditSolution}
+                                handleEditSolution={handleEditAssignment}
                                 baseUrl={baseUrl}
                                 originalDescription={solution.description}
                                 solutionUuid={solution.solution_uuid}
                               />
-                            )}
+                            )} */}
                           {isAuthenticated &&
-                            userUuid == solution.user_uuid && (
+                            userUuid == resource.user_uuid && (
                               <img
                                 src="/assets/trash.png"
                                 onClick={() =>
-                                  deleteOwnSolution(solution.solution_uuid)
+                                  deleteOwnResource(resource.test_resource_uuid)
                                 }
                                 className="w-5 md:w-7"
                                 alt=""
@@ -388,15 +351,15 @@ export default function assignments() {
                         className="text-highlight text-sm md:text-lg font-base whitespace-pre-line"
                         dangerouslySetInnerHTML={{
                           __html: convertLinksToAnchors(
-                            solution.description,
+                            resource.description,
                             currentDomain
                           ),
                         }}
                       />
                       <div className="flex items-center space-x-2">
-                        {solution.content && (
+                        {resource.content && (
                           <a
-                            href={`${solution.content}`}
+                            href={`${resource.content}`}
                             className="flex items-center space-x-2"
                           >
                             <img
@@ -409,10 +372,10 @@ export default function assignments() {
                             </p>
                           </a>
                         )}
-                        {solution.content && (
+                        {resource.content && (
                           <a
                             target="_blank"
-                            href={`${convertToViewLink(solution.content)}`}
+                            href={`${convertToViewLink(resource.content)}`}
                             className="flex items-center space-x-2"
                           >
                             <img
@@ -433,9 +396,9 @@ export default function assignments() {
 
               {isAuthenticated && (
                 <div className="my-10">
-                  <AddSolutionButton
-                    assignmentUuid={uuid}
-                    handleSolutionAddition={handleAddSolution}
+                  <AddTestResourceButton
+                    testResourceUuid={uuid}
+                    handleTestResourceAddition={handleAddResource}
                     baseUrl={baseUrl}
                   />
                 </div>
@@ -451,11 +414,12 @@ export default function assignments() {
 export const loader = async ({ params }: any) => {
   const { uuid } = params;
   try {
-    const url = `${process.env.PUBLIC_DOMAIN}/api/v1/get-assignment-solutions/${uuid}`;
+    const url = `${process.env.PUBLIC_DOMAIN}/api/v2/get/test/${uuid}`;
     const resp = await axios.get(url);
+    console.log(resp);
     const data = {
-      solutions: resp.data.solutions,
-      storedAssignment: resp.data.assignment,
+      resources: resp.data.resources,
+      storedTest: resp.data.test,
       baseUrl: process.env.PUBLIC_DOMAIN,
       currentDomain: process.env.CURRENT_DOMAIN,
       uuid: uuid,
@@ -463,21 +427,21 @@ export const loader = async ({ params }: any) => {
     return data;
   } catch (error) {
     console.log(error);
-    return redirect("/not-found");
+    // return redirect("/not-found");
   }
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
-  const { storedAssignment } = data;
+  const { storedTest } = data;
   return [
-    { title: `${storedAssignment.title} | ${storedAssignment.subject}` },
+    { title: `${storedTest.title} | ${storedTest.subject}` },
     {
       property: "og:title",
-      content: `${storedAssignment.title} | ${storedAssignment.subject}`,
+      content: `${storedTest.title} | ${storedTest.subject}`,
     },
     {
       name: "description",
-      content: `${storedAssignment.description}`,
+      content: `${storedTest.description}`,
     },
     {
       property: "og:site_name",

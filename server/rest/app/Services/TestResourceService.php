@@ -30,8 +30,8 @@ class TestResourceService{
         $testId = $this->testService->getTestId($testUuid);
         $data = [
             "user_id" => $userId,
-            "assignment_id" => $testId,
-            "solution_uuid" => Uuid::uuid4(),
+            "test_id" => $testId,
+            "test_resource_uuid" => Uuid::uuid4(),
         ];
         if($content){
             $content = $this->convertDriveLinkToDownloadLink($content);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\EmptyDescriptionException;
 use App\Http\Requests\AddTestResourceRequest;
 use App\Http\Requests\UpdateTestResourceRequest;
 use App\Models\TestResource;
@@ -21,8 +22,11 @@ class TestResourceController extends Controller
             $validated = $request->validated();
             $testResource = $this->service->createTestResource($validated["description"] ?? null,$validated["test_uuid"],$validated["content"] ?? null,$request->user()->id);
             return response(["test_resource" => $testResource],201);
-        }catch(Exception $e){
+        }catch(EmptyDescriptionException $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }
+        catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
         }
     }
     public function deleteOwnTestResource(Request $request,$uuid){

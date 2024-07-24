@@ -58,3 +58,10 @@ interface Test {
   subject_uuid: string;
   subject: string;
 }
+interface TestResource {
+  content: string;
+  test_resource_uuid: string;
+  description: string;
+  username: string;
+  user_uuid: string;
+}

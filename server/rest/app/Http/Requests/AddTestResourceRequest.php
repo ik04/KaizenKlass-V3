@@ -7,14 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 class AddTestResourceRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
@@ -22,7 +14,13 @@ class AddTestResourceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "content" => [
+                "string",
+                "nullable",
+                "regex:#https://(?:docs\.google\.com/(?:document|presentation)/d/|drive\.google\.com/file/d/)([a-zA-Z0-9_-]+)/(?:edit|view|usp=drivesdk)?\S*#"            
+            ],                  
+            "test_uuid" => "uuid|required",
+            "description" => "string|required"
         ];
     }
 }

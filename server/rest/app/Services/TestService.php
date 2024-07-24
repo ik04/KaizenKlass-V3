@@ -26,7 +26,7 @@ class TestService{
         if(!$testId){
             throw new TestNotFoundException(message:"invalid uuid, test not found",code:404);
         }
-        return $testId;
+        return $testId->id;
     }
 
     public function createTest($title, string $examDate = null,$subjectUuid){
@@ -100,11 +100,13 @@ class TestService{
     }
 
     return [
-        "title" => $test->title,
-        "exam_date" => $test->exam_date,
-        "test_uuid" => $test->test_uuid,
-        "subject_uuid" => $test->subject_uuid,
-        "subject" => $test->subject,
+        "test" => [
+            "title" => $test->title,
+            "exam_date" => $test->exam_date,
+            "test_uuid" => $test->test_uuid,
+            "subject_uuid" => $test->subject_uuid,
+            "subject" => $test->subject,
+        ],
         "resources" => $resourceData,
     ];
 }
