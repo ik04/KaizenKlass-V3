@@ -79,7 +79,7 @@ export const TestCard = (test: Test) => {
 
       {subject && subject_uuid && (
         <Link
-          to={`/subjects/${subject_uuid}`}
+          to={`/subjects/tests/${subject_uuid}`}
           className="text-highlightSecondary font-base md:text-base text-sm"
         >
           <div className="flex space-x-1">
