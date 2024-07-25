@@ -45,7 +45,7 @@ Route::prefix("v1")->group(function(){
     
     
     // * contributor routes
-    Route::middleware(["auth:sanctum"])->group(function(){
+    Route::middleware(["auth:sanctum","checkIsOnboard"])->group(function(){
         Route::post("logout",[UserController::class,"logout"]);
         Route::post("add-solution",[SolutionController::class,"addSolution"]);
         Route::delete("delete-own-account/{userUuid}", [UserController::class, "deleteOwnAccount"]);
@@ -54,7 +54,7 @@ Route::prefix("v1")->group(function(){
     });
     
     // * crosschecker routes
-    Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){ 
+    Route::middleware(["auth:sanctum","checkCrosschecker","checkIsOnboard"])->group(function(){ 
         Route::post("add-assignment",[AssignmentController::class,"addAssignment"]);
         Route::put("edit-assignment/{assignmentUuid}", [AssignmentController::class, "editAssignment"]);
         Route::delete("delete-assignment/{assignmentUuid}", [AssignmentController::class, "deleteAssignment"]);
@@ -62,7 +62,7 @@ Route::prefix("v1")->group(function(){
     
     // * admin routes
     Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
-        Route::post("register-crosschecker",[UserController::class,"registerCrosschecker"]);
+        Route::post("register-crosschecker",[UserController::class,"registerCrosschecker"]); // * remove in prod, use the panel
         Route::put("promote/{userUuid}",[UserController::class,"promote"]);
         Route::put("demote/{userUuid}",[UserController::class,"demote"]);
         

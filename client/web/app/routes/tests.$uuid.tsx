@@ -11,6 +11,7 @@ import { EditSolutionButton } from "~/components/assignments/editSolutionButton"
 import { EditOwnSolutionButton } from "~/components/assignments/editOwnSolutionButton";
 import { MetaFunction, redirect } from "@remix-run/node";
 import { AddTestResourceButton } from "~/components/tests/addTestResourceButton";
+import { EditTestResourceButton } from "~/components/tests/editTestResourceButton";
 
 export default function tests() {
   const {
@@ -36,7 +37,7 @@ export default function tests() {
     setTest(assignment);
   };
 
-  const handleEditResource = (updatedResource: TestResource) => {
+  const handleEditTestResource = (updatedResource: TestResource) => {
     setTestResources((prevResources: TestResource[]) =>
       prevResources.map((resource) =>
         resource.test_resource_uuid === updatedResource.test_resource_uuid
@@ -61,7 +62,6 @@ export default function tests() {
     };
     return date.toLocaleDateString("en-US", options);
   };
-  console.log(resources);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -246,10 +246,10 @@ export default function tests() {
           <div className="md:flex md:justify-center md:items-center md:w-full">
             <div className="md:flex md:flex-col md:space-y-9 md:w-4/5">
               <div className="md:flex md:space-x-4 md:items-start">
-                <div className="icon md:flex w-16 hidden justify-center p-2 items-center bg-mainLighter rounded-full">
+                <div className="icon md:flex w-16 hidden justify-center p-3 items-center bg-mainLighter rounded-full">
                   <img
-                    src="/assets/assignment.svg"
-                    className="md:w-16"
+                    src="/assets/examIcon.png"
+                    className="md:w-10"
                     alt="assignment"
                   />
                 </div>
@@ -315,7 +315,7 @@ export default function tests() {
                   <div className="md:flex md:space-x-4 md:items-start">
                     <div className="icon md:flex w-16 hidden justify-center p-3 items-center bg-mainLighter rounded-full">
                       <img
-                        src="/assets/lightBulb.svg"
+                        src="/assets/testResources.png"
                         className="md:w-16"
                         alt="lightbulb"
                       />
@@ -326,15 +326,16 @@ export default function tests() {
                           Posted by: {resource.username}
                         </h1>
                         <div className="flex space-x-3 items-start">
-                          {/* {isAuthenticated &&
-                            userUuid == solution.user_uuid && (
-                              <EditOwnSolutionButton
-                                handleEditSolution={handleEditAssignment}
+                          {isAuthenticated &&
+                            userUuid == resource.user_uuid && (
+                              <EditTestResourceButton
+                                handleEditTestResource={handleEditTestResource}
                                 baseUrl={baseUrl}
-                                originalDescription={solution.description}
-                                solutionUuid={solution.solution_uuid}
+                                originalDescription={resource.description}
+                                testResourceUuid={resource.test_resource_uuid}
                               />
-                            )} */}
+                            )}
+
                           {isAuthenticated &&
                             userUuid == resource.user_uuid && (
                               <img
@@ -417,7 +418,6 @@ export const loader = async ({ params }: any) => {
   try {
     const url = `${process.env.PUBLIC_DOMAIN}/api/v2/get/test/${uuid}`;
     const resp = await axios.get(url);
-    console.log(resp);
     const data = {
       resources: resp.data.resources,
       storedTest: resp.data.test,
@@ -428,7 +428,7 @@ export const loader = async ({ params }: any) => {
     return data;
   } catch (error) {
     console.log(error);
-    // return redirect("/not-found");
+    return redirect("/not-found");
   }
 };
 

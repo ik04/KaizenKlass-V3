@@ -9,35 +9,35 @@ import { useToast } from "../ui/use-toast";
 export const EditTestResourceButton = ({
   baseUrl,
   originalDescription,
-  solutionUuid,
-  handleEditSolution,
+  testResourceUuid,
+  handleEditTestResource,
 }: {
   baseUrl: string;
   originalDescription: string;
-  solutionUuid: string;
-  handleEditSolution: (updatedSolution: Solution) => void;
+  testResourceUuid: string;
+  handleEditTestResource: (updatedTestResource: TestResource) => void;
 }) => {
   const { toast } = useToast();
   const [description, setDescription] = useState<string>(originalDescription);
   const [content, setContent] = useState<string>();
   const [open, setOpen] = useState<boolean>(false);
 
-  const editSolution = async () => {
+  const editTestResource = async () => {
     try {
       const resp = await axios.put(
-        `${baseUrl}/api/v1/edit-own-solution/${solutionUuid}`,
+        `${baseUrl}/api/v2/update/test-resource/${testResourceUuid}`,
         {
           content,
           description,
         }
       );
-      // console.log(resp);
+      console.log(resp);
       toast({
-        title: "solution Updated!",
-        description: "solution has been updated",
+        title: "Test Resource Updated!",
+        description: "Test Resource has been updated",
       });
       // location.reload();
-      handleEditSolution(resp.data.solution);
+      handleEditTestResource(resp.data.solution);
       setOpen(false);
     } catch (error: any) {
       console.log(error.response);
@@ -89,7 +89,7 @@ export const EditTestResourceButton = ({
           />
         </div>
         <div
-          onClick={editSolution}
+          onClick={editTestResource}
           className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
         >
           Submit

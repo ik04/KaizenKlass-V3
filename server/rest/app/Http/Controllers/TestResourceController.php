@@ -33,10 +33,11 @@ class TestResourceController extends Controller
         $this->service->deleteOwnTestResource($uuid, $request->user()->id);
     return response()->json(["message" => "test resource deleted successfully"], 200);
     }
-    public function updateOwnSolution(UpdateTestResourceRequest $request,$uuid){
+    public function updateOwnTestResource(UpdateTestResourceRequest $request,$uuid){
         $validated = $request->validated();
         $testResource = $this->service->updateOwnTestResource($validated["description"] ?? null,$validated["content"] ?? null,$uuid,$request->user()->id);
-        return response()->json(["message" => "Test Resource updated successfully"], 200);
+        unset($testResource["id"],$testResource["user_id"],$testResource["test_id"]);
+        return response()->json(["message" => "Test Resource updated successfully","test_resource" => $testResource], 200);
     }
    
 }
