@@ -37,7 +37,7 @@ export const EditTestResourceButton = ({
         description: "Test Resource has been updated",
       });
       // location.reload();
-      handleEditTestResource(resp.data.solution);
+      handleEditTestResource(resp.data.test_resource);
       setOpen(false);
     } catch (error: any) {
       console.log(error.response);

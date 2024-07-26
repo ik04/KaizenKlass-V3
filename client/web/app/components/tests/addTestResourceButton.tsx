@@ -32,7 +32,8 @@ export const AddTestResourceButton = ({
         toast({
           title: "Test Resource Added!",
         });
-        handleTestResourceAddition(resp.data.solution);
+        setOpen(false);
+        handleTestResourceAddition(resp.data.test_resource);
       } else {
         toast({
           title: "Invalid Fields Inputs",
@@ -41,6 +42,7 @@ export const AddTestResourceButton = ({
         });
       }
     } catch (error: any) {
+      setOpen(true);
       console.log(error.response);
 
       if (error.response && error.response.status === 422) {
@@ -94,14 +96,12 @@ export const AddTestResourceButton = ({
             required
           />
         </div>
-        <DialogClose>
-          <div
-            onClick={addTestResource}
-            className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
-          >
-            Submit
-          </div>
-        </DialogClose>
+        <div
+          onClick={addTestResource}
+          className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
+        >
+          Submit
+        </div>
       </DialogContent>
     </Dialog>
   );

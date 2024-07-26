@@ -21,6 +21,8 @@ class TestResourceController extends Controller
 
             $validated = $request->validated();
             $testResource = $this->service->createTestResource($validated["description"] ?? null,$validated["test_uuid"],$validated["content"] ?? null,$request->user()->id);
+            unset($testResource["id"],$testResource["user_id"],$testResource["test_id"]);
+            $testResource["user_uuid"] = $request->user()->user_uuid;
             return response(["test_resource" => $testResource],201);
         }catch(EmptyDescriptionException $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
@@ -37,6 +39,7 @@ class TestResourceController extends Controller
         $validated = $request->validated();
         $testResource = $this->service->updateOwnTestResource($validated["description"] ?? null,$validated["content"] ?? null,$uuid,$request->user()->id);
         unset($testResource["id"],$testResource["user_id"],$testResource["test_id"]);
+        $testResource["user_uuid"] = $request->user()->user_uuid;
         return response()->json(["message" => "Test Resource updated successfully","test_resource" => $testResource], 200);
     }
    
