@@ -21,6 +21,11 @@ export const AddSolutionButton = ({
   const [content, setContent] = useState<string>();
   const [open, setOpen] = useState<boolean>(false);
 
+  const resetFields = () => {
+    setDescription("");
+    setContent("");
+  };
+
   const addSolution = async () => {
     try {
       if (description) {
@@ -32,7 +37,9 @@ export const AddSolutionButton = ({
         toast({
           title: "Solution Added!",
         });
+        setOpen(false);
         handleSolutionAddition(resp.data.solution);
+        resetFields();
       } else {
         toast({
           title: "Invalid Fields Inputs",
@@ -94,14 +101,12 @@ export const AddSolutionButton = ({
             required
           />
         </div>
-        <DialogClose>
-          <div
-            onClick={addSolution}
-            className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
-          >
-            Submit
-          </div>
-        </DialogClose>
+        <div
+          onClick={addSolution}
+          className="hover:text-dashboard text-xs md:text-base text-highlightSecondary border border-highlightSecondary duration-150 cursor-pointer hover:bg-highlightSecondary w-[15%] justify-center items-center flex p-1 font-base"
+        >
+          Submit
+        </div>
       </DialogContent>
     </Dialog>
   );

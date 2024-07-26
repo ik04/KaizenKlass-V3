@@ -21,6 +21,11 @@ export const AddTestResourceButton = ({
   const [content, setContent] = useState<string>();
   const [open, setOpen] = useState<boolean>(false);
 
+  const resetFields = () => {
+    setDescription("");
+    setContent("");
+  };
+
   const addTestResource = async () => {
     try {
       if (description) {
@@ -34,6 +39,7 @@ export const AddTestResourceButton = ({
         });
         setOpen(false);
         handleTestResourceAddition(resp.data.test_resource);
+        resetFields();
       } else {
         toast({
           title: "Invalid Fields Inputs",
@@ -42,7 +48,6 @@ export const AddTestResourceButton = ({
         });
       }
     } catch (error: any) {
-      setOpen(true);
       console.log(error.response);
 
       if (error.response && error.response.status === 422) {
