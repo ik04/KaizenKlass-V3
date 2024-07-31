@@ -27,7 +27,7 @@ class SubjectResourceController extends Controller
         try{
 
             $validated = $request->validated();
-            $subjectResource = $this->service->addSubjectResource($validated["content"],$request->user()->id,$validated["subject_uuid"]);
+            $subjectResource = $this->service->addSubjectResource($validated["title"],$validated["content"],$request->user()->id,$validated["subject_uuid"]);
             return response()->json([
                 "subject_resource" => $subjectResource,
                 "message" => "Subject Resource Added!"

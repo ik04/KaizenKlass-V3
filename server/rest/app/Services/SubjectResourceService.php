@@ -24,9 +24,10 @@ class SubjectResourceService{
         return $actualSubjectResourceId;
 
     }
-    public function addSubjectResource($content,$userId,$subjectUuid){
+    public function addSubjectResource($title,$content,$userId,$subjectUuid){
         $subjectId = $this->subjectService->getSubjectId($subjectUuid);
         $subjectResource = SubjectResource::create([
+            "title" => $title,
             "content" => $content,
             "user_id" => $userId,
             "subject_id" => $subjectId,

@@ -12,6 +12,7 @@ class SubjectResource extends Model
         "content",
         "user_id",
         "subject_id",
-        "subject_resource_uuid"
+        "subject_resource_uuid",
+        "title"
     ];
 }
