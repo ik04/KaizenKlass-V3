@@ -1,20 +1,13 @@
+import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { AddAssignmentButton } from "~/components/assignments/addAssignmentButton";
-import { AssignmentCard } from "~/components/assignments/assignmentCard";
-import { BackButton } from "~/components/utils/backButton";
+import React, { useContext, useEffect, useState } from "react";
 import { Dashboard } from "~/components/layout/dashboard";
+import { SubjectResourceCard } from "~/components/subject_resources/subjectResourceCard";
+import { Skeleton } from "~/components/ui/skeleton";
+import { BackButton } from "~/components/utils/backButton";
 import { EmptyState } from "~/components/utils/emptyState";
 import { GlobalContext } from "~/context/GlobalContext";
-import Calendar from "react-calendar";
-import { Skeleton } from "~/components/ui/skeleton";
-import { toast } from "~/components/ui/use-toast";
-import { MetaFunction } from "@remix-run/node";
-import { TestCard } from "~/components/tests/testCard";
-import { AddTestButton } from "~/components/tests/addTestButton";
-import { AddSubjectAssignmentButton } from "~/components/subjects/addSubjectAssignmentButton";
-import { AddSubjectTestButton } from "~/components/tests/addSubjectTestButton";
 
 function sanitizeAndCapitalizeSlug(slug: string) {
   let sanitizedSlug = slug.toLowerCase();
@@ -27,43 +20,35 @@ function sanitizeAndCapitalizeSlug(slug: string) {
   return sanitizedSlug;
 }
 
-export default function subjectTests() {
+export default function subjectsResources() {
   const { uuid, baseUrl }: { baseUrl: string; uuid: string } = useLoaderData();
-  // ? directly set nextpage url?
   const { isAuthenticated, hasEditPrivileges } = useContext(GlobalContext);
-  const [tests, setTests] = useState<Test[]>([]);
+  const [resources, setResources] = useState<SubjectResource[]>([]);
   const [nextPage, setNextPage] = useState("");
-  const [isLastPage, setIsLastPage] = useState(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  const handleTestAddition = (test: Test) => {
-    setTests([test, ...tests]);
-  };
-
-  const callTestsWithSubjects = async () => {
-    try {
-      const url = `${baseUrl}/api/v2/get/subjects/${uuid}/tests?page=1`;
-      const resp = await axios.get(url);
-      if (resp.data.tests.data.length === 0) {
-        setIsEmpty(true);
-        setIsLoading(false);
-      } else {
-        setTests(resp.data.tests.data);
-        setNextPage(resp.data.tests.next_page_url);
-        setIsLoading(false);
-      }
-    } catch (err: any) {}
+  const callSubjectResources = async () => {
+    const url = `${baseUrl}/api/v2/get/subjects/${uuid}/resources`;
+    const resp = await axios.get(url);
+    if (resp.data.subject_resources.data.length === 0) {
+      setIsEmpty(true);
+      setIsLoading(false);
+    } else {
+      setResources(resp.data.subject_resources.data);
+      setNextPage(resp.data.subject_resources.next_page_url);
+      setIsLoading(false);
+    }
   };
   const callNextPage = async () => {
     const resp = await axios.get(nextPage);
-    const newTests = resp.data.tests.data;
-    setTests((prevTests) => [...prevTests, ...newTests]);
+    const newResources = resp.data.tests.data;
+    setResources((prevResources) => [...prevResources, ...newResources]);
     setNextPage(resp.data.tests.next_page_url);
   };
+
   useEffect(() => {
-    callTestsWithSubjects();
-  }, [isAuthenticated]);
+    callSubjectResources();
+  }, []);
 
   return (
     <div className="bg-main h-screen">
@@ -79,7 +64,8 @@ export default function subjectTests() {
         <div className="h-full">
           {!isLoading ? (
             <>
-              {hasEditPrivileges && (
+              {/* make add button and delete button only */}
+              {/* {hasEditPrivileges && (
                 <div className="mb-7">
                   <AddSubjectTestButton
                     uuid={uuid}
@@ -87,17 +73,18 @@ export default function subjectTests() {
                     baseUrl={baseUrl}
                   />
                 </div>
-              )}
+              )} */}
               {!isEmpty ? (
                 <div className="flex flex-col space-y-7 mb-20">
-                  {tests.map((test) => (
-                    <TestCard
-                      test_uuid={test.test_uuid}
-                      subject={test.subject}
-                      exam_date={test.exam_date}
-                      title={test.title}
-                      subject_uuid={test.subject_uuid}
-                      key={test.test_uuid}
+                  {resources.map((resource) => (
+                    <SubjectResourceCard
+                      content={resource.content}
+                      name={resource.name}
+                      subject_resource_uuid={resource.subject_resource_uuid}
+                      title={resource.title}
+                      key={resource.subject_resource_uuid}
+                      user_uuid={resource.user_uuid}
+                      baseUrl={baseUrl}
                     />
                   ))}
                   {nextPage != null && (
@@ -145,10 +132,10 @@ export const loader = async ({ params }: any) => {
 export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
   const { uuid } = data;
   return [
-    { title: `${sanitizeAndCapitalizeSlug(uuid)} | Tests` },
+    { title: `${sanitizeAndCapitalizeSlug(uuid)} | Resources` },
     {
       property: "og:title",
-      content: `${sanitizeAndCapitalizeSlug(uuid)} | Tests`,
+      content: `${sanitizeAndCapitalizeSlug(uuid)} | Resources`,
     },
     {
       property: "og:site_name",

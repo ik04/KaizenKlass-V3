@@ -65,3 +65,10 @@ interface TestResource {
   username: string;
   user_uuid: string;
 }
+interface SubjectResource {
+  content: string;
+  subject_resource_uuid: string;
+  name: string;
+  title: string;
+  user_uuid: string;
+}

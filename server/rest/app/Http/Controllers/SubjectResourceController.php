@@ -42,9 +42,9 @@ class SubjectResourceController extends Controller
     public function getSubjectResources($uuid){
         $subjectId = $this->subjectService->getSubjectId($uuid);
         $subjectResources = SubjectResource::join("users","users.id","subject_resources.user_id")
-        ->select("subject_resources.content","subject_resources.subject_resource_uuid","users.name")
+        ->select("subject_resources.content","subject_resources.subject_resource_uuid","users.name","users.user_uuid","subject_resources.title")
         ->where("subject_id",$subjectId)
-        ->get();
+        ->paginate(5);
         return response()->json(["subject_resources" => $subjectResources]);
     }
     public function updateSubjectResource(UpdateSubjectResourceRequest $request, $subjectResourceUuid){

@@ -204,6 +204,9 @@ export default function tests() {
   };
   const deleteSolution = async (solutionUuid: string) => {
     try {
+      const { userUuid, hasEditPrivileges, isAuthenticated, role } =
+        useContext(GlobalContext);
+
       const resp = await axios.delete(
         `${baseUrl}/api/v1/delete-solution/${solutionUuid}`
       );

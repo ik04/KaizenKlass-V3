@@ -82,7 +82,7 @@ Route::prefix("v2")->group(function(){
     Route::prefix("get")->group(function(){
         Route::get("tests",[TestController::class,"getTests"]);
         Route::get("subjects/{uuid}/tests",[TestController::class,"getTestsBySubject"]);
-        Route::get("subject-resources/{uuid}",[SubjectResourceController::class,"getSubjectResources"]);
+        Route::get("subjects/{uuid}/resources",[SubjectResourceController::class,"getSubjectResources"]);
         Route::get("test/{uuid}",[TestController::class,"getTest"]);
         
     });
