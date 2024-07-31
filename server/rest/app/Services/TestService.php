@@ -61,16 +61,22 @@ class TestService{
         ->where("selected_subjects.user_id", $userId)
         ->orderByRaw("CASE 
             WHEN tests.exam_date >= ? THEN 0 
-            WHEN tests.exam_date < ? THEN 1 
-            WHEN tests.exam_date IS NULL THEN 2 
+            WHEN tests.exam_date < ? THEN 2 
+            WHEN tests.exam_date IS NULL THEN 1 
             END", [$currentDate, $currentDate])
         ->orderBy("tests.exam_date", "ASC")
         ->paginate(5);
         return $tests;
     }
     public function getTestsBySubjects(string $subjectUuid){
+        $currentDate = now();
         $subjectId = $this->subjectService->getSubjectId($subjectUuid);
-        $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->paginate(5);
+        $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->orderByRaw("CASE 
+        WHEN tests.exam_date >= ? THEN 0 
+        WHEN tests.exam_date < ? THEN 2 
+        WHEN tests.exam_date IS NULL THEN 1 
+        END", [$currentDate, $currentDate])
+    ->orderBy("tests.exam_date", "ASC")->paginate(5);
         return $tests;
     }
     public function getTestWithResources(string $uuid)

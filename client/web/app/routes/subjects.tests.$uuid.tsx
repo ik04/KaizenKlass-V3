@@ -73,9 +73,11 @@ export default function subjectTests() {
     <div className="bg-main h-screen">
       <Dashboard baseUrl={baseUrl}>
         <div className="header w-full h-20 mb-10 flex justify-between items-center text-5xl">
-          <div className="font-display text-highlightSecondary mb-7 text-5xl flex justify-between">
+          <div className="font-display text-highlightSecondary mb-7 text-5xl w-full flex justify-between">
             <BackButton />
-            <h2></h2>
+            <h2 className="font-display text-xl md:text-5xl text-highlightSecondary">
+              {sanitizeAndCapitalizeSlug(uuid)}
+            </h2>
           </div>
         </div>
         <div className="h-full">

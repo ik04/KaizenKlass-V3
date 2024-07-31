@@ -14,7 +14,11 @@ class AddSubjectResourceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "content" => "string|required",
+            "content" => [
+                "required",
+                "string",
+                "regex:/(https?:\/\/[^\s]+)/"
+            ],
             "subject_uuid" => "string|required"
         ];
     }

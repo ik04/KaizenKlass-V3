@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InvalidSlugException;
 use App\Exceptions\InvalidSubjectResourceUuidException;
 use App\Http\Requests\AddSubjectResourceRequest;
 use App\Http\Requests\UpdateSubjectResourceRequest;
@@ -23,12 +24,20 @@ class SubjectResourceController extends Controller
     }
     
     public function addSubjectResource(AddSubjectResourceRequest $request){
-        $validated = $request->validated();
-        $subjectResource = $this->service->addSubjectResource($validated["content"],$request->user()->id,$validated["subject_uuid"]);
-        return response()->json([
-            "subject_resource" => $subjectResource,
-            "message" => "Subject Resource Added!"
-        ]);
+        try{
+
+            $validated = $request->validated();
+            $subjectResource = $this->service->addSubjectResource($validated["content"],$request->user()->id,$validated["subject_uuid"]);
+            return response()->json([
+                "subject_resource" => $subjectResource,
+                "message" => "Subject Resource Added!"
+            ]);
+        }catch(Exception $e){
+            return response()->json(["error" => $e->getMessage()]);
+        }
+        catch(InvalidSlugException $e){
+            return response()->json(["error" => $e->getMessage()],$e->getCode());
+        }
     }
     public function getSubjectResources($uuid){
         $subjectId = $this->subjectService->getSubjectId($uuid);
