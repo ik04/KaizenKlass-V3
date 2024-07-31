@@ -226,6 +226,7 @@ export default function assignments() {
     const viewLink = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
     return viewLink;
   };
+
   // todo: finish solution components
   // todo: redo assignments page with new design
   return (

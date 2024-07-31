@@ -128,10 +128,10 @@ export const loader = async ({ params }: any) => {
 export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
   const { uuid } = data;
   return [
-    { title: `${sanitizeAndCapitalizeSlug(uuid)}` },
+    { title: `${sanitizeAndCapitalizeSlug(uuid)} | Assignments` },
     {
       property: "og:title",
-      content: `${sanitizeAndCapitalizeSlug(uuid)}`,
+      content: `${sanitizeAndCapitalizeSlug(uuid)} | Assignments`,
     },
     {
       property: "og:site_name",

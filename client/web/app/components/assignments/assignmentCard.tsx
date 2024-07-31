@@ -20,7 +20,7 @@ export const AssignmentCard = ({
       to={`/assignments/${assignment_uuid}`}
       className="bg-mainLighter h-max-36 md:h-32 w-full flex rounded-2xl items-center justify-between hover:border-highlight border border-mainLighter duration-200 transition-all space-y-3 p-5"
     >
-      <div className="">
+      <div className="w-full">
         <Link
           to={`/assignments/${assignment_uuid}`}
           className="flex justify-between space-x-5 w-full items-center"

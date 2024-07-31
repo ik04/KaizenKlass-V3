@@ -27,30 +27,21 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export const AddTestButton = ({
+export const AddSubjectTestButton = ({
   baseUrl,
+  uuid,
   handleAddTest,
 }: {
   baseUrl: string;
+  uuid: string;
   handleAddTest: (test: Test) => void;
 }) => {
   const { toast } = useToast();
-  const [subjects, setSubjects] = useState<Subject[]>([]);
   const [subject, setSubject] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [date, setDate] = useState<Date | null>(null);
   const [isDatePicked, setIsDatePicked] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
-  const getSubjects = async () => {
-    const url = `${baseUrl}/api/v2/get/selected-subjects/all`;
-    const resp = await axios.get(url);
-    setSubjects(resp.data.selected_subjects);
-  };
-
-  useEffect(() => {
-    getSubjects();
-  }, []);
 
   const addTest = async () => {
     try {
@@ -66,7 +57,7 @@ export const AddTestButton = ({
         }
         const resp = await axios.post(`${baseUrl}/api/v2/add/test`, {
           title,
-          subject_uuid: subject,
+          subject_uuid: uuid,
           exam_date: combinedDeadline,
         });
         toast({
@@ -143,25 +134,6 @@ export const AddTestButton = ({
       </DialogTrigger>
       <DialogContent>
         <div className="font-base flex flex-col space-y-1 md:block overflow-hidden">
-          <div className="flex flex-col">
-            <Label>Subject</Label>
-            <select
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              name=""
-              className="py-2 my-2 bg-white text-sm rounded-sm"
-              id=""
-            >
-              <option value="" className="text-[#737373]" disabled selected>
-                Select Subject
-              </option>
-              {subjects.map((subject) => (
-                <option className="p-4" value={subject.subject_uuid}>
-                  {subject.subject}
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="flex flex-col">
             <Label>Title</Label>
             <select
