@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Dashboard } from "~/components/layout/dashboard";
 import { SubjectResourceCard } from "~/components/subject_resources/subjectResourceCard";
 import { Skeleton } from "~/components/ui/skeleton";
+import { toast } from "~/components/ui/use-toast";
 import { BackButton } from "~/components/utils/backButton";
 import { EmptyState } from "~/components/utils/emptyState";
 import { GlobalContext } from "~/context/GlobalContext";
@@ -22,7 +23,8 @@ function sanitizeAndCapitalizeSlug(slug: string) {
 
 export default function subjectsResources() {
   const { uuid, baseUrl }: { baseUrl: string; uuid: string } = useLoaderData();
-  const { isAuthenticated, hasEditPrivileges } = useContext(GlobalContext);
+  const { isAuthenticated, hasEditPrivileges, userUuid } =
+    useContext(GlobalContext);
   const [resources, setResources] = useState<SubjectResource[]>([]);
   const [nextPage, setNextPage] = useState("");
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
@@ -44,6 +46,20 @@ export default function subjectsResources() {
     const newResources = resp.data.tests.data;
     setResources((prevResources) => [...prevResources, ...newResources]);
     setNextPage(resp.data.tests.next_page_url);
+  };
+
+  const deleteOwnResource = async (uuid: string) => {
+    const url = `${baseUrl}/api/v2/delete/subject-resource/${uuid}`;
+    const resp = await axios.delete(url);
+    setResources((prevResources) =>
+      prevResources.filter(
+        (resource) => resource.subject_resource_uuid !== uuid
+      )
+    );
+    toast({
+      title: "Solution deleted!",
+      description: `the solution has been deleted`,
+    });
   };
 
   useEffect(() => {
@@ -77,15 +93,27 @@ export default function subjectsResources() {
               {!isEmpty ? (
                 <div className="flex flex-col space-y-7 mb-20">
                   {resources.map((resource) => (
-                    <SubjectResourceCard
-                      content={resource.content}
-                      name={resource.name}
-                      subject_resource_uuid={resource.subject_resource_uuid}
-                      title={resource.title}
-                      key={resource.subject_resource_uuid}
-                      user_uuid={resource.user_uuid}
-                      baseUrl={baseUrl}
-                    />
+                    <div className="flex items-center space-x-2">
+                      <SubjectResourceCard
+                        content={resource.content}
+                        name={resource.name}
+                        subject_resource_uuid={resource.subject_resource_uuid}
+                        title={resource.title}
+                        key={resource.subject_resource_uuid}
+                        user_uuid={resource.user_uuid}
+                        baseUrl={baseUrl}
+                      />
+                      {isAuthenticated && resource.user_uuid == userUuid && (
+                        <img
+                          src="/assets/trash.png"
+                          onClick={() =>
+                            deleteOwnResource(resource.subject_resource_uuid)
+                          }
+                          className="w-12 md:w-5"
+                          alt=""
+                        />
+                      )}
+                    </div>
                   ))}
                   {nextPage != null && (
                     <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
