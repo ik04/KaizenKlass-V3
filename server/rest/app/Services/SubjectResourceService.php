@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Exceptions\EmptySubjectResourceContentException;
 use App\Exceptions\InvalidSubjectResourceUuidException;
 use App\Models\SubjectResource;
+use App\Models\User;
 use Ramsey\Uuid\Uuid;
 
 class SubjectResourceService{
-    public function __construct(protected SubjectService $subjectService)
+    public function __construct(protected SubjectService $subjectService, protected UserService $userService)
     {
         
     }
@@ -33,6 +34,10 @@ class SubjectResourceService{
             "subject_id" => $subjectId,
             "subject_resource_uuid" => Uuid::uuid4()
         ]);
+        $userDetails = User::select("name","user_uuid")->where("id",$userId)->first();
+        $subjectResource["name"] = $userDetails->name;
+        $subjectResource["user_uuid"] = $userDetails->user_uuid;
+        unset($subjectResource["user_id"],$subjectResource["subject_id"],$subjectResource["id"]);
         return $subjectResource;
     }
     public function updateSubjectResource($content,$subjectResourceUuid,$userId){

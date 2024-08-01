@@ -3,6 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Dashboard } from "~/components/layout/dashboard";
+import { AddSubjectResourceButton } from "~/components/subject_resources/addSubjectResourceButton";
 import { SubjectResourceCard } from "~/components/subject_resources/subjectResourceCard";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
@@ -66,6 +67,10 @@ export default function subjectsResources() {
     callSubjectResources();
   }, []);
 
+  const handleAddResource = (resource: SubjectResource) => {
+    setResources((prev) => [resource, ...prev]);
+  };
+
   return (
     <div className="bg-main h-screen">
       <Dashboard baseUrl={baseUrl}>
@@ -81,15 +86,15 @@ export default function subjectsResources() {
           {!isLoading ? (
             <>
               {/* make add button and delete button only */}
-              {/* {hasEditPrivileges && (
+              {isAuthenticated && (
                 <div className="mb-7">
-                  <AddSubjectTestButton
-                    uuid={uuid}
-                    handleAddTest={handleTestAddition}
+                  <AddSubjectResourceButton
+                    subjectUuid={uuid}
+                    handleAddResource={handleAddResource}
                     baseUrl={baseUrl}
                   />
                 </div>
-              )} */}
+              )}
               {!isEmpty ? (
                 <div className="flex flex-col space-y-7 mb-20">
                   {resources.map((resource) => (
