@@ -10,6 +10,7 @@ import { toast } from "~/components/ui/use-toast";
 import { EditSolutionButton } from "~/components/assignments/editSolutionButton";
 import { EditOwnSolutionButton } from "~/components/assignments/editOwnSolutionButton";
 import { MetaFunction, redirect } from "@remix-run/node";
+import MetadataFetcher from "~/components/utils/metaFetcher.tsx";
 
 export default function assignments() {
   const {
@@ -159,6 +160,7 @@ export default function assignments() {
 
   function convertLinksToAnchors(text: string, currentDomain: string) {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
+    console.log(currentDomain);
 
     return text.replace(urlRegex, function (url) {
       if (url === currentDomain || url.startsWith(currentDomain + "/")) {
@@ -394,6 +396,7 @@ export default function assignments() {
                           ),
                         }}
                       />
+
                       <div className="flex items-center space-x-2">
                         {solution.content && (
                           <a
