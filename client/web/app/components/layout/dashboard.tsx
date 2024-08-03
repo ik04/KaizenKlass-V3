@@ -29,7 +29,8 @@ export const Dashboard = ({
       img: "/assets/exam.png",
       name: "tests",
     },
-    { href: "/deadlines", img: "/assets/skull.svg", name: "deadlines" },
+    // { href: "/deadlines", img: "/assets/skull.svg", name: "deadlines" },
+    // * not necessary for now
   ];
   const extraSidebarIcons = [
     { href: "/resources", img: "/assets/treasure.svg", name: "resources" },

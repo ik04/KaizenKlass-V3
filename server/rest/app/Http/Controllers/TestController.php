@@ -87,4 +87,7 @@ class TestController extends Controller
         return response()->json(["error"=>$e->getMessage()],$e->getCode());
     }
 }
+    public function getDeadlines(){
+        
+    }
 }

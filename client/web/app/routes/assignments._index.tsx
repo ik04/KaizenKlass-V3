@@ -11,6 +11,7 @@ import Calendar from "react-calendar";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 import { MetaFunction } from "@remix-run/node";
+import { DeadlineCard } from "~/components/deadlines/deadlineCard";
 
 export const meta: MetaFunction = () => {
   return [
@@ -155,7 +156,8 @@ export default function assignments() {
                   <div className="flex flex-col space-y-7 mb-10">
                     {assignments &&
                       assignments.map((assignment) => (
-                        <AssignmentCard
+                        <DeadlineCard
+                          deadline={assignment.deadline}
                           key={assignment.assignment_uuid}
                           subject={assignment.subject}
                           title={assignment.title}

@@ -183,24 +183,40 @@ class AssignmentService{
             ];
         }
         public function getAssignmentsWithSubjects(){
-            $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject","subjects.subject_uuid")->orderBy("assignments.id","DESC")->paginate(5);
+            $currentDate = now();
+            $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject","subjects.subject_uuid","assignments.deadline")
+            ->orderByRaw("CASE 
+            WHEN assignments.deadline >= ? THEN 0 
+            WHEN assignments.deadline < ? THEN 2 
+            WHEN assignments.deadline IS NULL THEN 1 
+            END", [$currentDate, $currentDate])
+            ->orderBy("assignments.deadline", "ASC")
+            ->paginate(5);
             return $assignments;
         }
         public function getAssignmentsWithDeadline() {
             $currentDateTime = Carbon::now();
             $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title", "assignments.deadline", "assignments.assignment_uuid","subjects.subject","subjects.subject_uuid")
                 ->whereNotNull("deadline")->where("deadline",">",$currentDateTime)
-                ->orderBy("deadline","ASC")
+                ->orderBy("deadline","DESC")
                 ->get();
             return $assignments;
         }
         public function getAssignmentsWithSelectedSubjects($userId)
         {
+            $currentDate = now();
             $assignments = Assignment::join("subjects", "subjects.id", "=", "assignments.subject_id")
-                ->leftJoin("selected_subjects", "selected_subjects.subject_id", "=", "assignments.subject_id")
-                ->select("assignments.title", "assignments.assignment_uuid", "subjects.subject", "subjects.subject_uuid")->where("selected_subjects.user_id",$userId)
-                ->orderBy("assignments.id", "DESC")
-                ->paginate(5);
+            ->leftJoin("selected_subjects", "selected_subjects.subject_id", "=", "assignments.subject_id")
+            ->select("assignments.title", "assignments.assignment_uuid", "subjects.subject", "subjects.subject_uuid", "assignments.deadline", "assignments.created_at")
+            ->where("selected_subjects.user_id", $userId)
+            ->orderByRaw("CASE
+                WHEN assignments.deadline >= ? THEN 0
+                WHEN assignments.deadline < ? THEN 1
+                WHEN assignments.deadline IS NULL THEN 1
+                END", [$currentDate, $currentDate])
+            ->orderBy("assignments.deadline", "ASC")
+            ->orderBy("assignments.created_at", "DESC")
+            ->paginate(5);
         
             return $assignments;
         }

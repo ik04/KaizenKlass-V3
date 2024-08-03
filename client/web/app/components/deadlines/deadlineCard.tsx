@@ -10,7 +10,7 @@ export const DeadlineCard = ({
 }: {
   title: string;
   assignment_uuid: string;
-  deadline: string;
+  deadline?: string;
   subject: string;
   subject_uuid: string;
 }) => {
@@ -39,18 +39,34 @@ export const DeadlineCard = ({
           daysUntilDeadline === 1 ? "" : "s"
         } ${hoursUntilDeadline} hour${hoursUntilDeadline === 1 ? "" : "s"}`
       );
-    } else {
+    } else if (hoursUntilDeadline > 0) {
       setIsDanger(true);
       setReadableDeadline(
         `${hoursUntilDeadline} hour${
           hoursUntilDeadline === 1 ? "" : "s"
         } ${minutesUntilDeadline} min${minutesUntilDeadline === 1 ? "" : "s"}`
       );
+    } else {
+      setIsDanger(true);
+      setReadableDeadline(`Passed On ${formatDate(deadlineDate)}`);
     }
   };
 
+  const formatDate = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
   useEffect(() => {
-    calculateTimeUntilDeadline(deadline);
+    if (deadline != null) {
+      calculateTimeUntilDeadline(deadline);
+    }
   }, [deadline]);
 
   const isMobileViewport =
@@ -78,13 +94,15 @@ export const DeadlineCard = ({
           </div>
         </Link>
       )}
-      <div
-        className={`${
-          !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
-        } font-base md:text-xl`}
-      >
-        {readableDeadline}
-      </div>
+      {deadline != null && (
+        <div
+          className={`${
+            !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
+          } font-base md:text-xl`}
+        >
+          {readableDeadline}
+        </div>
+      )}
     </Link>
   );
 };

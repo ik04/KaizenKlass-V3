@@ -84,6 +84,7 @@ Route::prefix("v2")->group(function(){
         Route::get("subjects/{uuid}/tests",[TestController::class,"getTestsBySubject"]);
         Route::get("subjects/{uuid}/resources",[SubjectResourceController::class,"getSubjectResources"]);
         Route::get("test/{uuid}",[TestController::class,"getTest"]);
+        Route::get("deadlines",[TestController::class,"getDeadlines"]);
         
     });
     
