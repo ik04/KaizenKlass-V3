@@ -30,18 +30,15 @@ class SubjectService{
     }
     public function getSubjects(){
         $subjects = Subject::select("subject", "subject_uuid")
-                    ->withCount('assignments') 
-                    ->orderByDesc('assignments_count') 
+                    ->orderByDesc('created_at') 
                     ->get();
 
                     return $subjects;
     }
     public function getSubjectsV2(){
         $subjects = Subject::select("subject", "subject_uuid")
-                    ->withCount('assignments') 
-                    ->orderByDesc('assignments_count') 
+                    ->orderByDesc('created_at')
                     ->paginate(12);
-
                     return $subjects;
     }
     public function deleteSubject(Uuid $subjectUuid){
