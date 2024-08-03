@@ -185,12 +185,13 @@ class AssignmentService{
         public function getAssignmentsWithSubjects(){
             $currentDate = now();
             $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject","subjects.subject_uuid","assignments.deadline")
-            ->orderByRaw("CASE 
-            WHEN assignments.deadline >= ? THEN 0 
-            WHEN assignments.deadline < ? THEN 2 
-            WHEN assignments.deadline IS NULL THEN 1 
-            END", [$currentDate, $currentDate])
+            ->orderByRaw("CASE
+                WHEN assignments.deadline >= ? THEN 0
+                WHEN assignments.deadline < ? THEN 1
+                WHEN assignments.deadline IS NULL THEN 1
+                END", [$currentDate, $currentDate])
             ->orderBy("assignments.deadline", "ASC")
+            ->orderBy("assignments.created_at", "DESC")
             ->paginate(5);
             return $assignments;
         }
