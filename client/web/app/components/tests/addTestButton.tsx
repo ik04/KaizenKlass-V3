@@ -54,7 +54,7 @@ export const AddTestButton = ({
 
   const addTest = async () => {
     try {
-      if (subject && title) {
+      if (title) {
         let combinedDeadline = null;
         if (date) {
           const deadlineDateTime = new Date(date);
@@ -79,7 +79,7 @@ export const AddTestButton = ({
         toast({
           title: "Required fields",
           variant: "destructive",
-          description: `Add both title and subject`,
+          description: `Title is required`,
         });
       }
     } catch (error: any) {

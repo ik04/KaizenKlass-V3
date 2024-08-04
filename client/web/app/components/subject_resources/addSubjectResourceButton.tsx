@@ -53,7 +53,7 @@ export const AddSubjectResourceButton = ({
           />
           <Label>Content</Label>
           <Input
-            placeholder="Drive link of Solution pdf (a share link that is public)"
+            placeholder="Enter a valid link"
             onChange={(e) => setContent(e.target.value)}
             required
           />
