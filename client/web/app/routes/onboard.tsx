@@ -104,10 +104,10 @@ export default function onboard() {
   };
   return (
     <div className="bg-main min-h-screen">
-      <h1 className="text-highlight font-display text-6xl py-4 capitalize text-center">
+      <h1 className="text-highlight font-display text-2xl md:text-6xl py-4 capitalize text-center px-2 md:px-0">
         Welcome to the onboarding page
       </h1>
-      <p className="font-base text-highlightSecondary text-center text-2xl">
+      <p className="font-base text-highlightSecondary text-center text-sm md:text-2xl px-3 md:px-0">
         Please select your subjects to get started with using the site and track
         your subjects
       </p>
@@ -148,7 +148,7 @@ export default function onboard() {
                   <div
                     key={subject.subject}
                     onClick={() => handleToggle(subject.subject_uuid)}
-                    className={`md:m-8 my-8 ${
+                    className={`md:m-8 md:px-0 px-4 my-8 ${
                       selectedSubjects.includes(subject.subject_uuid) &&
                       "border-2 border-highlight rounded-3xl"
                     }`}
