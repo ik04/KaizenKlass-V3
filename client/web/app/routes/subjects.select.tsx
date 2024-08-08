@@ -94,13 +94,15 @@ export default function selectSubject() {
           prevSelectedSubjects.filter((id) => id !== uuid)
         );
       } else {
-        await axios.post(
+        const resp = await axios.post(
           `${baseUrl}/api/v2/add/selected-subject/`,
           {
             subject_uuid: uuid,
           },
           { withCredentials: true }
         );
+        console.log(resp);
+
         setSelectedSubjects((prevSelectedSubjects) => [
           ...prevSelectedSubjects,
           uuid,
