@@ -44,18 +44,18 @@ export default function subjectPage() {
       <Dashboard baseUrl={baseUrl}>
         <div className="flex justify-between">
           <BackButton />
-          <h1 className="font-display text-xl md:text-5xl text-highlightSecondary">
+          <h1 className="font-display text-end md:text-5xl text-highlightSecondary">
             {sanitizeAndCapitalizeSlug(uuid)}
           </h1>
         </div>
-        <div className="flex flex-wrap basis-2/4 h-[80%] space-x-4 my-10">
+        <div className="flex md:flex-row flex-col md:flex-wrap md:basis-2/4 md:h-[80%] h-[82%] space-y-4 md:space-y-0 md:space-x-4 my-10">
           {sections.map((section) => (
             <Link
               to={section.href}
               className="text-highlightSecondary bg-mainLighter flex-1 rounded-3xl flex flex-col justify-center items-center space-y-5 hover:border hover:border-highlight duration-75"
             >
-              <img src={section.img} className="w-16" alt="" />
-              <h1 className="font-base capitalize font-bold text-3xl">
+              <img src={section.img} className="w-12 md:w-16" alt="" />
+              <h1 className="font-base capitalize font-bold text-xl md:text-3xl">
                 {section.name}
               </h1>
             </Link>
