@@ -116,10 +116,10 @@ export default function selectSubject() {
       <Dashboard baseUrl={baseUrl}>
         <div className="">
           <BackButton />
-          <h1 className="text-highlight font-display text-6xl py-4 capitalize text-center">
+          <h1 className="text-highlight font-display text-xl md:text-6xl py-4 capitalize text-center">
             Welcome to the Selection page
           </h1>
-          <p className="font-base text-highlightSecondary text-center text-2xl">
+          <p className="font-base text-highlightSecondary text-center text-sm md:text-2xl">
             Please select or remove your subjects
           </p>
           <div className="">

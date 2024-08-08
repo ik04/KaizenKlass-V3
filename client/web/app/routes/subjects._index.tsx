@@ -134,26 +134,29 @@ export default function Subjects() {
           <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:w-full">
             {!isLoading ? (
               <>
+                {isAuthenticated && (
+                  <div className="md:m-6 my-6">
+                    <Link
+                      to={`/subjects/select`}
+                      className="hover:border-highlight p-5 flex flex-col justify-between items-center md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl md:flex md:flex-col md:justify-center md:items-center md:space-y-5 space-y-0 bg-mainLighter transition-all"
+                    >
+                      <div className="font-base w-full text-highlightSecondary md:p-0 p-4 font-semibold text-center text-5xl md:text-7xl">
+                        +
+                      </div>
+                      <div className="font-base text-highlightSecondary md:text-2xl font-bold">
+                        Select Subjects
+                      </div>
+                    </Link>
+                  </div>
+                )}
                 {(searchQuery ? filteredSubjects : subjects).map((subject) => (
-                  <div key={subject.subject} className="md:m-8 my-8">
+                  <div key={subject.subject} className="md:m-6 my-6">
                     <SubjectCard
                       subject={subject.subject}
                       uuid={subject.subject_uuid}
                     />
                   </div>
                 ))}
-                {isAuthenticated && (
-                  <div className="md:m-8 my-8">
-                    <Link
-                      to={`/subjects/select`}
-                      className="hover:border-highlight p-5 flex justify-between items-center md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl md:flex md:flex-col md:justify-center md:items-center md:space-y-5 bg-mainLighter transition-all"
-                    >
-                      <div className="font-base w-full text-highlightSecondary md:p-0 p-4 font-semibold text-center md:text-7xl">
-                        +
-                      </div>
-                    </Link>
-                  </div>
-                )}
               </>
             ) : (
               <>
