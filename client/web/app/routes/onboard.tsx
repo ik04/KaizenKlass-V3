@@ -141,14 +141,14 @@ export default function onboard() {
               )}
             </div>
           )}
-          <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:w-full">
+          <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:px-0 px-4 md:w-full">
             {!isLoading ? (
               <>
                 {(searchQuery ? filteredSubjects : subjects).map((subject) => (
                   <div
                     key={subject.subject}
                     onClick={() => handleToggle(subject.subject_uuid)}
-                    className={`md:m-8 md:px-0 px-4 my-8 ${
+                    className={`md:m-8 my-8 ${
                       selectedSubjects.includes(subject.subject_uuid) &&
                       "border-2 border-highlight rounded-3xl"
                     }`}
