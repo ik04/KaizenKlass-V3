@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddSubjectRequest;
+use App\Http\Requests\SearchSubjectRequest;
 use App\Models\Assignment;
 use App\Models\Subject;
 use App\Services\SubjectService;
@@ -45,6 +46,11 @@ class SubjectController extends Controller
         return response()->json(["message" => "Subject deleted successfully"], 200);
     }
 
+    public function searchSubjects($query){
+        $sanitizedQuery = str_replace('+', ' ', $query);
+        $results = $this->service->searchSubjects($sanitizedQuery);
+        return response()->json(["results" => $results]);
+    }
   
 }
 // todo: continue shifting

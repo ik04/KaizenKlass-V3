@@ -79,13 +79,15 @@ Route::prefix("v1")->group(function(){
 // todo: add search for subjects
 Route::prefix("v2")->group(function(){
     Route::get("get-subjects",[SubjectController::class,"getSubjectsV2"]);
+    Route::prefix("search")->group(function(){
+        Route::get("subjects/{query}",[SubjectController::class,"searchSubjects"]);
+    });
     Route::prefix("get")->group(function(){
         Route::get("tests",[TestController::class,"getTests"]);
         Route::get("subjects/{uuid}/tests",[TestController::class,"getTestsBySubject"]);
         Route::get("subjects/{uuid}/resources",[SubjectResourceController::class,"getSubjectResources"]);
         Route::get("test/{uuid}",[TestController::class,"getTest"]);
         Route::get("deadlines",[TestController::class,"getDeadlines"]);
-        
     });
     
     Route::middleware(["auth:sanctum"])->group(function(){
@@ -97,8 +99,6 @@ Route::prefix("v2")->group(function(){
             Route::get("selected-subjects/all",[SelectedSubjectController::class,"getAllSelectedSubjects"]);
             Route::get("selected-subjects/assignments",[AssignmentController::class,"getAssignmentsWithSelectedSubjects"]);
             
-            Route::get("subjects/search/{query}",[SubjectController::class,"searchSubjects"]);
-            Route::get("selected-subjects/search/{query}",[SelectedSubjectController::class,"searchSelectedSubjects"]);
             
             Route::get("selected-subjects/tests",[TestController::class,"getTestsWithSelectedSubjects"]);
         });
@@ -119,9 +119,12 @@ Route::prefix("v2")->group(function(){
             Route::post("selected-subjects",[SelectedSubjectController::class,"removeAllSelectedSubject"]);
             
             Route::delete("subject-resource/{subjectResourceUuid}",[SubjectResourceController::class,"removeSubjectResources"]); 
-
+            
             Route::delete("test-resource/{uuid}", [TestResourceController::class, "deleteOwnTestResource"]);
             
+        });
+        Route::prefix("search")->group(function(){
+            Route::get("selected-subjects/{query}",[SelectedSubjectController::class,"searchSelectedSubjects"]);
         });
     });
     Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){

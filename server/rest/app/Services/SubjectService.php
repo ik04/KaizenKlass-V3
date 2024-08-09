@@ -53,7 +53,8 @@ class SubjectService{
         return $subjectDetails;
     }
 
-    public function selectSubject(){
-        
+    public function searchSubjects(string $query){
+        $results = Subject::where('subject', 'LIKE', '%' . $query . '%')->paginate(8);        
+        return $results;
     }
 }

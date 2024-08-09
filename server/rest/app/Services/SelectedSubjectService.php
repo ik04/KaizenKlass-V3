@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\SelectionNotFoundException;
 use App\Exceptions\SubjectAlreadySelectedException;
 use App\Models\SelectedSubject;
+use App\Models\Subject;
 use Exception;
 use Ramsey\Uuid\Uuid;
 
@@ -69,5 +70,11 @@ class SelectedSubjectService{
     }
     public function removeAllSubjects($userId){
         SelectedSubject::where("user_id",$userId)->delete();        
+    }
+    public function searchSelectedSubjects(string $query){
+        $results = Subject::select('subjects.subject', 'subjects.subject_uuid')
+        ->leftJoin('selected_subjects', 'selected_subjects.subject_id', '=', 'subjects.id')
+        ->where('subjects.subject', 'like', '%' . $query . '%')
+        ->get();
     }
 }

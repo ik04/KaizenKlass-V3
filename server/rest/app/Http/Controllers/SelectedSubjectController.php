@@ -82,4 +82,9 @@ class SelectedSubjectController extends Controller
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
     }
+    public function searchSelectedSubjects(string $query){
+        $sanitizedQuery = str_replace('+', ' ', $query);
+        $results = $this->service->searchSelectedSubjects($sanitizedQuery);
+        return response()->json(["results" => $results]);
+    }
 }
