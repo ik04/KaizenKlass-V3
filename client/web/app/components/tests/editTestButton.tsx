@@ -7,6 +7,7 @@ import axios from "axios";
 import Calendar from "react-calendar";
 import { format } from "date-fns";
 import { toast } from "../ui/use-toast";
+import { testTitles } from "~/data/constants";
 
 export const EditTestButton = ({
   baseUrl,
@@ -117,13 +118,21 @@ export const EditTestButton = ({
               </option>
             ))}
           </select>
-          <Label>Title</Label>
-          <Input
-            placeholder="New Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <div className="flex flex-col">
+            <Label>Title</Label>
+            <select
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="py-2 my-2 bg-white text-sm rounded-sm"
+            >
+              <option value="" className="text-[#737373]" disabled selected>
+                Select Title
+              </option>
+              {testTitles.map((test) => (
+                <option value={test}>{test}</option>
+              ))}
+            </select>
+          </div>
           <div className="flex flex-col space-y-1">
             <div className="">
               <Label>Exam Date</Label>
