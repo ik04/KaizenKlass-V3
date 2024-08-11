@@ -66,9 +66,9 @@ export const EditAssignmentButton = ({
   );
 
   const getSubjects = async () => {
-    const url = `${baseUrl}/api/v1/get-subjects`;
+    const url = `${baseUrl}/api/v2/get/selected-subjects/all`;
     const resp = await axios.get(url);
-    setSubjects(resp.data.subjects);
+    setSubjects(resp.data.selected_subjects);
   };
   // ! alot of refactors needed
   useEffect(() => {

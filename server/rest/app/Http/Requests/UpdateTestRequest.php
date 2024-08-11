@@ -16,7 +16,7 @@ class UpdateTestRequest extends FormRequest
         return [
             "title" => "string|nullable",
             "subject_uuid" =>"string|nullable",
-            "exam_date" =>"nullable|date_format:Y-m-d|after_or_equal:today",
+            "exam_date" =>"nullable|date_format:Y-m-d H:i:s|after_or_equal:today",
         ];
     }
 }

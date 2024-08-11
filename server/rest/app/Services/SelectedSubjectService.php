@@ -75,6 +75,8 @@ class SelectedSubjectService{
         $results = Subject::select('subjects.subject', 'subjects.subject_uuid')
         ->leftJoin('selected_subjects', 'selected_subjects.subject_id', '=', 'subjects.id')
         ->where('subjects.subject', 'like', '%' . $query . '%')
-        ->get();
+        ->paginate(8);
+        return $results;
+
     }
 }

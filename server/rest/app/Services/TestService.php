@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\TestAlreadyExistsException;
 use App\Exceptions\TestNotFoundException;
+use App\Models\Subject;
 use App\Models\Test;
 use App\Models\User;
 use Carbon\Carbon;
@@ -136,9 +137,13 @@ class TestService{
             $test->subject_id = $subjectId;
         }
         if (isset($data['exam_date'])) {
-            $test->exam_date = Carbon::parse($data['exam_date']);
+            $test->exam_date = $data['exam_date'];
         }
         $test->save();
+        $subject = Subject::select("subject_uuid","subject")->where("id",$test->subject_id)->first();
+        $test["subject_uuid"] = $subject->subject_uuid;
+        $test["subject"] = $subject->subject;
+        unset($test["id"],$test["subject_id"]);
         return $test;
     }
 }

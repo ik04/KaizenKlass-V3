@@ -12,6 +12,7 @@ import { EditOwnSolutionButton } from "~/components/assignments/editOwnSolutionB
 import { MetaFunction, redirect } from "@remix-run/node";
 import { AddTestResourceButton } from "~/components/tests/addTestResourceButton";
 import { EditTestResourceButton } from "~/components/tests/editTestResourceButton";
+import { EditTestButton } from "~/components/tests/editTestButton";
 
 export default function tests() {
   const {
@@ -190,13 +191,13 @@ export default function tests() {
         )
       );
       toast({
-        title: "Solution deleted!",
-        description: `the solution has been deleted`,
+        title: "Resource deleted!",
+        description: `the test resource has been deleted`,
       });
     } catch (error) {
       toast({
         title: "Error Request Failed",
-        description: "An error occurred while deleting the solution",
+        description: "An error occurred while deleting the test resource",
         variant: "destructive",
       });
       console.error("Error deleting solution:", error);
@@ -239,6 +240,9 @@ export default function tests() {
     const viewLink = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
     return viewLink;
   };
+  const handleEditTest = (test: Test) => {
+    setTest(test);
+  };
   // todo: finish solution components
   // todo: redo assignments page with new design
   return (
@@ -262,18 +266,13 @@ export default function tests() {
                       {test.title}
                     </h1>
                     <div className="flex space-x-2">
-                      {/* {hasEditPrivileges && (
-                        <EditAssignmentButton
-                          handleEditAssignment={handleEditAssignment}
-                          assignmentUuid={uuid}
+                      {hasEditPrivileges && (
+                        <EditTestButton
                           baseUrl={baseUrl}
-                          originalLink={assignment.link}
-                          originalTitle={assignment.title}
-                          originalSubjectUuid={assignment.subject_uuid}
-                          originalDescription={assignment.description}
-                          originalDeadline={assignment.deadline}
+                          test={test}
+                          handleEditTest={handleEditTest}
                         />
-                      )} */}
+                      )}
 
                       {hasEditPrivileges && (
                         <img
@@ -443,10 +442,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }: { data: any }) => {
       property: "og:title",
       content: `${storedTest.title} | ${storedTest.subject}`,
     },
-    {
-      name: "description",
-      content: `${storedTest.description}`,
-    },
+
     {
       property: "og:site_name",
       content: "Kaizen Klass",

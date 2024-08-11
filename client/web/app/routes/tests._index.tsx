@@ -78,10 +78,6 @@ export default function tests() {
     callTestsWithSubjects();
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    console.log("Tests state updated:", tests);
-  }, [tests]);
-
   return (
     <div className="bg-main h-screen">
       <Dashboard baseUrl={baseUrl}>

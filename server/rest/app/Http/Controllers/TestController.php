@@ -73,7 +73,7 @@ class TestController extends Controller
         try{
             $validated = $request->validated();
             $test = $this->service->updateTest($uuid,$validated);
-            return response()->json(["message"=>"Test Updated!"]);
+            return response()->json(["message"=>"Test Updated!","test" => $test]);
         }catch(Exception $e){
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
