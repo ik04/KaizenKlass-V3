@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('test_resources', function (Blueprint $table) {
             $table->string("content")->nullable()->change();
-            $table->binary("description")->change();
+            $table->binary("description")->change(); // make this long blob not tinyBlob
         });
     }
 
