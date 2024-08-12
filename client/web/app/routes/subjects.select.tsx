@@ -33,12 +33,11 @@ export default function selectSubject() {
     };
     const getSelectedSubjects = async () => {
       if (isAuthenticated) {
-        const url = `${baseUrl}/api/v2/get/selected-subjects`;
+        const url = `${baseUrl}/api/v2/get/selected-subjects/all`;
         try {
           const resp = await axios.get(url);
           let selectedSubjectSlugs: string[] = [];
-          const selectedSubjectsArray: Subject[] =
-            resp.data.selected_subjects.data;
+          const selectedSubjectsArray: Subject[] = resp.data.selected_subjects;
           selectedSubjectsArray.forEach((subject) => {
             selectedSubjectSlugs.push(subject.subject_uuid);
           });
