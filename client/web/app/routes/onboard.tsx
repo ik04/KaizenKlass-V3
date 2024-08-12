@@ -141,7 +141,7 @@ export default function onboard() {
               )}
             </div>
           )}
-          <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:px-0 px-4 md:w-full">
+          <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:px-0 px-4 md:w-screen w-screen">
             {!isLoading ? (
               <>
                 {(searchQuery ? filteredSubjects : subjects).map((subject) => (
