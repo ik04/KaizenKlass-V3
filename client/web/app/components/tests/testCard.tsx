@@ -1,10 +1,28 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import deadlines from "~/routes/deadlines";
 
 export const TestCard = (test: Test) => {
   const { title, exam_date, test_uuid, subject_uuid, subject } = test;
   const [readableDeadline, setReadableDeadline] = useState<string>("");
   const [isDanger, setIsDanger] = useState<boolean>(false);
+  function parseDateForIndia(dateString: string): string {
+    const parsedDate = new Date(dateString);
+
+    if (isNaN(parsedDate.getTime())) {
+      return "Invalid date";
+    }
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "Asia/Kolkata",
+    };
+
+    const formattedDate = parsedDate.toLocaleString("en-IN", options);
+    return formattedDate;
+  }
 
   const calculateTimeUntilDeadline = (deadline: string) => {
     const now = new Date();
@@ -90,11 +108,12 @@ export const TestCard = (test: Test) => {
       )}
       {exam_date != null && (
         <div
-          className={`${
+          className={`flex justify-between text-sm md:text-base space-x-0 md:justify-start md:space-x-2 ${
             !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
-          } font-base md:text-xl`}
+          } font-base`}
         >
-          {readableDeadline}
+          <p>{readableDeadline}</p>
+          <p>{parseDateForIndia(exam_date)}</p>
         </div>
       )}
     </Link>

@@ -52,6 +52,24 @@ export const DeadlineCard = ({
     }
   };
 
+  function parseDateForIndia(dateString: string): string {
+    const parsedDate = new Date(dateString);
+
+    if (isNaN(parsedDate.getTime())) {
+      return "Invalid date";
+    }
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "Asia/Kolkata",
+    };
+
+    const formattedDate = parsedDate.toLocaleString("en-IN", options);
+    return formattedDate;
+  }
+
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -96,11 +114,12 @@ export const DeadlineCard = ({
       )}
       {deadline != null && (
         <div
-          className={`${
+          className={`flex justify-between w-full text-sm md:text-base space-x-0 md:justify-start md:space-x-2 ${
             !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
-          } font-base md:text-xl`}
+          } font-base`}
         >
-          {readableDeadline}
+          <p>{readableDeadline}</p>
+          <p>{parseDateForIndia(deadline)}</p>
         </div>
       )}
     </Link>
