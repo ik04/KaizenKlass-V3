@@ -293,7 +293,7 @@ export const Dashboard = ({
             )}
           </ul>
         </div>
-        <div className="content overflow-auto w-full md:px-16 px-10 py-10 mb-16">
+        <div className="content w-full md:px-16 px-10 py-10 mb-16">
           {children}
         </div>
       </div>
