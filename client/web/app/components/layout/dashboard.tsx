@@ -4,11 +4,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "~/context/GlobalContext";
 import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
-
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Loader } from "~/components/ui/loader";
 // ! shift dashboard to global ( this is bad practice lmao)
 export const Dashboard = ({
   children,
   baseUrl,
+  infiniteLoaderData,
 }: {
   children: React.ReactNode;
   baseUrl: string;
@@ -293,8 +295,27 @@ export const Dashboard = ({
             )}
           </ul>
         </div>
-        <div className="content w-full md:px-16 px-10 py-10 mb-16">
-          {children}
+        <div
+          className="content overflow-auto w-full md:px-16 px-10 py-10 mb-16"
+          id="scrollableDiv"
+        >
+          {infiniteLoaderData?.length ? (
+            <InfiniteScroll
+              next={() => {
+                setTimeout(() => {
+                  infiniteLoaderData?.callNextPage();
+                }, 1000);
+              }}
+              hasMore={infiniteLoaderData?.nextPage != null}
+              dataLength={infiniteLoaderData?.length}
+              scrollableTarget="scrollableDiv"
+              loader={<Loader />}
+            >
+              {children}
+            </InfiniteScroll>
+          ) : (
+            children
+          )}
         </div>
       </div>
     </div>

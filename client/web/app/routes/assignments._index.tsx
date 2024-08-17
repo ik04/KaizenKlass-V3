@@ -131,9 +131,15 @@ export default function assignments() {
     callAssignmentsWithSubjects();
   }, [isAuthenticated]);
 
+  const infiniteLoaderData = {
+    callNextPage,
+    nextPage: page,
+    length: assignments.length,
+  };
+
   return (
     <div className="bg-main h-screen">
-      <Dashboard baseUrl={baseUrl}>
+      <Dashboard baseUrl={baseUrl} infiniteLoaderData={infiniteLoaderData}>
         <div className="header w-full h-20 mb-10 flex justify-between items-center text-5xl">
           {/* <BackButton /> */}
           <div className="font-display text-highlightSecondary mb-7 text-5xl">
@@ -167,7 +173,7 @@ export default function assignments() {
                       ))}
                   </div>
 
-                  {!isLastPage && (
+                  {/* {!isLastPage && (
                     <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
                       <div
                         className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 w-[40%] flex justify-center items-center text-2xl p-2"
@@ -178,7 +184,7 @@ export default function assignments() {
                         load more
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </>
               </>
             ) : (
