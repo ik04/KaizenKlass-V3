@@ -9,6 +9,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import Fuse from "fuse.js";
 import { MetaFunction } from "@remix-run/node";
 import { GlobalContext } from "~/context/GlobalContext";
+// import PacmanLoader from "react-spinners/PacmanLoader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,7 +31,7 @@ export default function Subjects() {
   const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [nextPage, setNextPage] = useState<string>("");
+  const [nextPage, setNextPage] = useState<string | null>(null);
 
   useEffect(() => {
     const callSubjectsEndpoint = async () => {
@@ -58,20 +59,24 @@ export default function Subjects() {
       }
     };
     callSubjectsEndpoint();
+    console.log(nextPage != null);
   }, [baseUrl, isAuthenticated]);
 
   const callNextPage = async () => {
     if (nextPage != null) {
-      if (isAuthenticated) {
+      try {
         const resp = await axios.get(nextPage);
-        const newSubs = resp.data.selected_subjects.data;
-        setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
-        setNextPage(resp.data.selected_subjects.next_page_url);
-      } else {
-        const resp = await axios.get(nextPage);
-        const newSubs = resp.data.subjects.data;
-        setSubjects((prevSubs) => [...prevSubs, ...newSubs]);
-        setNextPage(resp.data.subjects.next_page_url);
+        const newSubs = isAuthenticated
+          ? resp.data.selected_subjects.data
+          : resp.data.subjects.data;
+        setSubjects((prevSubjects) => [...prevSubjects, ...newSubs]);
+        setNextPage(
+          isAuthenticated
+            ? resp.data.selected_subjects.next_page_url
+            : resp.data.subjects.next_page_url
+        );
+      } catch (error) {
+        console.error("Error fetching next page:", error);
       }
     }
   };
@@ -108,9 +113,15 @@ export default function Subjects() {
     setSearchQuery("");
   };
 
+  const infiniteLoaderData = {
+    nextPage,
+    callNextPage,
+    length: subjects.length,
+  };
+
   return (
     <div className="bg-main min-h-screen">
-      <Dashboard baseUrl={baseUrl}>
+      <Dashboard baseUrl={baseUrl} infiniteLoaderData={infiniteLoaderData}>
         <div className="flex flex-col">
           {!isLoading && (
             <div className="flex items-center space-x-3 text-xl md:w-full">
@@ -149,6 +160,7 @@ export default function Subjects() {
                     </Link>
                   </div>
                 )}
+
                 {(searchQuery ? filteredSubjects : subjects).map((subject) => (
                   <div key={subject.subject} className="md:m-6 my-6">
                     <SubjectCard
@@ -169,16 +181,6 @@ export default function Subjects() {
               </>
             )}
           </div>
-          {nextPage != null && !isLoading && (
-            <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
-              <div
-                className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
-                onClick={callNextPage}
-              >
-                load more
-              </div>
-            </div>
-          )}
         </div>
       </Dashboard>
     </div>
@@ -194,4 +196,17 @@ export async function loader() {
   };
   console.log(process.env.PUBLIC_DOMAIN);
   return data;
+}
+
+{
+  /* {nextPage != null && !isLoading && (
+            <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
+              <div
+                className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
+                onClick={callNextPage}
+              >
+                load more
+              </div>
+            </div>
+          )} */
 }
