@@ -32,8 +32,7 @@ export default function assignments() {
   const { isAuthenticated, role, hasEditPrivileges } =
     useContext(GlobalContext);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [page, setPage] = useState(1);
-  const [isLastPage, setIsLastPage] = useState(true);
+  const [page, setPage] = useState<number | null>(1);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,12 +51,6 @@ export default function assignments() {
           setAssignments(resp.data.assignments.data);
           setIsLoading(false);
         }
-
-        if (resp.data.assignments.next_page_url === null) {
-          setIsLastPage(true);
-        } else {
-          setIsLastPage(false);
-        }
       } else {
         const url = `${baseUrl}/api/v1/get-assignment-subjects?page=1`;
         const resp = await axios.get(url);
@@ -66,11 +59,6 @@ export default function assignments() {
           setIsEmpty(true);
         } else {
           setAssignments(resp.data.assignments.data);
-        }
-        if (resp.data.assignments.next_page_url === null) {
-          setIsLastPage(true);
-        } else {
-          setIsLastPage(false);
         }
       }
     } catch (error) {
@@ -84,17 +72,19 @@ export default function assignments() {
   //! improved approach in subjects page, refactor later
   const callNextPage = async () => {
     try {
-      const nextPage = page + 1;
-      const url = `${baseUrl}/api/v1/get-assignment-subjects?page=${nextPage}`;
-      const resp = await axios.get(url);
-      const newAssignments = resp.data.assignments.data;
-      setAssignments((prevAssignments) => [
-        ...prevAssignments,
-        ...newAssignments,
-      ]);
-      setPage(nextPage);
-      if (resp.data.assignments.next_page_url === null) {
-        setIsLastPage(true);
+      if (page != null) {
+        const nextPage = page + 1;
+        const url = `${baseUrl}/api/v1/get-assignment-subjects?page=${nextPage}`;
+        const resp = await axios.get(url);
+        const newAssignments = resp.data.assignments.data;
+        setAssignments((prevAssignments) => [
+          ...prevAssignments,
+          ...newAssignments,
+        ]);
+        setPage(nextPage);
+        if (resp.data.assignments.next_page_url === null) {
+          setPage(null);
+        }
       }
     } catch (error) {
       toast({
@@ -106,17 +96,19 @@ export default function assignments() {
   };
   const callNextAuthPage = async () => {
     try {
-      const nextPage = page + 1;
-      const url = `${baseUrl}/api/v2/get/selected-subjects/assignments?page=${nextPage}`;
-      const resp = await axios.get(url);
-      const newAssignments = resp.data.assignments.data;
-      setAssignments((prevAssignments) => [
-        ...prevAssignments,
-        ...newAssignments,
-      ]);
-      setPage(nextPage);
-      if (resp.data.assignments.next_page_url === null) {
-        setIsLastPage(true);
+      if (page != null) {
+        const nextPage = page + 1;
+        const url = `${baseUrl}/api/v2/get/selected-subjects/assignments?page=${nextPage}`;
+        const resp = await axios.get(url);
+        const newAssignments = resp.data.assignments.data;
+        setAssignments((prevAssignments) => [
+          ...prevAssignments,
+          ...newAssignments,
+        ]);
+        setPage(nextPage);
+        if (resp.data.assignments.next_page_url === null) {
+          setPage(null);
+        }
       }
     } catch (error) {
       toast({
@@ -132,7 +124,7 @@ export default function assignments() {
   }, [isAuthenticated]);
 
   const infiniteLoaderData = {
-    callNextPage,
+    callNextPage: !isAuthenticated ? callNextPage : callNextAuthPage,
     nextPage: page,
     length: assignments.length,
   };
