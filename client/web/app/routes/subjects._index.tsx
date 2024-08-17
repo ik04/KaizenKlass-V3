@@ -9,7 +9,6 @@ import { Skeleton } from "~/components/ui/skeleton";
 import Fuse from "fuse.js";
 import { MetaFunction } from "@remix-run/node";
 import { GlobalContext } from "~/context/GlobalContext";
-import InfiniteScroll from "react-infinite-scroll-component";
 // import PacmanLoader from "react-spinners/PacmanLoader";
 
 export const meta: MetaFunction = () => {
@@ -114,84 +113,74 @@ export default function Subjects() {
     setSearchQuery("");
   };
 
+  const infiniteLoaderData = {
+    nextPage,
+    callNextPage,
+    length: subjects.length,
+  };
+
   return (
     <div className="bg-main min-h-screen">
-      <Dashboard baseUrl={baseUrl}>
-        <div style={{ height: "80vh", overflow: "auto" }} id="scrollableDiv">
-          <InfiniteScroll
-            next={callNextPage}
-            hasMore={nextPage != null}
-            dataLength={subjects.length}
-            scrollableTarget="scrollableDiv"
-            loader={
-              <h1 className="text-3xl text-highlightSecondary font-base uppercase text-center">
-                loading
-              </h1>
-            }
-          >
-            <div className="flex flex-col">
-              {!isLoading && (
-                <div className="flex items-center space-x-3 text-xl md:w-full">
-                  <Input
-                    type="text"
-                    placeholder="Search subjects..."
-                    value={searchQuery}
-                    onChange={handleInputChange}
-                    className="p-2 rounded-md font-base font-bold bg-highlightSecondary text-mainLighter"
-                  />
-                  {isSearching && (
-                    <p
-                      onClick={clearSearch}
-                      className="font-base font-extrabold text-highlightSecondary"
-                    >
-                      X
-                    </p>
-                  )}
-                </div>
+      <Dashboard baseUrl={baseUrl} infiniteLoaderData={infiniteLoaderData}>
+        <div className="flex flex-col">
+          {!isLoading && (
+            <div className="flex items-center space-x-3 text-xl md:w-full">
+              <Input
+                type="text"
+                placeholder="Search subjects..."
+                value={searchQuery}
+                onChange={handleInputChange}
+                className="p-2 rounded-md font-base font-bold bg-highlightSecondary text-mainLighter"
+              />
+              {isSearching && (
+                <p
+                  onClick={clearSearch}
+                  className="font-base font-extrabold text-highlightSecondary"
+                >
+                  X
+                </p>
               )}
-              <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:w-full">
-                {!isLoading ? (
-                  <>
-                    {isAuthenticated && (
-                      <div className="md:m-6 my-6">
-                        <Link
-                          to={`/subjects/select`}
-                          className="hover:border-highlight p-5 flex flex-col justify-between items-center md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl md:flex md:flex-col md:justify-center md:items-center md:space-y-5 space-y-0 bg-mainLighter transition-all"
-                        >
-                          <div className="font-base w-full text-highlightSecondary md:p-0 p-4 font-semibold text-center text-5xl md:text-7xl">
-                            +
-                          </div>
-                          <div className="font-base text-highlightSecondary md:text-2xl font-bold">
-                            Select Subjects
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-
-                    {(searchQuery ? filteredSubjects : subjects).map(
-                      (subject) => (
-                        <div key={subject.subject} className="md:m-6 my-6">
-                          <SubjectCard
-                            subject={subject.subject}
-                            uuid={subject.subject_uuid}
-                          />
-                        </div>
-                      )
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {Array.from({ length: 12 }, (_, index) => (
-                      <Skeleton
-                        key={index}
-                        className="p-5 mb-11 md:m-8 my-8 md:mb-14 h-28 md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl bg-mainLighter transition-all"
-                      />
-                    ))}
-                  </>
-                )}
-              </div>
             </div>
-          </InfiniteScroll>
+          )}
+          <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:w-full">
+            {!isLoading ? (
+              <>
+                {isAuthenticated && (
+                  <div className="md:m-6 my-6">
+                    <Link
+                      to={`/subjects/select`}
+                      className="hover:border-highlight p-5 flex flex-col justify-between items-center md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl md:flex md:flex-col md:justify-center md:items-center md:space-y-5 space-y-0 bg-mainLighter transition-all"
+                    >
+                      <div className="font-base w-full text-highlightSecondary md:p-0 p-4 font-semibold text-center text-5xl md:text-7xl">
+                        +
+                      </div>
+                      <div className="font-base text-highlightSecondary md:text-2xl font-bold">
+                        Select Subjects
+                      </div>
+                    </Link>
+                  </div>
+                )}
+
+                {(searchQuery ? filteredSubjects : subjects).map((subject) => (
+                  <div key={subject.subject} className="md:m-6 my-6">
+                    <SubjectCard
+                      subject={subject.subject}
+                      uuid={subject.subject_uuid}
+                    />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {Array.from({ length: 12 }, (_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="p-5 mb-11 md:m-8 my-8 md:mb-14 h-28 md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl bg-mainLighter transition-all"
+                  />
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </Dashboard>
     </div>

@@ -71,9 +71,15 @@ export default function subjectsResources() {
     setResources((prev) => [resource, ...prev]);
   };
 
+  const infiniteLoaderData = {
+    callNextPage,
+    nextPage,
+    length: resources.length,
+  };
+
   return (
     <div className="bg-main h-screen">
-      <Dashboard baseUrl={baseUrl}>
+      <Dashboard baseUrl={baseUrl} infiniteLoaderData={infiniteLoaderData}>
         <div className="header w-full h-20 mb-10 flex justify-between items-center text-5xl">
           <div className="font-display text-highlightSecondary mb-7 text-5xl w-full flex justify-between">
             <BackButton />
@@ -120,7 +126,7 @@ export default function subjectsResources() {
                       )}
                     </div>
                   ))}
-                  {nextPage != null && (
+                  {/* {nextPage != null && (
                     <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
                       <div
                         className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 w-[40%] flex justify-center items-center text-2xl p-2"
@@ -129,7 +135,7 @@ export default function subjectsResources() {
                         load more
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <EmptyState />
