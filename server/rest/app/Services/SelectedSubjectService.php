@@ -26,7 +26,7 @@ class SelectedSubjectService{
         }
      }
     public function getSelectedSubjects($userId){
-        $selectedSubjects = SelectedSubject::join("subjects","selected_subjects.subject_id","=","subjects.id")->select("subjects.subject_uuid","subjects.subject")->where("selected_subjects.user_id",$userId)->paginate(8);
+        $selectedSubjects = SelectedSubject::join("subjects","selected_subjects.subject_id","=","subjects.id")->select("subjects.subject_uuid","subjects.subject")->where("selected_subjects.user_id",$userId)->orderBy("subjects.subject")->paginate(8);
         return $selectedSubjects;
     }
     public function getAllSelectedSubjects($userId){
