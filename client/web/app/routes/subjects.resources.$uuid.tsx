@@ -44,7 +44,7 @@ export default function subjectsResources() {
   };
   const callNextPage = async () => {
     const resp = await axios.get(nextPage);
-    const newResources = resp.data.tests.data;
+    const newResources = resp.data.subject_resources.data;
     setResources((prevResources) => [...prevResources, ...newResources]);
     setNextPage(resp.data.subject_resources.next_page_url);
   };
