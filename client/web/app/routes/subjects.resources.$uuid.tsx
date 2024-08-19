@@ -46,7 +46,7 @@ export default function subjectsResources() {
     const resp = await axios.get(nextPage);
     const newResources = resp.data.tests.data;
     setResources((prevResources) => [...prevResources, ...newResources]);
-    setNextPage(resp.data.tests.next_page_url);
+    setNextPage(resp.data.subject_resources.next_page_url);
   };
 
   const deleteOwnResource = async (uuid: string) => {
