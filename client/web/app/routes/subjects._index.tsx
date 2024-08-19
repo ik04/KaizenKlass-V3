@@ -155,7 +155,7 @@ export default function Subjects() {
                         +
                       </div>
                       <div className="font-base text-highlightSecondary md:text-2xl font-bold">
-                        Select Subjects
+                        Edit Subjects
                       </div>
                     </Link>
                   </div>
