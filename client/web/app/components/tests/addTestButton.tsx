@@ -58,7 +58,7 @@ export const AddTestButton = ({
         let combinedDeadline = null;
         if (date) {
           const deadlineDateTime = new Date(date);
-          deadlineDateTime.setHours(23);
+          deadlineDateTime.setHours(8);
           deadlineDateTime.setMinutes(0);
           deadlineDateTime.setSeconds(0); // Ensure seconds are set to 0
           combinedDeadline = format(deadlineDateTime, "yyyy-MM-dd HH:mm:ss");
