@@ -65,11 +65,11 @@ export default function subjectTests() {
     callTestsWithSubjects();
   }, [isAuthenticated]);
 
-  const infiniteLoaderData  = {
+  const infiniteLoaderData = {
     callNextPage,
     nextPage,
     length: tests.length,
-  }
+  };
 
   return (
     <div className="bg-main h-screen">
@@ -77,7 +77,7 @@ export default function subjectTests() {
         <div className="header w-full h-20 mb-10 flex justify-between items-center text-5xl">
           <div className="font-display text-highlightSecondary mb-7 text-5xl w-full flex justify-between">
             <BackButton />
-            <h2 className="font-display text-xl md:text-5xl text-highlightSecondary">
+            <h2 className="font-display text-right text-base md:text-5xl text-highlightSecondary">
               {sanitizeAndCapitalizeSlug(uuid)}
             </h2>
           </div>

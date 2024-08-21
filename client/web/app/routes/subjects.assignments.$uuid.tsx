@@ -70,7 +70,7 @@ export default function subject() {
           <>
             <div className="header w-full md:space-x-0 space-x-20 md:h-20 mb-10 md:justify-between flex items-center">
               <BackButton />
-              <div className="font-display text-xl md:text-5xl text-highlightSecondary">
+              <div className="font-display text-right text-base md:text-5xl text-highlightSecondary">
                 {subject}
               </div>
             </div>
