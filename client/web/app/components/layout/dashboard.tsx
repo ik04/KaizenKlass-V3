@@ -14,7 +14,7 @@ export const Dashboard = ({
 }: {
   children: React.ReactNode;
   baseUrl: string;
-  infiniteLoaderData: any;
+  infiniteLoaderData?: any;
 }) => {
   const { isAuthenticated, username, isSidebarExpanded, setSidebarExpanded } =
     useContext(GlobalContext);

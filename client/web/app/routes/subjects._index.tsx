@@ -33,25 +33,49 @@ export default function Subjects() {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [nextPage, setNextPage] = useState<string | null>(null);
 
+  const callSubjectsPaginatedEndpoint = async () => {
+    let url;
+    if (isAuthenticated) {
+      url = `${baseUrl}/api/v2/get/selected-subjects`;
+      try {
+        const resp = await axios.get(url);
+        setSubjects(resp.data.selected_subjects.data);
+        setNextPage(resp.data.selected_subjects.next_page_url);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    } else {
+      url = `${baseUrl}/api/v2/get-subjects`;
+      try {
+        const resp = await axios.get(url);
+        setSubjects(resp.data.subjects.data);
+        setNextPage(resp.data.subjects.next_page_url);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    }
+  };
+
   useEffect(() => {
+    // ! re add pagination when alot of subjects
     const callSubjectsEndpoint = async () => {
       let url;
       if (isAuthenticated) {
-        url = `${baseUrl}/api/v2/get/selected-subjects`;
+        url = `${baseUrl}/api/v2/get/selected-subjects/all`;
         try {
           const resp = await axios.get(url);
-          setSubjects(resp.data.selected_subjects.data);
-          setNextPage(resp.data.selected_subjects.next_page_url);
+          setSubjects(resp.data.selected_subjects);
           setIsLoading(false);
         } catch (error) {
           console.error("Error fetching subjects:", error);
         }
       } else {
-        url = `${baseUrl}/api/v2/get-subjects`;
+        url = `${baseUrl}/api/v1/get-subjects`;
         try {
           const resp = await axios.get(url);
-          setSubjects(resp.data.subjects.data);
-          setNextPage(resp.data.subjects.next_page_url);
+          setSubjects(resp.data.subjects);
           setIsLoading(false);
         } catch (error) {
           console.error("Error fetching subjects:", error);
@@ -121,7 +145,7 @@ export default function Subjects() {
 
   return (
     <div className="bg-main min-h-screen">
-      <Dashboard baseUrl={baseUrl} infiniteLoaderData={infiniteLoaderData}>
+      <Dashboard baseUrl={baseUrl}>
         <div className="flex flex-col">
           {!isLoading && (
             <div className="flex items-center space-x-3 text-xl md:w-full">
