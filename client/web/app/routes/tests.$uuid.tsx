@@ -310,7 +310,7 @@ export default function tests() {
                 </div>
               </div>
               <p className="md:hidden text-highlightSecondary font-base my-5">
-                Solutions:assignment
+                Solutions:
               </p>
               <div className="solutions flex flex-col space-y-5 md:space-y-7">
                 {testResources.map((resource) => (
