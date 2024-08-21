@@ -169,7 +169,7 @@ export default function Subjects() {
           <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:w-full">
             {!isLoading ? (
               <>
-                {isAuthenticated && (
+                {isAuthenticated && !isSearching && (
                   <div className="md:m-6 my-6">
                     <Link
                       to={`/subjects/select`}
