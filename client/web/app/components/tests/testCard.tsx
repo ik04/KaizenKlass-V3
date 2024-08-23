@@ -53,6 +53,11 @@ export const TestCard = (test: Test) => {
           hoursUntilDeadline === 1 ? "" : "s"
         } ${minutesUntilDeadline} min${minutesUntilDeadline === 1 ? "" : "s"}`
       );
+    } else if (minutesUntilDeadline > 0) {
+      setIsDanger(true);
+      setReadableDeadline(
+        `${minutesUntilDeadline} min${minutesUntilDeadline === 1 ? "" : "s"}`
+      );
     } else {
       setIsDanger(true);
       setReadableDeadline(`Passed On ${formatDate(deadlineDate)}`);
