@@ -88,7 +88,7 @@ export const TestCard = (test: Test) => {
   return (
     <Link
       to={`/tests/${test_uuid}`}
-      className="bg-mainLighter h-32 flex flex-col rounded-2xl hover:border-highlight border border-mainLighter duration-150 transition-all p-5"
+      className="bg-mainLighter flex flex-col rounded-2xl hover:border-highlight border border-mainLighter duration-150 transition-all p-5"
     >
       <Link
         to={`/tests/${test_uuid}`}
@@ -113,12 +113,12 @@ export const TestCard = (test: Test) => {
       )}
       {exam_date != null && (
         <div
-          className={`flex justify-between text-sm md:text-base space-x-0 md:justify-start md:space-x-2 ${
+          className={`flex justify-between text-xs md:text-base space-x-0 md:justify-start md:space-x-2 ${
             !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
           } font-base`}
         >
-          <p>{readableDeadline}</p>
-          <p>{parseDateForIndia(exam_date)}</p>
+          <p className="text-start">{readableDeadline}</p>
+          <p className="text-end">{parseDateForIndia(exam_date)}</p>
         </div>
       )}
     </Link>
