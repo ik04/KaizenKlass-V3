@@ -1,0 +1,19 @@
+{
+    "categories":[
+        {
+            "category":"general"
+        },
+        {
+            "category":"placements"
+        },
+        {
+            "category":"internships"
+        },
+        {
+            "category":"clubs"
+        },
+        {
+            "category":"events"
+        }
+    ]
+}
