@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\ResourceController;
@@ -130,6 +131,7 @@ Route::prefix("v2")->group(function(){
     Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){
         Route::prefix("add")->group(function(){
             Route::post("test",[TestController::class,"createTest"]);
+            Route::post("announcement",[AnnouncementController::class,"createAnnouncement"]);
         });
         Route::prefix("get")->group(function(){
         });
