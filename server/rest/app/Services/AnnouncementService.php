@@ -1,7 +1,9 @@
 <?php
+namespace App\Services;
 
 use App\Exceptions\InvalidUserException;
 use App\Models\Announcement;
+
 
 class AnnouncementService{
     private function sanitizeOutput($announcement, string ...$keys){
@@ -18,7 +20,6 @@ class AnnouncementService{
             "category_id" => $categoryId,
             "user_id" => $userId
         ]);
-        $announcement = $this->sanitizeOutput($announcement,"id");
         return $announcement;
     }
     public function getAnnouncements(){
@@ -29,7 +30,7 @@ class AnnouncementService{
     }
     public function deleteAnnouncement($userId,$announcementId){
         $announcement = Announcement::where("id",$announcementId)->first();
-        if ($announcement->id != $userId){
+        if ($announcement->user_id != $userId){
             throw new InvalidUserException("The users do not match",409);
         }
         $announcement->delete();

@@ -90,6 +90,7 @@ Route::prefix("v2")->group(function(){
         Route::get("subjects/{uuid}/resources",[SubjectResourceController::class,"getSubjectResources"]);
         Route::get("test/{uuid}",[TestController::class,"getTest"]);
         Route::get("deadlines",[TestController::class,"getDeadlines"]);
+        Route::get("announcements",[AnnouncementController::class,"getAnnouncements"]);
     });
     
     Route::middleware(["auth:sanctum"])->group(function(){
@@ -134,12 +135,9 @@ Route::prefix("v2")->group(function(){
             Route::post("test",[TestController::class,"createTest"]);
             Route::post("announcement",[AnnouncementController::class,"createAnnouncement"]);
         });
-        Route::prefix("get")->group(function(){
-            Route::post("announcements",[AnnouncementController::class,"getAnnouncements"]);
-        });
         Route::prefix("delete")->group(function(){
             Route::delete("test/{uuid}",[TestController::class,"deleteTest"]); 
-            Route::delete("announcement/{id}",[AnnouncementController::class,"deleteTest"]); // * migrating to better schema (no need to have both id and uuid its retarded)
+            Route::delete("announcement/{id}",[AnnouncementController::class,"deleteAnnouncement"]); // * migrating to better schema (no need to have both id and uuid its retarded)
         });
         Route::prefix("update")->group(function(){
             Route::put("test/{uuid}",[TestController::class,"updateTest"]); 
