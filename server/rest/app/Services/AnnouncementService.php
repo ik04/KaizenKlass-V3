@@ -35,4 +35,19 @@ class AnnouncementService{
         }
         $announcement->delete();
     }
+    public function updateAnnouncement($title, $description, $categoryId, $announcementId, $userId){
+        $announcement = Announcement::where("id",$announcementId)->first();
+        if ($announcement->user_id != $userId){
+            throw new InvalidUserException("The users do not match",409);
+        }
+        // * allow empty desc
+        $announcement->update(
+            [
+                "title" => $title,
+                "description" => $description,
+                "category_id" => $categoryId
+            ]
+        );
+        return $announcement;
+    }
 }

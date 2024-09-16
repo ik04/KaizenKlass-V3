@@ -141,7 +141,7 @@ Route::prefix("v2")->group(function(){
         });
         Route::prefix("update")->group(function(){
             Route::put("test/{uuid}",[TestController::class,"updateTest"]); 
-            Route::delete("announcement/{id}",[AnnouncementCategory::class,"updateAnnouncement"]); // * migrating to better schema (no need to have both id and uuid its retarded)
+            Route::put("announcement/{id}",[AnnouncementController::class,"updateAnnouncement"]); // * migrating to better schema (no need to have both id and uuid its retarded)
         });
     });
 });

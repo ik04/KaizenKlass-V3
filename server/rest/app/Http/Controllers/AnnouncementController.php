@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use AnnouncementService;
 use App\Exceptions\InvalidUserException;
 use App\Http\Requests\AddAnnouncementRequest;
+use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Services\AnnouncementService as ServicesAnnouncementService;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,7 +26,6 @@ class AnnouncementController extends Controller
         return response()->json(["announcements" => $announcements]);
     }
 
-
     public function deleteAnnouncement(Request $request, $id){
         try{
             $this->service->deleteAnnouncement($request->user()->id,$id);
@@ -37,5 +37,10 @@ class AnnouncementController extends Controller
         catch(Exception $e){
             return response()->json(["error" => $e->getMessage()],500);
         }
+    }
+    public function updateAnnouncement(UpdateAnnouncementRequest $request, $id){
+        $validated = $request->validated();
+        $announcement = $this->service->updateAnnouncement($validated["title"], $validated["description"], $validated["category_id"], $id, $request->user()->id);
+        return response()->json(["announcement" => $announcement, "message" => "Announcement updated successfully!"]);
     }
 }
