@@ -11,6 +11,7 @@ use App\Http\Controllers\SubjectResourceController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestResourceController;
 use App\Http\Controllers\UserController;
+use App\Models\AnnouncementCategory;
 use App\Models\Subject;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -134,12 +135,15 @@ Route::prefix("v2")->group(function(){
             Route::post("announcement",[AnnouncementController::class,"createAnnouncement"]);
         });
         Route::prefix("get")->group(function(){
+            Route::post("announcements",[AnnouncementController::class,"getAnnouncements"]);
         });
         Route::prefix("delete")->group(function(){
             Route::delete("test/{uuid}",[TestController::class,"deleteTest"]); 
+            Route::delete("announcement/{id}",[AnnouncementController::class,"deleteTest"]); // * migrating to better schema (no need to have both id and uuid its retarded)
         });
         Route::prefix("update")->group(function(){
             Route::put("test/{uuid}",[TestController::class,"updateTest"]); 
+            Route::delete("announcement/{id}",[AnnouncementCategory::class,"updateAnnouncement"]); // * migrating to better schema (no need to have both id and uuid its retarded)
         });
     });
 });
