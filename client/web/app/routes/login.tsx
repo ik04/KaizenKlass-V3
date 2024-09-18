@@ -39,6 +39,7 @@ export default function login() {
         email,
         password,
       });
+      localStorage.setItem("isLoggedIn", "true");
       toast({
         title: "Logged In successfully!",
         description: "Welcome!",

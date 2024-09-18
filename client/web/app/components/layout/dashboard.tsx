@@ -45,6 +45,7 @@ export const Dashboard = ({
   const authLinks = [{ name: username, href: "/subjects" }];
   const logout = async () => {
     const resp = await axios.post(`${baseUrl}/api/v1/logout`);
+    localStorage.setItem("isLoggedIn", "false");
     location.reload();
   };
   const locationHook = useLocation();

@@ -1,7 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useEffect } from "react";
 import { About } from "~/components/landing/about";
 import Contact from "~/components/landing/contact";
 import { Landing } from "~/components/landing/landing";
+import { useNavigate } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,11 +36,19 @@ export const meta: MetaFunction = () => {
       property: "og:site_name",
       content: "Kaizen Klass",
     },
-    // <meta property="og:site_name" content="Site Name" />
   ];
 };
 
+
 export default function Index() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (isLoggedIn === "true") {
+      navigate("/subjects", { replace: true });
+    }
+  }, [navigate]);
+
   return (
     <main className="w-full min-h-screen">
       <Landing />
