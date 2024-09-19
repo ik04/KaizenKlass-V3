@@ -18,7 +18,13 @@ class TestService{
     }
 
     public function getTests(){
-        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->join("subjects","subjects.id","=","tests.subject_id")->paginate(5);
+        $currentDate = now();
+        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->orderByRaw("CASE 
+        WHEN tests.exam_date >= ? THEN 0 
+        WHEN tests.exam_date < ? THEN 2 
+        WHEN tests.exam_date IS NULL THEN 1 
+        END", [$currentDate, $currentDate])
+        ->join("subjects","subjects.id","=","tests.subject_id")->paginate(5);
         return $tests;
     }
 

@@ -39,6 +39,7 @@ export const GlobalState = ({
       setHasEditPrivileges(
         resp.data.role === AdminRole || resp.data.role === CrossCheckerRole
       );
+      localStorage.setItem("isLoggedIn", "true");
     } catch (error) {}
   };
 
