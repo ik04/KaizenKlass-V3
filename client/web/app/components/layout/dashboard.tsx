@@ -155,7 +155,7 @@ export const Dashboard = ({
                   >
                     <img
                       src={icon.img}
-                      className={`${
+                      className={`w-13 ${
                         !isSidebarExpanded && index == isActive
                           ? "bg-mainLighter p-3 rounded-2xl"
                           : ""
