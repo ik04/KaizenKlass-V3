@@ -14,13 +14,12 @@ services:
     environment:
       APP_ENV: local
       APP_DEBUG: true
-      APP_KEY: base64:your-app-key
       DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
-      DB_DATABASE: kaizenklass
-      DB_USERNAME: kaizenklass
-      DB_PASSWORD: secret
+      DB_DATABASE: kaizenklassv3
+      DB_USERNAME: root
+      DB_PASSWORD: 12345
     depends_on:
       - db
     networks:
