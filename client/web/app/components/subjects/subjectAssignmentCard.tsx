@@ -11,7 +11,7 @@ export const SubjectAssignmentCard = ({
   subject_uuid?: string;
 }) => {
   const isMobileViewport = window.innerWidth < 768;
-  const truncatedTitle = title.length > 10 ? title.slice(0, 10) + "..." : title;
+  const truncatedTitle = title.length > 10 ? title.slice(0, 20) + "..." : title;
   return (
     <Link
       to={`/assignments/${assignment_uuid}`}
@@ -22,7 +22,7 @@ export const SubjectAssignmentCard = ({
         className="flex items-center justify-between w-full"
       >
         <div className="flex items-center space-x-2">
-          <h2 className="text-4xl font-base text-highlight">
+          <h2 className="text-2xl md:text-4xl font-base text-highlight">
             {!isMobileViewport ? title : truncatedTitle}
           </h2>
         </div>

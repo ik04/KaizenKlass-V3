@@ -89,7 +89,7 @@ export const DeadlineCard = ({
 
   const isMobileViewport =
     typeof window !== "undefined" && window.innerWidth < 768;
-  const truncatedTitle = title.length > 10 ? title.slice(0, 10) + "..." : title;
+  const truncatedTitle = title.length > 10 ? title.slice(0, 20) + "..." : title;
 
   return (
     <Link
@@ -97,16 +97,16 @@ export const DeadlineCard = ({
       className="bg-mainLighter h-32 flex rounded-2xl flex-col items-start justify-center hover:border-highlight border border-mainLighter duration-150 transition-all space-y-1 p-5"
     >
       <Link to={`/assignments/${assignment_uuid}`} className="">
-        <h2 className="text-4xl font-base text-highlight">
+        <h2 className="text-2xl md:text-4xl font-base text-highlight">
           {!isMobileViewport ? title : truncatedTitle}
         </h2>
       </Link>
       {subject && subject_uuid && (
         <Link
           to={`/subjects/${subject_uuid}`}
-          className="text-highlightSecondary font-base"
+          className="text-highlightSecondary text-sm md:text-base font-base"
         >
-          <div className="flex space-x-1">
+          <div className="flex items-center space-x-1">
             <p>{subject}</p>
             <img src="/assets/book.svg" alt="" />
           </div>
