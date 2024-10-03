@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import axios from "axios";
 import Fuse from "fuse.js";
 import React, { useContext, useEffect, useState } from "react";
@@ -19,8 +19,11 @@ export default function selectSubject() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/subjects");
+    }
     const callSubjectsEndpoint = async () => {
       const url = `${baseUrl}/api/v1/get-subjects`;
       try {
