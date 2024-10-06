@@ -40,7 +40,7 @@ export const Dashboard = ({
     {
       href: "http://buymeacoffee.com/ik04",
       img: "/assets/coffee.png",
-      name: "Buy me a coffee",
+      name: "Support me",
     },
   ];
   const navlinks = [
@@ -139,7 +139,7 @@ export const Dashboard = ({
         <div
           className={`sidebar hidden h-full bg-dashboard items-center space-y-12 py-10 md:flex flex-col ${
             isSidebarExpanded
-              ? "w-[30%] transition-all duration-300"
+              ? " w-[40%] transition-all duration-300"
               : "transition-all duration-300 w-[150px]"
           }`}
         >
@@ -160,7 +160,7 @@ export const Dashboard = ({
                   >
                     <img
                       src={icon.img}
-                      className={`w-13 ${
+                      className={`${
                         !isSidebarExpanded && index == isActive
                           ? "bg-mainLighter p-3 rounded-2xl"
                           : ""
@@ -168,7 +168,7 @@ export const Dashboard = ({
                       alt={icon.name}
                     />
                     {isSidebarExpanded && (
-                      <span className="w-[70%] text-left font-base text-highlightSecondary text-2xl uppercase">
+                      <span className="w-[50%] text-left font-base text-highlightSecondary text-2xl uppercase">
                         {icon.name}
                       </span>
                     )}
@@ -206,7 +206,7 @@ export const Dashboard = ({
                       alt={icon.name}
                     />
                     {isSidebarExpanded && (
-                      <span className="w-[70%] text-left font-base text-highlightSecondary text-2xl uppercase">
+                      <span className="w-[50%] text-left font-base text-highlightSecondary text-2xl uppercase">
                         {icon.name}
                       </span>
                     )}
