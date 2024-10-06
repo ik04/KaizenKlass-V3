@@ -43,8 +43,17 @@ export const GlobalState = ({
     } catch (error) {}
   };
 
-  // just couldn't think of a better name at the time
+  useEffect(() => {
+    const handleTabFocus = () => {
+      location.reload();
+    };
 
+    document.addEventListener("focus", handleTabFocus);
+
+    return () => {
+      document.removeEventListener("focus", handleTabFocus);
+    };
+  }, []);
   useEffect(() => {
     callUserData();
   }, []);

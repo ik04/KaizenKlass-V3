@@ -31,7 +31,6 @@ export const EditTestResourceButton = ({
           description,
         }
       );
-      console.log(resp);
       toast({
         title: "Test Resource Updated!",
         description: "Test Resource has been updated",

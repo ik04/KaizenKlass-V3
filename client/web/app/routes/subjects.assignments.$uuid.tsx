@@ -51,7 +51,6 @@ export default function subject() {
         };
         setSubject(data.subject);
         setAssignments(data.assignments);
-        console.log(hasEditPrivileges);
         if (data.assignments.length === 0) {
           setIsEmpty(true);
         }
