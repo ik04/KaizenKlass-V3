@@ -45,7 +45,14 @@ export const GlobalState = ({
 
   useEffect(() => {
     const handleTabFocus = () => {
-      location.reload();
+      const lastRefresh = localStorage.getItem("lastRefresh");
+      const now = new Date().getTime();
+      const fiveMinutes = 300000; // 5 minutes in milliseconds
+
+      if (!lastRefresh || now - parseInt(lastRefresh) > fiveMinutes) {
+        location.reload();
+        localStorage.setItem("lastRefresh", now.toString());
+      }
     };
 
     document.addEventListener("focus", handleTabFocus);
@@ -54,6 +61,7 @@ export const GlobalState = ({
       document.removeEventListener("focus", handleTabFocus);
     };
   }, []);
+
   useEffect(() => {
     callUserData();
   }, []);
