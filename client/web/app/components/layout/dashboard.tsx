@@ -37,6 +37,11 @@ export const Dashboard = ({
   ];
   const extraSidebarIcons = [
     { href: "/resources", img: "/assets/treasure.svg", name: "resources" },
+    {
+      href: "http://buymeacoffee.com/ik04",
+      img: "/assets/coffee.png",
+      name: "Buy me a coffee",
+    },
   ];
   const navlinks = [
     { name: "login", href: "/login" },
