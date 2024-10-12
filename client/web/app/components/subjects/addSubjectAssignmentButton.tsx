@@ -58,7 +58,6 @@ export const AddSubjectAssignmentButton = ({
           deadlineDateTime.setMinutes(parseInt(minutes, 10));
           deadlineDateTime.setSeconds(0); // Ensure seconds are set to 0
           combinedDeadline = format(deadlineDateTime, "yyyy-MM-dd HH:mm:ss");
-          console.log(combinedDeadline);
         }
         const resp = await axios.post(`${baseUrl}/api/v1/add-assignment`, {
           title,

@@ -54,7 +54,6 @@ export const AddSubjectTestButton = ({
           deadlineDateTime.setSeconds(0); // Ensure seconds are set to 0
 
           combinedDeadline = format(deadlineDateTime, "yyyy-MM-dd HH:mm:ss");
-          console.log(combinedDeadline);
         }
         const resp = await axios.post(`${baseUrl}/api/v2/add/test`, {
           title,
