@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-  # Laravel server
   laravel:
     container_name: laravel-app
     restart: always
@@ -17,15 +16,14 @@ services:
       DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
-      DB_DATABASE: kaizenklassv3
-      DB_USERNAME: root
-      DB_PASSWORD: 12345
+      DB_DATABASE: kaizenklassv3 # Match this with the db service
+      DB_USERNAME: kaizenklass # Match with MYSQL_USER in db service
+      DB_PASSWORD: secret # Match with MYSQL_PASSWORD in db service
     depends_on:
       - db
     networks:
       - app-network
 
-  # Remix frontend
   remix:
     container_name: remix-app
     restart: always
@@ -41,14 +39,15 @@ services:
     networks:
       - app-network
 
-  # MySQL database
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: kaizenklass
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: kaizenklassv3 # Ensure this matches laravel service
       MYSQL_USER: kaizenklass
       MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     networks:
@@ -60,4 +59,3 @@ volumes:
 networks:
   app-network:
     driver: bridge
-
