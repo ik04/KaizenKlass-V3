@@ -1,4 +1,4 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Dashboard } from "~/components/layout/dashboard";
@@ -32,6 +32,8 @@ export default function Subjects() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [nextPage, setNextPage] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const callSubjectsPaginatedEndpoint = async () => {
     let url;
@@ -143,6 +145,18 @@ export default function Subjects() {
     length: subjects.length,
   };
 
+  useEffect(() => {
+    const searchInput = document.querySelector("#search") as HTMLInputElement;
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && searchQuery && filteredSubjects.length > 0) {
+        const subject = filteredSubjects[0].subject_uuid;
+        navigate(`/subjects/${subject}`);
+      }
+    };
+    searchInput?.addEventListener("keypress", handleKeyPress);
+    return () => searchInput?.removeEventListener("keypress", handleKeyPress);
+  }, [searchQuery, filteredSubjects, navigate]);
+
   return (
     <div className="bg-main min-h-screen">
       <Dashboard baseUrl={baseUrl}>
@@ -150,6 +164,7 @@ export default function Subjects() {
           {!isLoading && (
             <div className="flex items-center space-x-3 text-xl md:w-full">
               <Input
+                id="search"
                 type="text"
                 placeholder="Search subjects..."
                 value={searchQuery}
