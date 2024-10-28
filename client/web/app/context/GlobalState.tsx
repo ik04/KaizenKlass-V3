@@ -47,9 +47,9 @@ export const GlobalState = ({
     const handleTabFocus = () => {
       const lastRefresh = localStorage.getItem("lastRefresh");
       const now = new Date().getTime();
-      const tenMinutes = 600000; // 5 minutes in milliseconds
+      const oneHour = 60 * 60 * 1000;
 
-      if (!lastRefresh || now - parseInt(lastRefresh) > tenMinutes) {
+      if (!lastRefresh || now - parseInt(lastRefresh) > oneHour) {
         location.reload();
         localStorage.setItem("lastRefresh", now.toString());
       }
