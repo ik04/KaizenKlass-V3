@@ -7,10 +7,9 @@ import { AddSolutionButton } from "~/components/assignments/addSolutionButton";
 import { GlobalContext } from "~/context/GlobalContext";
 import { EditAssignmentButton } from "~/components/assignments/editAssignmentButton";
 import { toast } from "~/components/ui/use-toast";
-import { EditSolutionButton } from "~/components/assignments/editSolutionButton";
 import { EditOwnSolutionButton } from "~/components/assignments/editOwnSolutionButton";
 import { MetaFunction, redirect } from "@remix-run/node";
-import MetadataFetcher from "~/components/utils/metaFetcher.tsx";
+import { convertLinksToAnchors } from "~/utils/convertLinksToAnchors";
 
 export default function assignments() {
   const {
@@ -156,19 +155,6 @@ export default function assignments() {
     const formattedDateTime = parsedDate.toLocaleString("en-IN", options);
 
     return formattedDateTime;
-  }
-
-  function convertLinksToAnchors(text: string, currentDomain: string) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    console.log(currentDomain);
-
-    return text.replace(urlRegex, function (url) {
-      if (url === currentDomain || url.startsWith(currentDomain + "/")) {
-        return ` <a href="${url}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Source -></a>`;
-      } else {
-        return `<a href="${url}" style="color: #3A84CE; cursor: pointer;" target="_blank">${url}</a>`;
-      }
-    });
   }
 
   const deleteOwnSolution = async (solutionUuid: string) => {

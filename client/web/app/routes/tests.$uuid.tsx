@@ -13,6 +13,7 @@ import { MetaFunction, redirect } from "@remix-run/node";
 import { AddTestResourceButton } from "~/components/tests/addTestResourceButton";
 import { EditTestResourceButton } from "~/components/tests/editTestResourceButton";
 import { EditTestButton } from "~/components/tests/editTestButton";
+import { convertLinksToAnchors } from "~/utils/convertLinksToAnchors";
 
 export default function tests() {
   const {
@@ -166,18 +167,6 @@ export default function tests() {
     const formattedDateTime = parsedDate.toLocaleString("en-IN", options);
 
     return formattedDateTime;
-  }
-
-  function convertLinksToAnchors(text: string, currentDomain: string) {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-    return text.replace(urlRegex, function (url) {
-      if (url === currentDomain || url.startsWith(currentDomain + "/")) {
-        return ` <a href="${url}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Source -></a>`;
-      } else {
-        return `<a href="${url}" style="color: #3A84CE; cursor: pointer;" target="_blank">${url}</a>`;
-      }
-    });
   }
 
   const deleteOwnResource = async (resourceUuid: string) => {
