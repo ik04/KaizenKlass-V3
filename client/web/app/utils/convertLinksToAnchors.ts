@@ -1,7 +1,6 @@
 export const convertLinksToAnchors = (text: string, currentDomain: string) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const currentBaseDomain = new URL(currentDomain).hostname.split(".")[0];
-  console.log(currentBaseDomain);
 
   return text.replace(urlRegex, (url) => {
     try {
@@ -9,13 +8,15 @@ export const convertLinksToAnchors = (text: string, currentDomain: string) => {
       const baseDomain = parsedUrl.hostname.split(".")[0];
 
       const pathSegments = parsedUrl.pathname.split("/").filter(Boolean);
+      console.log(pathSegments);
+
       if (baseDomain === currentBaseDomain) {
         if (pathSegments[0] === "assignments" && pathSegments[1]) {
           const uuid = pathSegments[1];
           return `<a href="${currentDomain}/assignments/${uuid}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Assignment -></a>`;
         } else if (pathSegments[0] === "tests" && pathSegments[1]) {
           const uuid = pathSegments[1];
-          return `<a href="${currentDomain}/tests/${uuid}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Assignment -></a>`;
+          return `<a href="${currentDomain}/tests/${uuid}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Test -></a>`;
         } else {
           return `<a href="${url}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Source -></a>`;
         }
