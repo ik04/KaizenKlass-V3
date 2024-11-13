@@ -6,6 +6,7 @@ use App\Exceptions\TestAlreadyExistsException;
 use App\Exceptions\TestNotFoundException;
 use App\Models\Subject;
 use App\Models\Test;
+use App\Models\TestResource;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -152,4 +153,49 @@ class TestService{
         unset($test["id"],$test["subject_id"]);
         return $test;
     }
+    public function createEndsemWithCts($userId, string $subjectUuid) {
+        $subjectId = $this->subjectService->getSubjectId($subjectUuid);
+    
+        $currentDate = now();
+        $existingEndsem = Test::where('subject_id', $subjectId)
+            ->whereRaw('LOWER(title) = ?', [strtolower("End-Sem")])
+            ->where(function ($query) use ($currentDate) {
+                $query->where("exam_date", ">=", $currentDate)
+                      ->orWhereNull("exam_date");
+            })
+            ->first();
+            
+        if ($existingEndsem) {
+            throw new TestAlreadyExistsException(message: "An End-Sem test already exists for this subject", code: 400);
+        }
+    
+        $endsem = Test::create([
+            "title" => "End-Sem",
+            "subject_id" => $subjectId,
+            "test_uuid" => Uuid::uuid4()
+        ]);
+    
+        $oldTests = Test::select("title", "created_at", "test_uuid")
+                       ->where("subject_id", $subjectId)
+                       ->where("id", "!=", $endsem->id)
+                       ->get();
+    
+        foreach ($oldTests as $oldTest) {
+            $frontendTestUrl = env('FRONTEND_URL') . "/tests/" . $oldTest->test_uuid;
+            TestResource::create([
+                "test_id" => $endsem->id,
+                "test_resource_uuid" => Uuid::uuid4(),
+                "description" => sprintf(
+                    "%s\n%s\nPosted at: %s",
+                    $oldTest->title,
+                    $frontendTestUrl,
+                    $oldTest->created_at->diffForHumans()
+                ),
+                "user_id" => $userId
+            ]);
+        }
+    
+        return $endsem;
+    }
+    
 }

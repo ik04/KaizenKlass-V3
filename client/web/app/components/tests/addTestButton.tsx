@@ -83,7 +83,7 @@ export const AddTestButton = ({
         });
       }
     } catch (error: any) {
-      console.log(error.response);
+      console.log(error.response.error);
 
       if (error.response && error.response.status === 400) {
         toast({
@@ -99,7 +99,6 @@ export const AddTestButton = ({
           let errorMessages = "";
 
           for (const [key, value] of Object.entries(errors)) {
-            // Iterate through each error message for a specific key
             if (Array.isArray(value)) {
               errorMessages += `${key}: ${value.join(", ")}\n`;
             }

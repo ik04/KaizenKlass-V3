@@ -144,4 +144,9 @@ Route::prefix("v2")->group(function(){
             Route::put("announcement/{id}",[AnnouncementController::class,"updateAnnouncement"]); // * migrating to better schema (no need to have both id and uuid its retarded)
         });
     });
+    Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
+        Route::prefix("add")->group(function(){
+            Route::post("test/endsem-with-cts/{subjectUuid}",[TestController::class,"createEndsemWithCts"]); 
+        });
+    });
 });
