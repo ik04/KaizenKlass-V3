@@ -189,7 +189,7 @@ class TestService{
                     "%s\n%s\nPosted at: %s",
                     $oldTest->title,
                     $frontendTestUrl,
-                    $oldTest->created_at->diffForHumans()
+                    $oldTest->created_at->format('Y-m-d H:i:s')
                 ),
                 "user_id" => $userId
             ]);
