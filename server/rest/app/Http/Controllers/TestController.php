@@ -78,16 +78,25 @@ class TestController extends Controller
             return response()->json(["error"=>$e->getMessage()],$e->getCode());
         }
     }
-    public function deleteTest($uuid)
-{
+    public function deleteTest($uuid){
     try{
         $this->service->deleteTest($uuid);
         return response()->json(["message" => "Assignment deleted successfully"], 200);
     }catch(Exception $e){
         return response()->json(["error"=>$e->getMessage()],$e->getCode());
     }
-}
-    public function getDeadlines(){
-        
+
     }
+    public function createEndsemWithCts(Request $request, string $subjectUuid){
+        // * this function adds the end sem and gets all the tests for the particular subject and adds them in as testResources, you can make an end sem normally too
+        try{
+            $endsem = $this->service->createEndsemWithCts($request->user()->id, $subjectUuid);
+            return response()->json(["message" => "Endsem created!", "test" => $endsem],201);
+        }catch(TestAlreadyExistsException $e){
+            return response()->json(["error"=>$e->getMessage()],$e->getCode());
+        }catch(Exception $e){
+            return response()->json(["error"=>$e->getMessage()]);
+        }
+    }
+        
 }

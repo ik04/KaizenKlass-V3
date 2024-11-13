@@ -1,20 +1,15 @@
 import { useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { AddAssignmentButton } from "~/components/assignments/addAssignmentButton";
-import { AssignmentCard } from "~/components/assignments/assignmentCard";
 import { BackButton } from "~/components/utils/backButton";
 import { Dashboard } from "~/components/layout/dashboard";
 import { EmptyState } from "~/components/utils/emptyState";
 import { GlobalContext } from "~/context/GlobalContext";
-import Calendar from "react-calendar";
 import { Skeleton } from "~/components/ui/skeleton";
-import { toast } from "~/components/ui/use-toast";
 import { MetaFunction } from "@remix-run/node";
 import { TestCard } from "~/components/tests/testCard";
-import { AddTestButton } from "~/components/tests/addTestButton";
-import { AddSubjectAssignmentButton } from "~/components/subjects/addSubjectAssignmentButton";
 import { AddSubjectTestButton } from "~/components/tests/addSubjectTestButton";
+import { AddEndsemButton } from "~/components/tests/addEndsemButton";
 
 function sanitizeAndCapitalizeSlug(slug: string) {
   let sanitizedSlug = slug.toLowerCase();
@@ -30,10 +25,10 @@ function sanitizeAndCapitalizeSlug(slug: string) {
 export default function subjectTests() {
   const { uuid, baseUrl }: { baseUrl: string; uuid: string } = useLoaderData();
   // ? directly set nextpage url?
-  const { isAuthenticated, hasEditPrivileges } = useContext(GlobalContext);
+  const { isAuthenticated, hasEditPrivileges, isAdmin } =
+    useContext(GlobalContext);
   const [tests, setTests] = useState<Test[]>([]);
   const [nextPage, setNextPage] = useState("");
-  const [isLastPage, setIsLastPage] = useState(true);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -85,6 +80,11 @@ export default function subjectTests() {
         <div className="h-full">
           {!isLoading ? (
             <>
+              {isAdmin && (
+                <div className="mb-7">
+                  <AddEndsemButton baseUrl={baseUrl} uuid={uuid} />
+                </div>
+              )}
               {hasEditPrivileges && (
                 <div className="mb-7">
                   <AddSubjectTestButton
