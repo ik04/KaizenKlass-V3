@@ -6,7 +6,6 @@ import { Tooltip, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Loader } from "~/components/ui/loader";
-// ! shift dashboard to global ( this is bad practice lmao)
 export const Dashboard = ({
   children,
   baseUrl,
@@ -75,7 +74,7 @@ export const Dashboard = ({
   // todo: add active state
   return (
     <div
-      className={`flex-col h-screen fixed ${
+      className={`flex-col z-50 h-screen fixed ${
         isSidebarExpanded ? "sidebar-expanded" : ""
       }`}
     >
@@ -135,7 +134,7 @@ export const Dashboard = ({
           </div>
         )}
       </div>
-      <div className="sidebar-and-content flex h-full w-full">
+      <div className="sidebar-and-content flex h-full w-full z-50">
         <div
           className={`sidebar hidden h-full bg-dashboard items-center space-y-12 py-10 md:flex flex-col ${
             isSidebarExpanded
@@ -179,7 +178,7 @@ export const Dashboard = ({
                 </TooltipTrigger>
               </Tooltip>
             ))}
-            <div className="border-2 border-highlightSecondary w-[80%]"></div>
+            <div className="border-2 border-highlightSecondary z-50 w-[80%]"></div>
             {extraSidebarIcons.map((icon, index) => (
               <Tooltip>
                 <TooltipTrigger className={`${isSidebarExpanded && "w-full"}`}>
@@ -222,8 +221,8 @@ export const Dashboard = ({
         <div
           className={
             isMobileNavExpanded
-              ? "fixed left-0 top-0 w-[80%] border-r border-r-gray-900 h-full bg-main ease-in-out duration-500"
-              : "ease-in-out fixed left-[-70%] w-[60%] duration-500"
+              ? "fixed left-0 z-50 top-0 w-[80%] border-r border-r-gray-900 h-full bg-main ease-in-out duration-500"
+              : "ease-in-out z-50 fixed left-[-70%] w-[60%] duration-500"
           }
           style={{ height: isMobileNavExpanded ? "100%" : "0" }}
         >

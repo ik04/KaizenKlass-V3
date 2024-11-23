@@ -14,16 +14,16 @@ use Ramsey\Uuid\Uuid;
 
 class TestService{
     public function __construct(protected SubjectService $subjectService){
-        
+
 
     }
 
     public function getTests(){
         $currentDate = now();
-        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->orderByRaw("CASE 
-        WHEN tests.exam_date >= ? THEN 0 
-        WHEN tests.exam_date < ? THEN 2 
-        WHEN tests.exam_date IS NULL THEN 1 
+        $tests = Test::select("tests.title","tests.exam_date","tests.test_uuid","subjects.subject","subjects.subject_uuid")->orderByRaw("CASE
+        WHEN tests.exam_date >= ? THEN 0
+        WHEN tests.exam_date < ? THEN 2
+        WHEN tests.exam_date IS NULL THEN 1
         END", [$currentDate, $currentDate])
         ->join("subjects","subjects.id","=","tests.subject_id")->paginate(5);
         return $tests;
@@ -67,10 +67,10 @@ class TestService{
         ->leftJoin("selected_subjects", "selected_subjects.subject_id", "=", "tests.subject_id")
         ->select("tests.title", "tests.test_uuid", "subjects.subject", "subjects.subject_uuid", "tests.exam_date")
         ->where("selected_subjects.user_id", $userId)
-        ->orderByRaw("CASE 
-            WHEN tests.exam_date >= ? THEN 0 
-            WHEN tests.exam_date < ? THEN 2 
-            WHEN tests.exam_date IS NULL THEN 1 
+        ->orderByRaw("CASE
+            WHEN tests.exam_date >= ? THEN 0
+            WHEN tests.exam_date < ? THEN 2
+            WHEN tests.exam_date IS NULL THEN 1
             END", [$currentDate, $currentDate])
         ->orderBy("tests.exam_date", "ASC")
         ->paginate(5);
@@ -79,10 +79,10 @@ class TestService{
     public function getTestsBySubjects(string $subjectUuid){
         $currentDate = now();
         $subjectId = $this->subjectService->getSubjectId($subjectUuid);
-        $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->orderByRaw("CASE 
-        WHEN tests.exam_date >= ? THEN 0 
-        WHEN tests.exam_date < ? THEN 2 
-        WHEN tests.exam_date IS NULL THEN 1 
+        $tests = Test::select("title","exam_date","test_uuid")->where("subject_id",$subjectId)->orderByRaw("CASE
+        WHEN tests.exam_date >= ? THEN 0
+        WHEN tests.exam_date < ? THEN 2
+        WHEN tests.exam_date IS NULL THEN 1
         END", [$currentDate, $currentDate])
     ->orderBy("tests.exam_date", "ASC")->paginate(5);
         return $tests;
@@ -96,11 +96,11 @@ class TestService{
             ->join("subjects", "subjects.id", "=", "tests.subject_id")
             ->where("tests.test_uuid", $uuid)
             ->first();
-    
+
         if (!$test) {
             throw new TestNotFoundException(message: "Test not found", code: 404);
         }
-    
+
         $resourceData = $test->testResources->map(function ($resource) {
             $user = User::select("name", "user_uuid")->where("id", $resource->user_id)->first();
             return [
@@ -111,7 +111,7 @@ class TestService{
                 "content" => $resource->content
             ];
         })->toArray();
-    
+
         return [
             "test" => [
                 "title" => $test->title,
@@ -155,7 +155,7 @@ class TestService{
     }
     public function createEndsemWithCts($userId, string $subjectUuid) {
         $subjectId = $this->subjectService->getSubjectId($subjectUuid);
-    
+
         $currentDate = now();
         $existingEndsem = Test::where('subject_id', $subjectId)
             ->whereRaw('LOWER(title) = ?', [strtolower("End-Sem")])
@@ -164,22 +164,22 @@ class TestService{
                       ->orWhereNull("exam_date");
             })
             ->first();
-            
+
         if ($existingEndsem) {
             throw new TestAlreadyExistsException(message: "An End-Sem test already exists for this subject", code: 400);
         }
-    
+
         $endsem = Test::create([
             "title" => "End-Sem",
             "subject_id" => $subjectId,
             "test_uuid" => Uuid::uuid4()
         ]);
-    
+
         $oldTests = Test::select("title", "created_at", "test_uuid")
                        ->where("subject_id", $subjectId)
                        ->where("id", "!=", $endsem->id)
                        ->get();
-    
+
         foreach ($oldTests as $oldTest) {
             $frontendTestUrl = env('FRONTEND_URL') . "/tests/" . $oldTest->test_uuid;
             TestResource::create([
@@ -194,8 +194,8 @@ class TestService{
                 "user_id" => $userId
             ]);
         }
-    
+
         return $endsem;
     }
-    
+
 }
