@@ -8,9 +8,12 @@ export const convertLinksToAnchors = (text: string, currentDomain: string) => {
       const baseDomain = parsedUrl.hostname.split(".")[0];
 
       const pathSegments = parsedUrl.pathname.split("/").filter(Boolean);
-      console.log(pathSegments);
+      console.log(currentBaseDomain);
 
-      if (baseDomain === currentBaseDomain) {
+      if (
+        baseDomain === currentBaseDomain ||
+        currentBaseDomain == "localhost"
+      ) {
         if (pathSegments[0] === "assignments" && pathSegments[1]) {
           const uuid = pathSegments[1];
           return `<a href="${currentDomain}/assignments/${uuid}" style="color: #D5CEA3; cursor: pointer; font-weight: bold;">Visit Assignment -></a>`;
