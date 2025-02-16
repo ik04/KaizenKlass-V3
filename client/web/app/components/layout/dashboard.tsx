@@ -170,7 +170,7 @@ export const Dashboard = ({
                         !isSidebarExpanded && index == isActive
                           ? "bg-mainLighter p-3 rounded-2xl"
                           : ""
-                      }`}
+                      } md:w-15 md:h-15`}
                       alt={icon.name}
                     />
                     {isSidebarExpanded && (
