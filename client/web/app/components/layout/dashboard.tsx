@@ -158,7 +158,7 @@ export const Dashboard = ({
                     key={icon.name}
                     className={`${
                       isSidebarExpanded
-                        ? `flex  w-full pl-[35px] justify-center items-center p-3 space-x-10 ${
+                        ? `flex w-full pl-[35px] justify-center items-center p-3 space-x-10 ${
                             index == isActive ? "bg-mainLighter" : ""
                           }`
                         : ``
@@ -171,7 +171,7 @@ export const Dashboard = ({
                         !isSidebarExpanded && index == isActive
                           ? "bg-mainLighter p-3 rounded-2xl"
                           : ""
-                      } md:w-15 md:h-15`}
+                      }`}
                       alt={icon.name}
                     />
                     {isSidebarExpanded && (
