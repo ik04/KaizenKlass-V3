@@ -13,17 +13,16 @@ import { GlobalContext } from "~/context/GlobalContext";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Subjects | KaizenKlass" },
-    { property: "og:title", content: "Subjects | KaizenKlass" },
+    { title: "Search | KaizenKlass" },
+    { property: "og:title", content: "Search | KaizenKlass" },
     {
       property: "og:site_name",
       content: "Kaizen Klass",
     },
-    // <meta property="og:site_name" content="Site Name" />
   ];
 };
 
-export default function Subjects() {
+export default function Search() {
   const { baseUrl }: { baseUrl: string } = useLoaderData();
   const { isAuthenticated } = useContext(GlobalContext);
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -64,24 +63,13 @@ export default function Subjects() {
     // ! re add pagination when alot of subjects
     const callSubjectsEndpoint = async () => {
       let url;
-      if (isAuthenticated) {
-        url = `${baseUrl}/api/v2/get/selected-subjects/all`;
-        try {
-          const resp = await axios.get(url);
-          setSubjects(resp.data.selected_subjects);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error fetching subjects:", error);
-        }
-      } else {
-        url = `${baseUrl}/api/v1/get-subjects`;
-        try {
-          const resp = await axios.get(url);
-          setSubjects(resp.data.subjects);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error fetching subjects:", error);
-        }
+      url = `${baseUrl}/api/v1/get-subjects`;
+      try {
+        const resp = await axios.get(url);
+        setSubjects(resp.data.subjects);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
       }
     };
     callSubjectsEndpoint();
@@ -235,17 +223,4 @@ export async function loader() {
   };
   console.log(process.env.PUBLIC_DOMAIN);
   return data;
-}
-
-{
-  /* {nextPage != null && !isLoading && (
-            <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
-              <div
-                className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 flex justify-center items-center text-2xl p-2"
-                onClick={callNextPage}
-              >
-                load more
-              </div>
-            </div>
-          )} */
 }

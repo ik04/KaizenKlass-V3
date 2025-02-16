@@ -20,7 +20,10 @@ export const Dashboard = ({
   const [isMobileNavExpanded, setIsMobileNavExpanded] = useState(false);
   const [isActive, setIsActive] = useState<number>(0);
   const sidebarIcons = [
-    { href: "/subjects", img: "/assets/home.svg", name: "home" },
+    { href: "/subjects", img: "/assets/home.svg", name: "dashboard" },
+    ...(isAuthenticated
+      ? [{ href: "/search", img: "/assets/search.png", name: "search" }]
+      : []),
     {
       href: "/assignments",
       img: "/assets/assignments.svg",
@@ -31,20 +34,18 @@ export const Dashboard = ({
       img: "/assets/exam.png",
       name: "tests",
     },
-    // { href: "/deadlines", img: "/assets/skull.svg", name: "deadlines" },
     // * not necessary for now
   ];
   const extraSidebarIcons = [
     { href: "/resources", img: "/assets/treasure.svg", name: "resources" },
-    {
-      href: "http://buymeacoffee.com/ik04",
-      img: "/assets/coffee.png",
-      name: "Support me",
-    },
   ];
   const navlinks = [
     { name: "login", href: "/login" },
     { name: "register", href: "/register" },
+    {
+      href: "http://buymeacoffee.com/ik04",
+      name: "Support me",
+    },
   ];
   const authLinks = [{ name: username, href: "/subjects" }];
   const logout = async () => {
@@ -120,7 +121,7 @@ export const Dashboard = ({
               <Link
                 key={navlink.name}
                 to={navlink.href}
-                className="text-highlight py-3 text-2xl uppercase font-base"
+                className="text-highlight py-3 text-lg uppercase font-base"
               >
                 {navlink.name}
               </Link>
