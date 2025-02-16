@@ -106,7 +106,7 @@ export const Dashboard = ({
               <Link
                 key={navlink.name}
                 to={navlink.href}
-                className="text-highlight text-2xl uppercase font-base"
+                className="text-highlight text-xl uppercase font-base"
               >
                 {navlink.name}
               </Link>
@@ -121,14 +121,14 @@ export const Dashboard = ({
               <Link
                 key={navlink.name}
                 to={navlink.href}
-                className="text-highlight py-3 text-lg uppercase font-base"
+                className="text-highlight py-3 text-xl uppercase font-base"
               >
                 {navlink.name}
               </Link>
             ))}
             <div
               onClick={logout}
-              className="text-highlight hover:text-red-500 cursor-pointer duration-150 text-2xl uppercase font-base"
+              className="text-highlight hover:text-red-500 cursor-pointer duration-150 text-xl uppercase font-base"
             >
               Logout
             </div>
