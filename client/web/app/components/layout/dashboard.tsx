@@ -21,9 +21,7 @@ export const Dashboard = ({
   const [isActive, setIsActive] = useState<number>(0);
   const sidebarIcons = [
     { href: "/subjects", img: "/assets/home.svg", name: "dashboard" },
-    ...(isAuthenticated
-      ? [{ href: "/search", img: "/assets/search.png", name: "search" }]
-      : []),
+
     {
       href: "/assignments",
       img: "/assets/assignments.svg",
@@ -34,6 +32,9 @@ export const Dashboard = ({
       img: "/assets/exam.png",
       name: "tests",
     },
+    ...(isAuthenticated
+      ? [{ href: "/search", img: "/assets/search.png", name: "search" }]
+      : []),
     // * not necessary for now
   ];
   const extraSidebarIcons = [
