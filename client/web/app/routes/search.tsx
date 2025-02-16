@@ -34,31 +34,6 @@ export default function Search() {
 
   const navigate = useNavigate();
 
-  const callSubjectsPaginatedEndpoint = async () => {
-    let url;
-    if (isAuthenticated) {
-      url = `${baseUrl}/api/v2/get/selected-subjects`;
-      try {
-        const resp = await axios.get(url);
-        setSubjects(resp.data.selected_subjects.data);
-        setNextPage(resp.data.selected_subjects.next_page_url);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-      }
-    } else {
-      url = `${baseUrl}/api/v2/get-subjects`;
-      try {
-        const resp = await axios.get(url);
-        setSubjects(resp.data.subjects.data);
-        setNextPage(resp.data.subjects.next_page_url);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-      }
-    }
-  };
-
   useEffect(() => {
     // ! re add pagination when alot of subjects
     const callSubjectsEndpoint = async () => {
@@ -75,25 +50,6 @@ export default function Search() {
     callSubjectsEndpoint();
     console.log(nextPage != null);
   }, [baseUrl, isAuthenticated]);
-
-  const callNextPage = async () => {
-    if (nextPage != null) {
-      try {
-        const resp = await axios.get(nextPage);
-        const newSubs = isAuthenticated
-          ? resp.data.selected_subjects.data
-          : resp.data.subjects.data;
-        setSubjects((prevSubjects) => [...prevSubjects, ...newSubs]);
-        setNextPage(
-          isAuthenticated
-            ? resp.data.selected_subjects.next_page_url
-            : resp.data.subjects.next_page_url
-        );
-      } catch (error) {
-        console.error("Error fetching next page:", error);
-      }
-    }
-  };
 
   // * implement the search better, using the backend
   useEffect(() => {
@@ -125,12 +81,6 @@ export default function Search() {
   const clearSearch = () => {
     setIsSearching(false);
     setSearchQuery("");
-  };
-
-  const infiniteLoaderData = {
-    nextPage,
-    callNextPage,
-    length: subjects.length,
   };
 
   useEffect(() => {
@@ -172,22 +122,6 @@ export default function Search() {
           <div className="flex flex-col md:flex md:justify-center md:items-center md:flex-row md:flex-wrap md:w-full">
             {!isLoading ? (
               <>
-                {isAuthenticated && !isSearching && (
-                  <div className="md:m-6 my-6">
-                    <Link
-                      to={`/subjects/select`}
-                      className="hover:border-highlight p-5 flex flex-col justify-between items-center md:p-2 border border-mainLighter md:w-80 md:h-80 rounded-3xl md:flex md:flex-col md:justify-center md:items-center md:space-y-5 space-y-0 bg-mainLighter transition-all"
-                    >
-                      <div className="font-base w-full text-highlightSecondary md:p-0 p-4 font-semibold text-center text-5xl md:text-7xl">
-                        +
-                      </div>
-                      <div className="font-base text-highlightSecondary md:text-2xl font-bold">
-                        Edit Subjects
-                      </div>
-                    </Link>
-                  </div>
-                )}
-
                 {(searchQuery ? filteredSubjects : subjects).map((subject) => (
                   <div key={subject.subject} className="md:m-6 my-6">
                     <SubjectCard
