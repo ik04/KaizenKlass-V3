@@ -47,7 +47,13 @@ export const Dashboard = ({
       name: "Support me",
     },
   ];
-  const authLinks = [{ name: username, href: "/subjects" }];
+  const authLinks = [
+    { name: username, href: "/subjects" },
+    {
+      href: "http://buymeacoffee.com/ik04",
+      name: "Support me",
+    },
+  ];
   const logout = async () => {
     const resp = await axios.post(`${baseUrl}/api/v1/logout`);
     localStorage.setItem("isLoggedIn", "false");

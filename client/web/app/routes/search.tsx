@@ -150,7 +150,7 @@ export default function Search() {
       <Dashboard baseUrl={baseUrl}>
         <div className="flex flex-col items-center">
           {!isLoading && (
-            <div className="flex items-center space-x-3 text-xl md:w-full md:max-w-[90%]">
+            <div className="flex items-center space-x-3 text-xl max-w-full md:w-full md:max-w-[90%]">
               <Input
                 id="search"
                 type="text"
