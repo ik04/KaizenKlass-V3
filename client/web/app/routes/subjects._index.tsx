@@ -169,7 +169,7 @@ export default function Subjects() {
                 placeholder="Search subjects..."
                 value={searchQuery}
                 onChange={handleInputChange}
-                className="p-4 rounded-md font-base font-bold bg-[#a38c6d] text-[#3a2a1e] placeholder:text-[#5c3d2e] border-none focus:outline-none focus:ring-2 focus:ring-[#8b6f52]"
+                className="p-4 rounded-md font-base font-bold bg-highlightSecondary text-[#3a2a1e] placeholder:text-[#7a5c43] border-none focus:outline-none focus:ring-2 focus:ring-[#b89c7d]"
               />
 
               {isSearching && (
