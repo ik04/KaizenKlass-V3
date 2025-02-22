@@ -100,15 +100,16 @@ export default function Search() {
       <Dashboard baseUrl={baseUrl}>
         <div className="flex flex-col items-center">
           {!isLoading && (
-            <div className="flex items-center space-x-3 text-xl max-w-full md:w-full md:max-w-[90%]">
+            <div className="flex items-center space-x-3 text-xl max-w-full md:w-full md:max-w-[87%]">
               <Input
                 id="search"
                 type="text"
                 placeholder="Search subjects..."
                 value={searchQuery}
                 onChange={handleInputChange}
-                className="p-2 rounded-md font-base font-bold bg-highlightSecondary text-mainLighter"
+                className="p-4 rounded-md font-base font-bold bg-[#a38c6d] text-[#3a2a1e] placeholder:text-[#5c3d2e] border-none focus:outline-none focus:ring-2 focus:ring-[#8b6f52]"
               />
+
               {isSearching && (
                 <p
                   onClick={clearSearch}

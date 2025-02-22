@@ -169,8 +169,9 @@ export default function Subjects() {
                 placeholder="Search subjects..."
                 value={searchQuery}
                 onChange={handleInputChange}
-                className="p-2 rounded-md font-base font-bold bg-highlightSecondary text-mainLighter"
+                className="p-4 rounded-md font-base font-bold bg-[#a38c6d] text-[#3a2a1e] placeholder:text-[#5c3d2e] border-none focus:outline-none focus:ring-2 focus:ring-[#8b6f52]"
               />
+
               {isSearching && (
                 <p
                   onClick={clearSearch}
