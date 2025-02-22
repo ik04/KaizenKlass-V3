@@ -162,7 +162,7 @@ export default function Subjects() {
       <Dashboard baseUrl={baseUrl}>
         <div className="flex flex-col items-center">
           {!isLoading && (
-            <div className="flex items-center space-x-3 text-xl md:w-full md:max-w-[90%]">
+            <div className="flex items-center space-x-3 text-xl md:w-full md:max-w-[87%]">
               <Input
                 id="search"
                 type="text"
