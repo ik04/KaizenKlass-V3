@@ -29,7 +29,8 @@ export const meta: MetaFunction = () => {
 export default function tests() {
   // const { assignments }: { assignments: Assignment[] } = useLoaderData();
   // ? directly set nextpage url?
-  const { baseUrl }: { baseUrl: string } = useLoaderData();
+  const { baseUrl, debug }: { baseUrl: string; debug: string } =
+    useLoaderData();
   const { isAuthenticated, hasEditPrivileges } = useContext(GlobalContext);
   const [tests, setTests] = useState<Test[]>([]);
   const [nextPage, setNextPage] = useState("");
@@ -38,6 +39,14 @@ export default function tests() {
 
   const handleTestAddition = (test: Test) => {
     setTests([test, ...tests]);
+  };
+
+  const sanitizeUrl = (url: string) => {
+    if (debug != "true") {
+      url.replace("http://", "https://");
+      return url;
+    }
+    return url;
   };
 
   const callTestsWithSubjects = async () => {
@@ -50,7 +59,7 @@ export default function tests() {
           setIsLoading(false);
         } else {
           setTests(resp.data.tests.data);
-          setNextPage(resp.data.tests.next_page_url);
+          setNextPage(sanitizeUrl(resp.data.tests.next_page_url));
           setIsLoading(false);
         }
       } else {
@@ -71,7 +80,7 @@ export default function tests() {
     const resp = await axios.get(nextPage);
     const newTests = resp.data.tests.data;
     setTests((prevTests) => [...prevTests, ...newTests]);
-    setNextPage(resp.data.tests.next_page_url);
+    setNextPage(sanitizeUrl(resp.data.tests.next_page_url));
   };
   useEffect(() => {
     callTestsWithSubjects();
@@ -148,5 +157,6 @@ export default function tests() {
 
 export const loader = async () => {
   const baseUrl: string = process.env.PUBLIC_DOMAIN || "";
-  return { baseUrl };
+  const debug: string = process.env.DEBUG || "";
+  return { baseUrl, debug };
 };
