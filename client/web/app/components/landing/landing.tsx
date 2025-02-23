@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react";
 
 export const Landing = () => {
   return (
-    <section className="bg-primary bg-[url('/assets/KaizenKlassBg.webp')] min-h-screen flex items-center bg-no-repeat bg-cover p-4 md:p-16">
+    <section className="bg-primary bg-[url('https://res.cloudinary.com/drtyjus1u/image/upload/v1740310113/KaizenKlassBg_elj9rj.webp')] min-h-screen flex items-center bg-no-repeat bg-cover p-4 md:p-16">
       <div className="flex flex-col items-center max-w-7xl 2xl:max-w-screen-2xl mx-auto">
         <h1 className="font-display text-highlight text-center text-5xl md:text-9xl">
           Kaizen Klass

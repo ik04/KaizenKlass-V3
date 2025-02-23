@@ -35,7 +35,7 @@ const Contact = () => {
         <section className="w-full h-full flex items-center justify-center">
           <div className="w-full max-w-xs md:max-w-sm">
             <img
-              src="/assets/about-3.jpg"
+              src="https://res.cloudinary.com/drtyjus1u/image/upload/v1740310094/about-3_ijik9o.jpg"
               alt=""
               className="w-full h-auto object-cover"
             />
