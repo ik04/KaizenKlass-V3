@@ -10,84 +10,78 @@ import { GlobalContext } from "~/context/GlobalContext";
 import Calendar from "react-calendar";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
-import { MetaFunction } from "@remix-run/node";
+import { MetaFunction, LoaderFunction } from "@remix-run/node";
 import { TestCard } from "~/components/tests/testCard";
 import { AddTestButton } from "~/components/tests/addTestButton";
+import { Test, TestsResponse } from "~/types/api";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Tests | KaizenKlass" },
-    { property: "og:title", content: "Tests | KaizenKlass" },
-    {
-      property: "og:site_name",
-      content: "Kaizen Klass",
-    },
-    // <meta property="og:site_name" content="Site Name" />
-  ];
-};
+interface LoaderData {
+  baseUrl: string;
+  debug: string;
+}
 
-export default function tests() {
-  // const { assignments }: { assignments: Assignment[] } = useLoaderData();
-  // ? directly set nextpage url?
-  const { baseUrl, debug }: { baseUrl: string; debug: string } =
-    useLoaderData();
+interface InfiniteLoaderData {
+  callNextPage: () => Promise<void>;
+  nextPage: string | null;
+  length: number;
+}
+
+export default function Tests() {
+  const { baseUrl, debug } = useLoaderData<LoaderData>();
   const { isAuthenticated, hasEditPrivileges } = useContext(GlobalContext);
   const [tests, setTests] = useState<Test[]>([]);
-  const [nextPage, setNextPage] = useState("");
+  const [nextPage, setNextPage] = useState<string | null>(null);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleTestAddition = (test: Test) => {
     setTests([test, ...tests]);
   };
 
-  const sanitizeUrl = (url: string) => {
-    console.log(url);
-
-    if (debug != "true") {
-      return url.replace("http://", "https://");
-    }
-    return url;
+  const sanitizeUrl = (url: string | null): string | null => {
+    if (!url) return null;
+    return debug !== "true" ? url.replace("http://", "https://") : url;
   };
 
-  const callTestsWithSubjects = async () => {
+  const callTestsWithSubjects = async (): Promise<void> => {
     try {
-      if (isAuthenticated) {
-        const url = `${baseUrl}/api/v2/get/selected-subjects/tests?page=1`;
-        const resp = await axios.get(url);
-        if (resp.data.tests.data.length === 0) {
-          setIsEmpty(true);
-          setIsLoading(false);
-        } else {
-          setTests(resp.data.tests.data);
-          setNextPage(sanitizeUrl(resp.data.tests.next_page_url));
-          setIsLoading(false);
-        }
+      const url = isAuthenticated
+        ? `${baseUrl}/api/v2/get/selected-subjects/tests?page=1`
+        : `${baseUrl}/api/v2/get/tests?page=1`;
+
+      const resp = await axios.get<TestsResponse>(url);
+
+      if (resp.data.tests.data.length === 0) {
+        setIsEmpty(true);
       } else {
-        const url = `${baseUrl}/api/v2/get/tests?page=1`;
-        const resp = await axios.get(url);
-        if (resp.data.tests.data.length === 0) {
-          setIsEmpty(true);
-          setIsLoading(false);
-        } else {
-          setTests(resp.data.tests.data);
-          setNextPage(resp.data.tests.next_page_url);
-          setIsLoading(false);
-        }
+        setTests(resp.data.tests.data);
+        setNextPage(sanitizeUrl(resp.data.tests.next_page_url));
       }
-    } catch (err: any) {}
+      setIsLoading(false);
+    } catch (err: unknown) {
+      console.error("Error fetching tests:", err);
+      setIsLoading(false);
+    }
   };
-  const callNextPage = async () => {
-    const resp = await axios.get(nextPage);
-    const newTests = resp.data.tests.data;
-    setTests((prevTests) => [...prevTests, ...newTests]);
-    setNextPage(sanitizeUrl(resp.data.tests.next_page_url));
+
+  const callNextPage = async (): Promise<void> => {
+    if (!nextPage) return;
+
+    try {
+      const resp = await axios.get<TestsResponse>(nextPage);
+      const newTests = resp.data.tests.data;
+      setTests((prevTests) => [...prevTests, ...newTests]);
+      setNextPage(sanitizeUrl(resp.data.tests.next_page_url));
+    } catch (err: unknown) {
+      console.error("Error fetching next page:", err);
+    }
   };
+
   useEffect(() => {
     callTestsWithSubjects();
   }, [isAuthenticated]);
 
-  const infiniteLoaderData = {
+  const infiniteLoaderData: InfiniteLoaderData = {
     callNextPage,
     nextPage,
     length: tests.length,
@@ -124,31 +118,18 @@ export default function tests() {
                       key={test.test_uuid}
                     />
                   ))}
-                  {/* {nextPage != null && (
-                    <div className="load-more flex mb-20 justify-center items-center cursor-pointer">
-                      <div
-                        className="uppercase hover:text-dashboard hover:bg-highlightSecondary duration-150 font-base text-highlightSecondary border-highlightSecondary border-2 w-[40%] flex justify-center items-center text-2xl p-2"
-                        onClick={callNextPage}
-                      >
-                        load more
-                      </div>
-                    </div>
-                  )} */}
                 </div>
               ) : (
                 <EmptyState />
               )}
             </>
           ) : (
-            <>
-              {" "}
-              <div className="flex flex-col space-y-7">
-                <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
-                <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
-                <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
-                <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
-              </div>
-            </>
+            <div className="flex flex-col space-y-7">
+              <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
+              <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
+              <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
+              <Skeleton className="h-32 px-5 rounded-2xl bg-mainLighter" />
+            </div>
           )}
         </div>
       </Dashboard>
@@ -156,7 +137,18 @@ export default function tests() {
   );
 }
 
-export const loader = async () => {
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Tests | KaizenKlass" },
+    { property: "og:title", content: "Tests | KaizenKlass" },
+    {
+      property: "og:site_name",
+      content: "Kaizen Klass",
+    },
+  ];
+};
+
+export const loader: LoaderFunction = async () => {
   const baseUrl: string = process.env.PUBLIC_DOMAIN || "";
   const debug: string = process.env.DEBUG || "";
   return { baseUrl, debug };
