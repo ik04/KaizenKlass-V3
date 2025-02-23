@@ -42,6 +42,8 @@ export default function tests() {
   };
 
   const sanitizeUrl = (url: string) => {
+    console.log(url);
+
     if (debug != "true") {
       url.replace("http://", "https://");
       return url;
