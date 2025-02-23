@@ -45,8 +45,7 @@ export default function tests() {
     console.log(url);
 
     if (debug != "true") {
-      url.replace("http://", "https://");
-      return url;
+      return url.replace("http://", "https://");
     }
     return url;
   };
