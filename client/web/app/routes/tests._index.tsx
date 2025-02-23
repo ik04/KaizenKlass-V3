@@ -51,7 +51,11 @@ export default function tests() {
           setIsLoading(false);
         } else {
           setTests(resp.data.tests.data);
-          setNextPage(resp.data.tests.next_page_url);
+          let url = resp.data.tests.next_page_url;
+          if (url.startsWith("http://")) {
+            url = url.replace("http://", "https://");
+          }
+          setNextPage(url);
           setIsLoading(false);
         }
       } else {
@@ -62,7 +66,11 @@ export default function tests() {
           setIsLoading(false);
         } else {
           setTests(resp.data.tests.data);
-          setNextPage(resp.data.tests.next_page_url);
+          let url = resp.data.tests.next_page_url;
+          if (url.startsWith("http://")) {
+            url = url.replace("http://", "https://");
+          }
+          setNextPage(url);
           setIsLoading(false);
         }
       }
@@ -72,7 +80,13 @@ export default function tests() {
     const resp = await axios.get(nextPage);
     const newTests = resp.data.tests.data;
     setTests((prevTests) => [...prevTests, ...newTests]);
-    setNextPage(resp.data.tests.next_page_url);
+
+    let url = resp.data.tests.next_page_url;
+    if (url.startsWith("http://")) {
+      url = url.replace("http://", "https://");
+    }
+    setNextPage(url);
+    setNextPage(url);
   };
   useEffect(() => {
     callTestsWithSubjects();
@@ -82,7 +96,7 @@ export default function tests() {
     callNextPage,
     nextPage,
     length: tests.length,
-  }
+  };
 
   return (
     <div className="bg-main h-screen">
