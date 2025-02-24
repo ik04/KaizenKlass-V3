@@ -1,17 +1,16 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import deadlines from "~/routes/deadlines";
+import { Test } from "~/types/api";
 
 export const TestCard = (test: Test) => {
   const { title, exam_date, test_uuid, subject_uuid, subject } = test;
   const [readableDeadline, setReadableDeadline] = useState<string>("");
   const [isDanger, setIsDanger] = useState<boolean>(false);
+  const [isPassed, setIsPassed] = useState<boolean>(false);
+
   function parseDateForIndia(dateString: string): string {
     const parsedDate = new Date(dateString);
-
-    if (isNaN(parsedDate.getTime())) {
-      return "Invalid date";
-    }
+    if (isNaN(parsedDate.getTime())) return "Invalid date";
 
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
@@ -20,8 +19,7 @@ export const TestCard = (test: Test) => {
       timeZone: "Asia/Kolkata",
     };
 
-    const formattedDate = parsedDate.toLocaleString("en-IN", options);
-    return formattedDate;
+    return parsedDate.toLocaleString("en-IN", options);
   }
 
   const calculateTimeUntilDeadline = (deadline: string) => {
@@ -60,7 +58,8 @@ export const TestCard = (test: Test) => {
       );
     } else {
       setIsDanger(true);
-      setReadableDeadline(`Passed On ${formatDate(deadlineDate)}`);
+      setIsPassed(true);
+      setReadableDeadline(`Passed on ${formatDate(deadlineDate)}`);
     }
   };
 
@@ -76,9 +75,7 @@ export const TestCard = (test: Test) => {
   };
 
   useEffect(() => {
-    if (exam_date != null) {
-      calculateTimeUntilDeadline(exam_date);
-    }
+    if (exam_date) calculateTimeUntilDeadline(exam_date);
   }, [exam_date]);
 
   const isMobileViewport =
@@ -88,13 +85,17 @@ export const TestCard = (test: Test) => {
   return (
     <Link
       to={`/tests/${test_uuid}`}
-      className="bg-mainLighter flex flex-col rounded-2xl hover:border-highlight border border-mainLighter duration-150 transition-all p-5"
+      className={`flex flex-col rounded-2xl border duration-150 transition-all p-5 ${
+        isPassed
+          ? "bg-gray-700 text-gray-300 border-gray-700 hover:border-gray-500"
+          : "bg-mainLighter text-highlight border-mainLighter hover:border-highlight"
+      }`}
     >
       <Link
         to={`/tests/${test_uuid}`}
         className="flex items-center justify-between w-full"
       >
-        <h2 className="text-4xl font-base text-highlight">
+        <h2 className="text-4xl font-base">
           {!isMobileViewport ? title : truncatedTitle}
         </h2>
         <img src="/assets/examIcon.png" className="md:w-10 w-8" alt="" />
@@ -111,11 +112,16 @@ export const TestCard = (test: Test) => {
           </div>
         </Link>
       )}
-      {exam_date != null && (
+
+      {exam_date && (
         <div
-          className={`flex justify-between text-xs md:text-base space-x-0 md:justify-start md:space-x-2 ${
-            !isDanger ? "text-highlightSecondary" : "text-[#B13232]"
-          } font-base`}
+          className={`flex justify-between text-xs md:text-base space-x-0 md:justify-start md:space-x-2 font-base ${
+            isPassed
+              ? "text-gray-400"
+              : isDanger
+              ? "text-[#B13232]"
+              : "text-highlightSecondary"
+          }`}
         >
           <p className="text-start">{readableDeadline}</p>
           <p className="text-end">{parseDateForIndia(exam_date)}</p>
