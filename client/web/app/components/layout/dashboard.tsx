@@ -39,11 +39,11 @@ export const Dashboard = ({
   ];
   const extraSidebarIcons = [
     { href: "/resources", img: "/assets/treasure.svg", name: "resources" },
-    {
-      href: "https://www.youtube.com/@Osiris-Codes",
-      img: "/assets/youtube.svg",
-      name: "My Channel",
-    },
+    // {
+    //   href: "https://www.youtube.com/@Osiris-Codes",
+    //   img: "/assets/youtube.svg",
+    //   name: "My Channel",
+    // },
   ];
   const navlinks = [
     { name: "login", href: "/login" },
