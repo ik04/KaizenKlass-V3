@@ -87,7 +87,7 @@ export const TestCard = (test: Test) => {
       to={`/tests/${test_uuid}`}
       className={`flex flex-col rounded-2xl border duration-150 transition-all p-5 ${
         isPassed
-          ? "bg-gray-700 text-gray-300 border-gray-700 hover:border-gray-500"
+          ? "bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-500"
           : "bg-mainLighter text-highlight border-mainLighter hover:border-highlight"
       }`}
     >
