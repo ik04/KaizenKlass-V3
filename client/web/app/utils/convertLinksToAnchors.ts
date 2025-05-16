@@ -1,4 +1,7 @@
 export const convertLinksToAnchors = (text: string, currentDomain: string) => {
+  const boldPattern = /\*\*(.*?)\*\*/g;
+  text = text.replace(boldPattern, "<strong>$1</strong>");
+
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const currentBaseDomain = new URL(currentDomain).hostname.split(".")[0];
 
