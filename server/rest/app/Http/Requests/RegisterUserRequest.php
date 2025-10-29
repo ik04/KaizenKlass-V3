@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ValidEmailRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterUserRequest extends FormRequest
@@ -19,7 +20,8 @@ class RegisterUserRequest extends FormRequest
                 "required",
                 "email",
                 "unique:users",
-                "regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/"
+                "regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",
+                new ValidEmailRule()
             ],
             "name" => "required|string",
             "password" => "required|string"
